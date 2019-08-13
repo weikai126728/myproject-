@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallProductTypeDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallProductType" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="details" property="describe" jdbcType="VARCHAR" />
+    <result column="type_order" property="order" jdbcType="INTEGER" />
+    <result column="type_status" property="status" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="VARCHAR"/>
+    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   id,product_type_name,details,type_order,pid,img_small,img_middle,img_large,create_time,type_status
+  </sql>
+  <select id="firstType" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from mall_product_type where pid = 0 order by type_order desc;
+  </select>
+  <select id="childType" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from mall_product_type where pid = #{pid,jdbcType=VARCHAR} order by type_order desc
+  </select>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallProductType">
+  	
+  	insert into mall_product_type (product_type_name,details,type_order,pid,img_small,img_middle,img_large,create_time,type_status) values(#{typeName,jdbcType=VARCHAR}
+  	,#{describe,jdbcType=VARCHAR},#{order,jdbcType=INTEGER},#{pid,jdbcType=VARCHAR},#{imgSmall,jdbcType=VARCHAR},#{imgMiddle,jdbcType=VARCHAR},#{imgLarge,jdbcType=VARCHAR},now(),1)
+  </insert>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.MallProductType">
+  	update mall_product_type 
+  	<trim prefix="set" suffixOverrides="," suffix=" where id = #{id} ">
+  		<if test="typeName!=null">product_type_name=#{typeName,jdbcType=VARCHAR},</if>
+  		<if test="describe">details=#{describe,jdbcType=VARCHAR},</if>
+  		<if test="order!=null">type_order=#{order,jdbcType=INTEGER},</if>
+  		<if test="pid!=null">pid=#{pid,jdbcType=VARCHAR},</if>
+  		<if test="imgSmall!=null">img_small=#{imgSmall,jdbcType=VARCHAR},</if>
+  		<if test="imgMiddle!=null">img_middle=#{imgMiddle,jdbcType=VARCHAR},</if>
+  		<if test="imgLarge!=null">img_large=#{imgLarge,jdbcType=VARCHAR},</if>
+  		<if test="status!=null">type_status=#{status,jdbcType=INTEGER},</if>
+  	</trim>
+  </update>
+  <select id="fetchById" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from mall_product_type where id=#{id}
+  </select>
+  <select id="countProByTypeId" resultType="Integer">
+  	select count(*) from mall_product_type as type left join mall_product as pro on type.id = pro.product_type_id where pro.product_type_id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="delete">
+  	delete from mall_product_type where id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

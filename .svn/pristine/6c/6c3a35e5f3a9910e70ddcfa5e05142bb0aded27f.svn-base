@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.ICommissionDao">
+	<resultMap type="com.abbot.schimneylife.pojo.weixin.Commission" id="baseMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="percent" property="percent" jdbcType="INTEGER"/>
+		<result column="business_type_id" property="businessTypeId" jdbcType="INTEGER"/>
+		<result column="businessType" property="businessType" jdbcType="VARCHAR"/>		
+		<result column="join_model_id" property="modelId" jdbcType="INTEGER"/>
+		<result column="model" property="model" jdbcType="VARCHAR"/>
+		<result column="zipcode" property="code" jdbcType="VARCHAR"/>
+		<result column="merername" property="merername" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="sql">
+		fz_commission.id,percent,business_type_id,join_model_id,fz_commission.zipcode,fz_commission.create_time
+	</sql>
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.weixin.Commission">
+		insert into fz_commission (percent,business_type_id,join_model_id,zipcode,create_time) 
+		values(#{percent},#{businessTypeId},#{modelId},#{code},now())
+	</insert>
+	<delete id="delete">
+		delete from fz_commission where id = #{id}
+	</delete>
+	<update id="update" parameterType="com.abbot.schimneylife.pojo.weixin.Commission">
+		update fz_commission 
+		<trim prefix=" set " suffix=" where id = #{id} " prefixOverrides=",">
+			<if test="percent != null">
+				percent = #{percent}
+			</if>
+			<if test="businessTypeId !=null">
+				,business_type_id = business_type_id
+			</if>
+			<if test="modelId !=null">
+				,join_model_id = #{modelId}
+			</if>
+			<if test="code !=null">
+				,zipcode = #{code}
+			</if>
+		</trim>
+	</update>
+	<select id="fetchByTypeAndModel" resultMap="baseMap">
+		select <include refid="sql"></include> from fz_commission where business_type_id = #{typeId} and join_model_id = #{modelId}
+	</select>
+	<select id="findByPage" resultMap="baseMap">
+		select <include refid="sql"></include>,bt.name businessType,jm.name model,pf.zipcode code,pf.mergername merername from fz_commission 
+		left join business_type as bt on fz_commission.business_type_id = bt.id 
+		left join join_model as jm on fz_commission.join_model_id = jm.id 
+		left join fzprovincial as pf on fz_commission.zipcode = pf.zipcode 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="search !=null">
+				<bind name="pattern" value="'%'+ search +'%'"/>
+				(fz_commission.zipcode like #{pattern} or pf.merername like #{pattern} or jm.name like #{pattern} or bt.name like #{pattern})
+			</if>
+			<if test="typeId !=null">
+				and bt.id = #{typeId}
+			</if>
+			<if test="modelId !=null">
+				and jm.id = #{modelId}
+			</if>
+		</trim>
+		order by 
+		<choose>
+			<when test="order !=null">
+				${order}
+			</when>
+			<otherwise>
+				fz_commission.create_time
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort !=null">
+				${sort}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult},#{pageSize}
+		</if>
+	</select>
+	<select id="totalCount" resultType="Integer">
+		select count(*) from fz_commission 
+		left join business_type as bt on fz_commission.business_type_id = bt.id 
+		left join join_model as jm on fz_commission.join_model_id = jm.id 
+		left join fzprovincial as pf on fz_commission.zipcode = pf.zipcode 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="search !=null">
+				<bind name="pattern" value="'%'+ search +'%'"/>
+				(fz_commission.zipcode like #{pattern} or pf.mergername like #{pattern} or jm.name like #{pattern} or bt.name like #{pattern})
+			</if>
+			<if test="typeId !=null">
+				and bt.id = #{typeId}
+			</if>
+			<if test="modelId !=null">
+				and jm.id = #{modelId}
+			</if>
+		</trim>
+	</select>
+	<select id="fetchByCondition" resultType="Integer">
+		select percent from fz_commission 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="typeId !=null">
+				and business_type_id = #{typeId}
+			</if>
+			<if test="modelId !=null">
+				and join_model_id = #{modelId}
+			</if>
+			<if test="zipcode !=null">
+				and zipcode = #{zipcode}
+			</if>
+		</trim>
+		limit 0,1
+	</select>
+	<select id="fetchPriByCondition" resultType="Integer">
+		select percent from fzalliance_commission where product_id = #{product_id} and business_type_id = #{typeId} and pri_status = 1
+	</select>
+</mapper>

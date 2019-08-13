@@ -1,0 +1,204 @@
+
+body{
+	background-color: #F4F4F4;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	border-bottom: 0.266rem solid #F4F4F4;
+	position: fixed;
+	top: 0;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+
+.gy{
+	width: 100%;
+	font-size: 0.6rem;
+}
+.gy span{
+	text-indent: 2em;
+	display: inline-block;
+	margin: 0.5rem;
+	margin-bottom: 0;
+	color: #4B4B4B;
+	line-height: 1rem;
+}
+
+
+.biaodan{
+	background-color: #FFFFFF;
+}
+.biaodan li{
+	padding-left: 0;
+	padding-right: 0;
+	height: 2.5rem;
+	margin-left: 0.7rem;
+	margin-right: 0.7rem;
+	border-bottom: 1px solid #E3E3E3;
+}
+.biaodan li span{
+	font-size: 0.6rem;
+	color: #4B4B4B;
+	line-height: 2.5rem;
+	margin-right: 0.9rem;
+}
+.biaodan li input{
+	font-size: 0.6rem;
+	width: 55%;
+	line-height: 1rem;
+	color: #6A6A6A;
+	vertical-align: middle;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.biaodan li em{
+	font-size: 0.6rem;
+	color: #9F9F9F;
+}
+.biaodan li .fr{
+	width: 2%;
+}
+.biaodan li .fr img{
+	width: 100%;
+	margin-top: 0.5rem;
+}
+
+.jiameng label{
+	font-size: 0.6rem;
+	margin-left: 0.5rem;
+	margin-right: 2rem;
+	vertical-align: middle;
+}
+
+/* iCheck plugin Square skin, red
+----------------------------------- */
+.icheckbox_square-red,
+.iradio_square-red {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 0.685rem;
+    height: 0.685rem;
+    background: url(../../../image/shopping/wap/moren.png) no-repeat center center;
+    -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    border: none;
+    cursor: pointer;
+}
+
+
+    .icheckbox_square-red.hover {
+        background-position: center;
+        background-image: url(../../../image/shopping/wap/moren.png);
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .icheckbox_square-red.checked {
+        background-position: center;
+        background-image: url(../../../image/shopping/wap/moren.png);
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    
+    
+.iradio_square-red {
+    background-position: center;
+    -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+    .iradio_square-red.hover {
+        background-position: center;
+        background-image: url(../../../image/shopping/wap/c_checkbox_off.png);
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .iradio_square-red.checked {
+        background-position: center;
+        background-image: url(../../../image/shopping/wap/moren.png);
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .iradio_square-red.disabled {
+        background-position: center;
+        cursor: default;
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .iradio_square-red.checked.disabled {
+        background-position: center;
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+    .icheckbox_square-red,
+    .iradio_square-red {
+        background-image: url(../../../image/shopping/wap/c_checkbox_off.png);
+        -webkit-background-size: cover;
+        background-size: cover;
+        -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+}
+
+
+
+.submit{
+	width: 92.5%;
+	background-color: #f84f18;
+	color: #FFFFFF;
+	margin: 1.5rem auto;
+	font-size: 0.6rem;
+	padding: 0.5rem 0;
+	border-radius: 0.2rem;
+	display:inline-block; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

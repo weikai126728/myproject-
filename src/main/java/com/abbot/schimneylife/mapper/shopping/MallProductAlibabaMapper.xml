@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallProductAlibabaDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallProductAlibaba">
+  	<id property="id" column="id" jdbcType="VARCHAR"/>
+     <result column="productID" property="productID" jdbcType="VARCHAR"/>
+     <result column="specID" property="specID" jdbcType="VARCHAR"/>
+     <result column="parameter_id" property="parameterID" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, productID, specID,parameter_id
+  </sql>
+  <insert id="insert">
+  	insert into mall_product_alibaba (<include refid="Base_Column_List" />) 
+  	values(replace(uuid(),'-',''),#{productID,jdbcType=VARCHAR},#{specId,jdbcType=VARCHAR},#{parameterId,jdbcType=VARCHAR})
+  </insert>
+  <update id="update">
+  	update mall_product_alibaba 
+  	<trim prefix="set" suffix=" where parameter_id = #{parameterId,jdbcType=VARCHAR} " suffixOverrides=",">
+  		<if test="productID !=null">
+  			productID = #{productID,jdbcType=VARCHAR},
+  		</if>
+  		<if test="specId !=null">
+  			specID = #{specId,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
+  </update>
+  <delete id="delete">
+  	delete from mall_product_alibaba where parameter_id = #{parameterId,jdbcType=VARCHAR}
+  </delete>
+  <select id="fetchByParamId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from mall_product_alibaba where parameter_id = #{paramId,jdbcType=VARCHAR}
+  </select>
+  <select id="fetchByProductIDAndSpecID" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from mall_product_alibaba where productID = #{productID,jdbcType=VARCHAR} and 
+  	specID = #{specId,jdbcType=VARCHAR}
+  </select>
+</mapper>

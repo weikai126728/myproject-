@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallProductInfoDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallProductInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="img_name" property="imgName" jdbcType="VARCHAR" />
+    <result column="mall_product_id" property="productId" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, img_name, mall_product_id,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallProductInfo">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into mall_product_info (<include refid="Base_Column_List"/>) values(#{id,jdbcType=VARCHAR},#{imgName,jdbcType=VARCHAR},#{productId,jdbcType=VARCHAR},now())
+  </insert>
+  <select id="fetchByProId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from mall_product_info where mall_product_id = #{proId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByProId">
+  	delete from mall_product_info where mall_product_id = #{proId,jdbcType=VARCHAR}
+  </delete>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.MallProductInfo">
+  	update mall_product_info set img_name = #{imgName,jdbcType=VARCHAR} where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

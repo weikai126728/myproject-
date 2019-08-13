@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.HouseDao">
+
+	<insert id="addHosue"
+		parameterType="com.abbot.schimneylife.pojo.shopping.HouseInfo"  useGeneratedKeys="true" keyProperty="id">
+		insert into m_houseinfo (
+		name, phone,openid,mclass,banners,create_time, update_time,facility,address,area,houseType,rent,longitude,latitude,status)
+		values(#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{openid,jdbcType=VARCHAR},#{mclass,jdbcType=INTEGER},#{banners,jdbcType=VARCHAR},now(),now(),#{facility,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR}
+		,#{area,jdbcType=INTEGER},#{houseType,jdbcType=INTEGER},#{rent,jdbcType=INTEGER},#{longitude,jdbcType=DECIMAL},#{longitude,jdbcType=DECIMAL},0)
+	</insert>
+	
+</mapper>

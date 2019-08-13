@@ -1,0 +1,137 @@
+package com.abbot.schimneylife.service.shopping;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import com.abbot.schimneylife.pojo.shopping.Appointment;
+import com.abbot.schimneylife.pojo.shopping.Customer;
+import com.abbot.schimneylife.pojo.shopping.MarketProductInfo;
+import com.abbot.schimneylife.pojo.shopping.Recharge;
+import com.abbot.schimneylife.pojo.shopping.SproductParameter;
+import com.abbot.schimneylife.pojo.shopping.SupermarketInfo;
+
+public interface SupermarketInfoService {
+
+	/**
+	 * 分页查询根据距离排序
+	 * 
+	 * @param firstResult
+	 * @param pageSize
+	 * @param lng
+	 * @param lat
+	 * @return
+	 */
+	List<SupermarketInfo> findByPageOrderDis(Integer firstResult, Integer pageSize, BigDecimal lng, BigDecimal lat);
+
+	/**
+	 * 查询总数量
+	 * 
+	 * @return
+	 */
+	Integer totalCount();
+
+	/**
+	 * 新增超市
+	 * 
+	 * @param market
+	 * @return
+	 */
+	void addSupermarket(SupermarketInfo market)throws Exception;
+
+	/**
+	 * 根据超市id查找超市信息
+	 * 
+	 * @param gid
+	 *            超市id
+	 * @return
+	 */
+	SupermarketInfo fetchById(Integer gid);
+
+	List<SupermarketInfo> findByPageBetweenRadius(Integer firstResult, Integer pageSize, String minlng, String maxlng,
+			String minlat, String maxlat);
+
+	/**
+	 * 超市列表展示信息
+	 * 
+	 * @return
+	 */
+	List<SupermarketInfo> selectMarket();
+
+	/**
+	 * 搜索查询
+	 * 
+	 * @param name
+	 * @return
+	 */
+	List<SupermarketInfo> findByName(String name);
+
+	/**
+	 * 禁用
+	 * 
+	 * @param marketId
+	 * @return
+	 */
+	boolean disable(Integer marketId);
+
+	/**
+	 * 启用
+	 * 
+	 * @param marketId
+	 * @return
+	 */
+	boolean enable(Integer marketId);
+
+	/**
+	 * 删除
+	 * 
+	 * @param marketId
+	 * @return
+	 */
+	boolean deleteMarket(Integer marketId);
+	void update(SupermarketInfo market)throws Exception;
+	void addmarketPro(MarketProductInfo info);
+	List<MarketProductInfo> findListPro();
+	boolean deleteMarketPro(Integer marketId);
+	MarketProductInfo fetchProById(Integer gId);
+	void updatePro( MarketProductInfo info,SproductParameter paramList);
+	void addProduct(MarketProductInfo info,List<SproductParameter> SproductParameter);
+	boolean disablePro(Integer proid);
+	boolean enablePro(Integer proid);
+	
+	SupermarketInfo fetchBygId(Integer proid);
+	
+	
+	
+	void addProductShare(MarketProductInfo info);
+	List<MarketProductInfo> findListShare();
+	boolean disableShare(Integer proid);
+	boolean enableShare(Integer proid);
+	MarketProductInfo fetchShareById(Integer marketId);
+	void updateShare(MarketProductInfo info);
+	boolean deleteMarketShare(Integer marketId);
+	/**
+	 * 公告金
+	 */
+	Recharge findBalance(String openid);
+	void addRecharge(Recharge re);
+	void updateRecharge(Recharge re);
+	
+	/**
+	 * 订单
+	 */
+	List<Customer>  findListOrder();
+	/**
+	 * 预约信息
+	 */
+	List<Appointment> findListAppointment();
+	MarketProductInfo findProductByid(Integer gid);
+	
+	
+	void addProductVipcn(MarketProductInfo product);
+	List<MarketProductInfo>  findListVipcn();
+	boolean deleteMarketVipcn(Integer marketId);
+	boolean enableVipcn(Integer proid);
+	boolean disableVipcn(Integer proid);
+	MarketProductInfo fetchVipcnById(Integer marketId);
+	void updateVipcn(MarketProductInfo info);
+}

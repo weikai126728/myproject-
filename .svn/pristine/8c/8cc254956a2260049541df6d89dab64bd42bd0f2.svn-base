@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.user.IUserCustomerDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.user.UserCustomer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_nickname" property="nickName" jdbcType="VARCHAR" />
+    <result column="customer_ico" property="ico" jdbcType="VARCHAR"/>
+    <result column="customer_integral" property="integral" jdbcType="INTEGER"/>
+    <result column="user_info_id" property="userID" jdbcType="INTEGER"/>
+    <result column="customer_activity" property="activity" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="DATE"/>
+    <result column="lastscan" property="lastscan" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_nickname, customer_ico, customer_integral,user_info_id, customer_activity,create_time,update_time,lastscan
+  </sql>
+ <insert id="insert" parameterType="com.abbot.schimneylife.pojo.user.UserCustomer" keyProperty="id" useGeneratedKeys="true">
+		insert into user_customer (
+		 customer_nickname, customer_ico, customer_integral,user_info_id,
+		customer_activity,create_time,update_time,lastscan
+		) values (#{nickName,jdbcType=VARCHAR}
+		,#{ico,jdbcType=VARCHAR},#{integral,jdbcType=INTEGER},#{userID,jdbcType=INTEGER},
+		#{activity,jdbcType=INTEGER},
+		now(),now(),now())
+	</insert>
+  <select id="fetchByUserId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from user_customer 
+  	where user_info_id=#{userID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByUserId">
+  	delete from user_customer where user_info_id=#{userID,jdbcType=INTEGER}
+  </delete>
+  <update id="updateCustomer" parameterType="com.abbot.schimneylife.pojo.user.UserCustomer">
+		update user_customer set
+		customer_nickname=#{nickName,jdbcType=VARCHAR},customer_ico=#{ico,jdbcType=VARCHAR}
+		where user_info_id=#{userID,jdbcType=INTEGER}
+ </update>
+ <select id="countTotal" resultType="Integer">
+ 	select count(*) from user_customer
+ </select>
+ <select id="fetchById" resultMap="BaseResultMap">
+ 	select <include refid="Base_Column_List" /> from user_customer 
+  	where id=#{id,jdbcType=INTEGER}
+ </select>
+ <update id="updateLastScan" parameterType="com.abbot.schimneylife.pojo.user.UserCustomer">
+ 	update user_customer set lastscan = now() where id=#{id,jdbcType=INTEGER}
+ </update>
+</mapper>

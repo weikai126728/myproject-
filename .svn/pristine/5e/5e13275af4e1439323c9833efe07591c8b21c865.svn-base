@@ -1,0 +1,59 @@
+
+body{
+	background-color: #FFFFFF;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	border-bottom: 0.266rem solid #F4F4F4;
+	position: fixed;
+	top: 0;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+
+.bottom{
+	width: 100%;
+	text-align: center;
+	margin-top: 1.95rem;
+}
+.bottom img{
+	width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

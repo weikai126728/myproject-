@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.fenxiao.IOrderDistributionDao">
+	<resultMap type="com.abbot.schimneylife.pojo.fenxiao.OrdersDistribution"
+		id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="deleted" property="deleted" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="money" property="money" jdbcType="DOUBLE" />
+		<result column="no" property="no" jdbcType="VARCHAR" />
+		<result column="payDate" property="payDate" jdbcType="DATE" />
+		<result column="productId" property="productId" jdbcType="VARCHAR" />
+		<result column="productMoney" property="productMoney" jdbcType="DOUBLE" />
+		<result column="productName" property="productName" jdbcType="VARCHAR" />
+		<result column="productNum" property="productNum" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="summary" property="summary" jdbcType="VARCHAR" />
+		<result column="user" property="userId" jdbcType="INTEGER" />
+		<result column="wlid" property="wlid" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="DATE" />
+		<association property="user"
+			javaType="com.abbot.schimneylife.pojo.fenxiao.UserDistribution">
+			<id column="user_id" property="id" jdbcType="INTEGER" />
+			<result column="name" property="name" jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,deleted,version,money,no,payDate,productId,productMoney,productName,productNum,status,summary,user,wlid,createDate
+	</sql>
+	<sql id="select_List">
+		select
+		orders.id,orders.deleted,orders.version,orders.money,orders.no,orders.payDate,
+		orders.productId,orders.productMoney,orders.productName,orders.productNum,
+		orders.status,orders.summary,orders.user,orders.wlid,orders.createDate,
+		user.name
+		from orders left join user
+		on user.id = orders.user
+	</sql>
+	<select id="selectOrder" resultMap="BaseResultMap">
+		<include refid="select_List" />
+		where orders.deleted = 0
+	</select>
+	<select id="selectOrderBy" resultMap="BaseResultMap">
+		<include refid="select_List" />
+		where orders.no LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+		or
+		orders.productName LIKE concat('%',#{name,jdbcType=VARCHAR},'%') or
+		user.name LIKE
+		concat('%',#{name,jdbcType=VARCHAR},'%')
+	</select>
+	<update id="deleteById">
+		update orders set deleted = 1 where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from orders
+		where deleted = 0
+	</select>
+	<select id="findByPageAndType" resultMap="BaseResultMap">
+		<include refid="select_List" />
+		where	orders.deleted = 0
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	 
+</mapper>

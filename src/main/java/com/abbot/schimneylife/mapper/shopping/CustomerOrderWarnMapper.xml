@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ICustomerOrderWarnDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.CustomerOrderWarn" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <association property="customer" javaType="com.abbot.schimneylife.pojo.user.UserCustomer" 
+    column="customer_order_id" select="com.abbot.schimneylife.dao.user.IUserCustomerDao.fetchById"/>
+    <association property="order" javaType="com.abbot.schimneylife.pojo.shopping.CustomerOrder" 
+    column="customer_order_id" select="com.abbot.schimneylife.dao.shopping.ICustomerOrderDao.fetchById"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_id, customer_order_id,create_time
+  </sql>
+  <insert id="insert">
+  	insert into customer_order_warn (<include refid="Base_Column_List" />) 
+  	values(replace(uuid(),'-',''),#{customerId,jdbcType=INTEGER},#{orderId,jdbcType=VARCHAR},now())
+  </insert>
+  <select id="findByPage" resultMap="BaseResultMap">
+  	select  customer_order_warn.id, customer_order_warn.customer_id, customer_order_warn.customer_order_id,customer_order_warn.create_time from customer_order_warn 
+  	left join user_customer on customer_order_warn.customer_id = user_customer.id 
+  	<trim prefix=" where " prefixOverrides="and|or" >
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			user_customer.customer_nickname like #{pattern,jdbcType=VARCHAR}
+  		</if>
+  		<if test="createTime !=null">
+  			TIMESTAMPDIFF(DAY,date_format(customer_order_warn.create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  	order by customer_order_warn.create_time ${sort} limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countTotal" resultType="Integer">
+  	select count(*) from customer_order_warn 
+  	<trim prefix=" where " prefixOverrides="and|or" >
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			user_customer.customer_nickname like #{pattern,jdbcType=VARCHAR}
+  		</if>
+  		<if test="createTime !=null">
+  			TIMESTAMPDIFF(DAY,date_format(customer_order_warn.create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  </select>
+</mapper>

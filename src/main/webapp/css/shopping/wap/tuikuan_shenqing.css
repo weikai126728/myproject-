@@ -1,0 +1,152 @@
+
+body{
+	background-color: #F4F4F4;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.296rem;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+.liebiao_box{
+	width: 100%;
+}
+.liebiao_box .lb_box .lb_top{
+	font-size: 0.6rem;
+	height: 1.481rem;
+	line-height: 1.481rem;
+	margin-top: 0.05rem;
+	border-bottom: 1px solid #EBEBEB;
+}
+.liebiao_box .lb_box .lb_top span{
+	margin-left: 0.592rem;
+	color: #444444;
+}
+.liebiao_box .lb_box .lb_top i{
+	margin-right: 0.592rem;
+	color: #6B6B6B;
+	font-size: 0.6rem;
+}
+
+
+.lb_box{
+	margin-bottom: 0.296rem;
+		background-color: #FFFFFF;
+}
+.lb_box .lb_bottom{
+	padding-left: 0.592rem;
+	padding-right: 0.592rem;
+	padding-bottom: 0.592rem;
+}
+
+.lb_box .lb_bottom img{
+	width: 4rem;
+	height: 4rem;
+}
+.lb_box .lb_bottom ul{
+	width: 9.63rem;
+	margin-top: 0.533rem;
+}
+.lb_box .lb_bottom .fr .li_title{
+	font-size: 0.6rem;
+	color: #333333;
+	margin-bottom: 0.3rem;
+}
+.lb_box .lb_bottom .fr .li_title2{
+	font-size: 0.55rem;
+	color: #989898;
+	margin-bottom: 0.7rem;
+}
+.lb_box .lb_bottom .fr .li_jiage{
+	width: 100%;
+}
+.lb_box .lb_bottom .fr .li_jiage .fl{
+	font-size: 0.6rem;
+	color: #EE3900;
+	line-height: 1rem;
+}
+.lb_box .lb_bottom .fr .li_jiage .fl em{
+	font-size: 0.4rem;
+}
+.lb_box .lb_bottom .fr .li_jiage .fr{
+	font-size: 0.6rem;
+	color: #989898;
+	line-height: 1rem;
+}
+
+.shenqing{
+	height: 2rem;
+	padding-right: 0.592rem;
+	padding-left: 0.592rem;
+	background-color: #FCFCFC;
+	border-top: 1px solid #F5F5F5;
+	border-bottom: 1px solid #F5F5F5;
+}
+.shenqing span{
+	font-size: 0.6rem;
+	color: #989898;
+	line-height: 2rem;
+}
+.guoqi em{
+	background: url(../../../image/shopping/wap/guoqi.png) no-repeat center center;
+	width: 0.6rem;
+	height: 0.6rem;
+	background-size: cover;
+	display: inline-block;
+	vertical-align: middle;
+	margin-bottom: 0.15rem;
+	margin-right: 0.15rem;
+}
+.shenqing a{
+	font-size: 0.6rem;
+	color: #4B4B4B;
+	padding: 0 0.503rem;
+	height: 1.185rem;
+	display: inline-block;
+	text-align: center;
+	line-height: 1.185rem;
+	border: 1px solid #E3E3E3;
+	border-radius: 0.2rem;
+	margin-top: 0.4rem;
+	margin-left: 0.5rem;
+	padding-top: 0.05rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

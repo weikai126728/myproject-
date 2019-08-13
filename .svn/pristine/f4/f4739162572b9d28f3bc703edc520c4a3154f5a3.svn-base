@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.RedpackDao">
+	<resultMap id="BaseResultMap"
+		type="com.abbot.schimneylife.pojo.weixin.Probability_fz">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="zipcode" property="zipcode" jdbcType="VARCHAR" />
+		<result column="merername" property="merername" jdbcType="VARCHAR" />
+		<result column="probability_1" property="probability_1"
+			jdbcType="DOUBLE" />
+		<result column="probability_2" property="probability_2"
+			jdbcType="DOUBLE" />
+		<result column="probability_3" property="probability_3"
+			jdbcType="DOUBLE" />
+		<result column="probability_4" property="probability_4"
+			jdbcType="DOUBLE" />
+		<result column="redlimit" property="redlimit" jdbcType="INTEGER" />
+		<result column="pro_a" property="pro_a" jdbcType="INTEGER" />
+		<result column="pro_b" property="pro_b" jdbcType="INTEGER" />
+		<result column="lowMoney" property="lowMoney" jdbcType="INTEGER" />
+		<result column="middleMoney" property="middleMoney" jdbcType="INTEGER" />
+		<result column="seniorMoney" property="seniorMoney" jdbcType="INTEGER" />
+
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,zipcode,merername,probability_1,probability_2,probability_3,probability_4,redlimit,pro_a,pro_b,lowMoney,middleMoney,seniorMoney
+	</sql>
+
+	<update id="updateRedpackGailv" parameterType="com.abbot.schimneylife.pojo.weixin.Probability_fz">
+		update probability_fz
+		<set>
+			<if test="probability_1 != null">
+				probability_1 = #{probability_1,jdbcType=DOUBLE},
+			</if>
+			<if test="probability_2 != null">
+				probability_2 = #{probability_2,jdbcType=DOUBLE},
+			</if>
+			<if test="probability_3 != null">
+				probability_3 = #{probability_3,jdbcType=DOUBLE},
+			</if>
+			<if test="probability_4 != null">
+				probability_4 = #{probability_4,jdbcType=DOUBLE},
+			</if>
+			<if test="redlimit != null">
+				redlimit = #{redlimit,jdbcType=INTEGER},
+			</if>
+			<if test="pro_a != null">
+				pro_a = #{pro_a,jdbcType=INTEGER},
+			</if>
+			<if test="pro_b != null">
+				pro_b = #{pro_b,jdbcType=INTEGER},
+			</if>
+			<if test="lowMoney != null">
+				lowMoney = #{lowMoney,jdbcType=INTEGER},
+			</if>
+			<if test="middleMoney != null">
+				middleMoney = #{middleMoney,jdbcType=INTEGER},
+			</if>
+			<if test="seniorMoney != null">
+				seniorMoney = #{seniorMoney,jdbcType=INTEGER},
+			</if>
+		</set>
+		where zipcode = #{zipcode,jdbcType=VARCHAR} and merername=#{merername,jdbcType=VARCHAR}
+	</update>
+
+	<select id="countTotal" resultType="java.lang.Integer">
+		select count(*) from
+		probability_fz
+	</select>
+
+	<select id="queryRedgailvList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from probability_fz
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<select id="queryRedgailvByzipcode" parameterType="com.abbot.schimneylife.pojo.weixin.GenneraCode"
+		resultMap="BaseResultMap">
+		select * from probability_fz where merername=#{merername}
+	</select>
+
+	<select id="queryLikeRedpackGailv" resultType="com.abbot.schimneylife.pojo.weixin.Probability_fz">
+		select
+		<include refid="Base_Column_List"></include>
+		from probability_fz
+		<if test="merername !=null">
+			<bind name="pattern" value="'%'+ merername +'%'" />
+			where merername like #{pattern,jdbcType=VARCHAR} or
+			zipcode=#{merername}
+		</if>
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryLikeRedpackGailvCuont" parameterType="com.abbot.schimneylife.pojo.weixin.Probability_fz"
+		resultType="java.lang.Integer">
+		select
+		count(*)
+		from probability_fz
+		<if test="merername !=null">
+			<bind name="pattern" value="'%'+ merername +'%'" />
+			where merername like #{pattern,jdbcType=VARCHAR} or
+			zipcode=#{merername}
+		</if>
+	</select>
+
+	<select id="queryBufaRedCount" resultType="java.lang.Integer">
+		select count(*) from
+		fzordermerredpack where count=2;
+	</select>
+
+	<select id="queryBufaRedlist"
+		resultType="com.abbot.schimneylife.pojo.weixin.OrderMerchantRedpack">
+		select * from
+		fzordermerredpack where count=2 order by redid
+		${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER};
+	</select>
+
+	<insert id="addMerchantPayment"
+		parameterType="com.abbot.schimneylife.pojo.weixin.OrderMerchantPayment">
+		insert into fzordermerpayment
+		(mchid,mch_appid,alopenid,merchantpayment,payment_time,partner_trade_no,payment_no,storename,alname)
+		values
+		(#{mchid},#{mch_appid},#{alopenid},#{merchantpayment},NOW(),#{partner_trade_no},#{payment_no},#{storename},#{alname})
+	</insert>
+
+	<insert id="addVoucher" parameterType="com.abbot.schimneylife.pojo.weixin.Voucher">
+		insert into vouchers
+		(coupon_stock_id,cadeId,sendTime)
+		values
+		(#{coupon_stock_id},#{cadeId},#{sendTime})
+	</insert>
+	<select id="queryVoucherCount" resultType="java.lang.Integer">
+		select count(*) from
+		vouchers where sendTime=#{sendTime,jdbcType=VARCHAR};
+	</select>
+
+	<select id="queryVoucherlist" resultType="com.abbot.schimneylife.pojo.weixin.Voucher">
+		select * from
+		vouchers
+		where sendTime=#{sendTime,jdbcType=VARCHAR} order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER};
+	</select>
+	<insert id="addUserVoucher" parameterType="com.abbot.schimneylife.pojo.weixin.Activities">
+		insert into Activities
+		(coupon_stock_id,openid,coupon_id,getTime,count,sendtag,tag,beginTime,endTime,cadeId,coupon_value,coupon_mininum,coupon_name,coupon_desc,scope,send_source)
+		values(#{coupon_stock_id},#{openid},#{coupon_id},#{getTime},#{count},1,1,#{beginTime},#{endTime},#{cadeId},#{coupon_value},#{coupon_mininum},#{coupon_name},#{coupon_desc},#{scope},#{send_source})
+	</insert>
+	<!-- 用户领取红包后将领取信息存入数据库 -->
+	<insert id="addUserRedPack"
+		parameterType="com.abbot.schimneylife.pojo.weixin.OrderMerchantRedpack">
+		insert into fzordermerredpack
+		(mchid,wxappid,re_openid,total_fee,total_amount,mch_billno,send_listid,product_id,count,sendredPackamount,re_time)
+		values(#{mchid},#{wxappid},#{re_openid},#{total_fee},#{total_amount},#{mch_billno},#{send_listid},#{product_id},1,#{sendredPackamount},now())
+	</insert>
+	<update id="updateUserRedPack"> 
+		update fzordermerredpack SET count=1,total_amount=#{total_amount},product_id=#{product_id} where  redid=#{redid}
+	</update>
+	
+	
+	
+	
+	
+	<!-- 通过当前时间获取需要发放代金券的批次号 -->
+	<select id="getSendCoupon_stock_id" resultType="com.abbot.schimneylife.pojo.weixin.Voucher"
+		parameterType="com.abbot.schimneylife.pojo.weixin.Voucher">
+		select *
+		from vouchers where sendTime=#{sendTime};
+	</select>
+	<!-- 代金券的信息 -->
+	<select id="getActivitiesList" resultType="com.abbot.schimneylife.pojo.weixin.Activities">
+		select * from
+		Activities where tag=1 and
+		TIMESTAMPDIFF(DAY,date_format(#{date3},'%Y-%m-%d'),date_format(endTime,'%Y-%m-%d'))>0
+		order by ${order} ${sort} limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER};
+	</select>
+	<select id="getActivitiesCountList" resultType="java.lang.Integer"
+		parameterType="com.abbot.schimneylife.pojo.weixin.Activities">
+		select count(*) from Activities where tag=1 and
+		TIMESTAMPDIFF(DAY,date_format(#{endTime},'%Y-%m-%d'),date_format(endTime,'%Y-%m-%d'))>0;
+	</select>
+	<!-- 通过openid获取代金券的信息 -->
+	<select id="getActivitiesLikeList" resultType="com.abbot.schimneylife.pojo.weixin.Activities">
+		select * from Activities where tag=1
+		<if test="activitsName !=null">
+			and endTime=#{activitsName} or
+			openid=#{activitsName,jdbcType=VARCHAR}
+		</if>
+		order by ${order} ${sort} limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER};
+	</select>
+	<select id="getActivitiesCountLikeList" resultType="java.lang.Integer">
+		select count(*) from Activities where tag=1
+		<if test="activitsName !=null">
+			and endTime=#{activitsName} or
+			openid=#{activitsName,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<!-- 查询：用户的过期代金券 -->
+	<select id="queryOverdueVouchersBytime" resultType="com.abbot.schimneylife.pojo.weixin.Activities">
+		select * from
+		activities where tag=1 and
+		TIMESTAMPDIFF(DAY,date_format(endTime,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d'))>=0
+		order by ${order} ${sort} limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER};
+	</select>
+	<select id="queryOverdueVouchersCountBytime" resultType="java.lang.Integer">
+		select
+		count(*) from activities where tag=1 and
+		TIMESTAMPDIFF(DAY,date_format(endTime,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d'))>=0
+	</select>
+	<!-- 如果用户领取失败 ，添加失败信息 -->
+	<insert id="addNoGetVouchers" parameterType="com.abbot.schimneylife.pojo.weixin.Activities">
+		insert into
+		fzvorcher (amopenid,msg,msgtime) values (#{openid},#{msg},now())
+	</insert>
+
+
+	<select id="queryFzvoruserList" resultType="com.abbot.schimneylife.pojo.weixin.FzVorUser">
+		select * from Fzvoruser order by ${order} ${sort} limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER};
+	</select>
+	<select id="queryFzvoruserCount" resultType="java.lang.Integer">
+		select count(*) from
+		Fzvoruser
+	</select>
+
+	<!-- 修改概率金额 -->
+	<update id="updatePromoney" parameterType="com.abbot.schimneylife.pojo.weixin.Probability_fz">
+		update probability_fz  
+		<trim prefix="set" suffixOverrides="," suffix="">
+  		<if test="lowMoney !=null">
+  			lowMoney = #{lowMoney},
+  		</if>
+  		<if test="middleMoney !=null">
+  			middleMoney = #{middleMoney},
+  		</if>
+  		<if test="seniorMoney !=null">
+  			seniorMoney = #{seniorMoney},
+  		</if>
+  	</trim>
+	</update>
+	<select id="queryPromoneyByzipcode" parameterType="com.abbot.schimneylife.pojo.weixin.GenneraCode"
+		resultMap="BaseResultMap">
+		select * from probability_fz
+	</select>
+		<!-- 佣金结算 -->
+		
+	<insert id="addCommissionSettlement"
+		parameterType="com.abbot.schimneylife.pojo.weixin.OrderMerchantPayment">
+		insert into fz_commission_log
+		(id,alopenid,mchid,mch_appid,merchantpayment,payment_time,create_time,partner_trade_no,payment_no,return_code,result_code,err_code_des)
+		values
+		(replace(uuid(),'-',''),#{alopenid},#{mchid},#{mch_appid},#{merchantpayment},#{payment_time},NOW(),#{partner_trade_no},#{payment_no},#{return_code},#{result_code},#{err_code_des})
+	</insert>
+</mapper>

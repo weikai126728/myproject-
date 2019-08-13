@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.company.INewsDao">
+	<resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.company.news">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="abstract" property="abs" jdbcType="VARCHAR" />
+		<result column="details" property="details" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="smallImg" property="smallImg" jdbcType="VARCHAR" />
+		<result column="degree" property="degree" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Column_list">
+		id,title,abstract,details,type,img,smallImg,create_time,degree
+	</sql>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from news
+	</select>
+	<select id="findByPage" resultMap="BaseResultMap">
+		select
+		<include refid="Column_list" />
+		from news
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<select id="findById" resultMap="BaseResultMap">
+		select
+		<include refid="Column_list" />
+		from news where id=#{id,jdbcType=VARCHAR}
+	</select>
+	<insert id="add" parameterType="com.abbot.schimneylife.pojo.company.news">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into news (
+		<include refid="Column_list" />
+		) values (
+		#{id,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{abs,jdbcType=VARCHAR},
+		#{details,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{img,jdbcType=VARCHAR},
+		#{smallImg,jdbcType=VARCHAR},
+		now(),
+		#{degree,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="edit" parameterType="com.abbot.schimneylife.pojo.company.news">
+		update news set
+		title= #{title,jdbcType=VARCHAR},
+		abstract=#{abs,jdbcType=VARCHAR},
+		details= #{details,jdbcType=VARCHAR},
+		type=#{type,jdbcType=INTEGER},
+		img= #{img,jdbcType=VARCHAR},
+		smallImg= #{smallImg,jdbcType=VARCHAR},
+		create_time= now(),
+		degree= #{degree,jdbcType=INTEGER}
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteById">
+		delete from news where id=#{id,jdbcType=VARCHAR}
+	</delete>
+</mapper>

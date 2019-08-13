@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.ICommissionSettlementDao">
+	<resultMap type="com.abbot.schimneylife.pojo.weixin.CommissionSettlement" id="baseMap">
+		<id column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="product_id" property="product_id" jdbcType="VARCHAR"/>
+		<result column="settlement_status" property="status" jdbcType="INTEGER"/>
+		<result column="settlement_commission" property="commission" jdbcType="INTEGER"/>		
+		<result column="settlement_amount" property="amount" jdbcType="INTEGER"/>
+		<result column="payment_no" property="paymentNo" jdbcType="VARCHAR"/>
+		<result column="storename" property="storename" jdbcType="VARCHAR"/>
+		<result column="total_payment" property="total" jdbcType="INTEGER"/>
+		<result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="sql">
+		id,product_id,settlement_status,settlement_commission,settlement_amount,payment_no,storename,total_payment,create_time
+	</sql>
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.weixin.CommissionSettlement">
+	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+		insert into fz_commission_settlement (<include refid="sql"></include>) 
+		values(#{id},#{product_id},#{status},#{commission},#{amount},#{paymentNo},#{storename},#{total},now())
+	</insert>
+	<select id="sumSuccess" resultType="Integer">
+		select sum(settlement_amount) from fz_commission_settlement where product_id = #{product_id} and settlement_status = 1
+		<if test="startTime !=null">
+			and date_format(create_time,'%Y-%m-%d') >= date_format(#{startTime},'%Y-%m-%d')
+		</if>
+		<if test="endTime !=null">
+			and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{endTime},'%Y-%m-%d')
+		</if>
+	</select>
+	<insert id="insertRelation">
+		insert into fz_comsettle_to_amount (id,amountorder_id,com_settlement_id,percent) values(replace(uuid(),'-',''),#{amountId},#{settlementId},#{percent})
+	</insert>
+	<select id="findByPage" resultMap="baseMap">
+		select <include refid="sql"></include> from fz_commission_settlement 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="search !=null">
+			<bind name="pattern" value="'%'+ search +'%'"/>
+				(product_id like #{pattern} or storename like #{pattern} or payment_no like #{pattern})
+			</if>
+			<if test="startTime !=null">
+				and date_format(create_time,'%Y-%m-%d') >= date_format(#{startTime},'%Y-%m-%d')
+			</if>
+			<if test="endTime !=null">
+				and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{endTime},'%Y-%m-%d')
+			</if>
+		</trim>
+		order by 
+		<choose>
+			<when test="order !=null">
+				${order}
+			</when>
+			<otherwise>
+				create_time
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort !=null">
+				${sort}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult},#{pageSize}
+		</if>
+	</select>
+	<select id="totalCount" resultType="Integer">
+		select count(*) from fz_commission_settlement 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="search !=null">
+			<bind name="pattern" value="'%'+ search +'%'"/>
+				(product_id like #{pattern} or storename like #{pattern} or payment_no like #{pattern})
+			</if>
+			<if test="startTime !=null">
+				and date_format(create_time,'%Y-%m-%d') >= date_format(#{startTime},'%Y-%m-%d')
+			</if>
+			<if test="endTime !=null">
+				and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{endTime},'%Y-%m-%d')
+			</if>
+		</trim>
+	</select>
+</mapper>

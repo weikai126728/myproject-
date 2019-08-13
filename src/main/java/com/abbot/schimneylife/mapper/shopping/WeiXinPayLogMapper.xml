@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IWeiXinPayLogDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.WeiXinPayLog" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="result_code" property="result_code" jdbcType="VARCHAR" />
+    <result column="err_code" property="err_code" jdbcType="VARCHAR"/>
+    <result column="err_code_des" property="err_code_des" jdbcType="VARCHAR"/>
+    <result column="trade_type" property="trade_type" jdbcType="VARCHAR"/>
+    <result column="bank_type" property="bank_type" jdbcType="VARCHAR"/>
+    <result column="total_fee" property="total_fee" jdbcType="INTEGER"/>
+    <result column="settlement_total_fee" property="settlement_total_fee" jdbcType="INTEGER"/>
+    <result column="cash_fee" property="cash_fee" jdbcType="INTEGER"/>
+    <result column="cash_fee_type" property="cash_fee_type" jdbcType="VARCHAR"/>
+    <result column="transaction_id" property="transaction_id" jdbcType="VARCHAR"/>
+    <result column="out_trade_no" property="out_trade_no" jdbcType="VARCHAR"/>
+    <result column="time_end" property="time_end" jdbcType="VARCHAR"/>
+    <result column="create_time" property="create_time" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, result_code,err_code,err_code_des,trade_type,bank_type,total_fee,settlement_total_fee,cash_fee
+    ,cash_fee_type,transaction_id,out_trade_no,time_end,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.WeiXinPayLog">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into weixin_pay_log (<include refid="Base_Column_List"></include>) 
+  	values(#{id,jdbcType=VARCHAR},#{result_code,jdbcType=VARCHAR},#{err_code,jdbcType=VARCHAR},#{err_code_des,jdbcType=VARCHAR}
+  	,#{trade_type,jdbcType=VARCHAR},#{bank_type,jdbcType=VARCHAR},#{total_fee,jdbcType=INTEGER},#{settlement_total_fee,jdbcType=INTEGER}
+  	,#{cash_fee,jdbcType=INTEGER},#{cash_fee_type,jdbcType=VARCHAR},#{transaction_id,jdbcType=VARCHAR},#{out_trade_no,jdbcType=VARCHAR},#{time_end,jdbcType=VARCHAR},now())
+  </insert>
+  <select id="fetchByOrderId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from weixin_pay_log where out_trade_no = (select out_trade_no from weixinpay_to_order where customer_order_id = #{customerOrderId} and type = #{type})
+  </select>
+</mapper>

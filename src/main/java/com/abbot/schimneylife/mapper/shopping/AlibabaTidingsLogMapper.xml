@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IAlibabaTidingsLogDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.AlibabaTidingsLog" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="customer_order_id" property="customerOrderId" jdbcType="VARCHAR" />
+    <result column="orderID" property="orderID" jdbcType="VARCHAR"/>
+    <result column="message_type" property="messageType" jdbcType="VARCHAR"/>
+    <result column="msgSendTime" property="msgSendTime" jdbcType="VARCHAR"/>
+    <result column="aop_signature" property="aop_signature" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_order_id, orderID, message_type,msgSendTime,aop_signature,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.AlibabaTidingsLog">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into alibaba_tidings_log (<include refid="Base_Column_List"/>) values (#{id,jdbcType=VARCHAR},#{customerOrderId,jdbcType=VARCHAR}
+  	,#{orderID,jdbcType=VARCHAR},#{messageType,jdbcType=VARCHAR},#{msgSendTime,jdbcType=VARCHAR},#{aop_signature,jdbcType=VARCHAR}
+  	,now())
+  </insert>
+  
+</mapper>

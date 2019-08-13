@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.fenxiao.IProductDistributionDao">
+	<resultMap type="com.abbot.schimneylife.pojo.fenxiao.ProductDistribution"
+		id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="deleted" property="deleted" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="bills" property="bills" jdbcType="DOUBLE" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="inventory" property="inventory" jdbcType="INTEGER" />
+		<result column="money" property="money" jdbcType="DOUBLE" />
+		<result column="picture" property="picture" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="product_cate" property="productCateId"
+			jdbcType="INTEGER" />
+		<result column="rate_a" property="rateA" jdbcType="INTEGER" />
+		<result column="rate_b" property="rateB" jdbcType="INTEGER" />
+		<result column="rate_c" property="rateC" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="DATE" />
+		<association property="productCate"
+			javaType="com.abbot.schimneylife.pojo.fenxiao.ProductCateDistribution">
+			<id column="pro_id" property="id" jdbcType="INTEGER" />
+			<result column="name" property="name" jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,deleted,version,bills,content,inventory,money,picture,title,product_cate,rate_a,rate_b,rate_c,createDate
+	</sql>
+	<sql id="select_Column_List">
+		select
+		pro.id,pro.bills,pro.content,pro.inventory,pro.money,pro.picture,pro.title,pro.product_cate,
+		pro.rate_a,pro.rate_b,pro.rate_c,pro.createDate,proCate.name from
+		product as pro left join
+		product_cate as proCate
+		on
+		proCate.id=pro.product_cate
+	</sql>
+	<insert id="upload"
+		parameterType="com.abbot.schimneylife.pojo.fenxiao.ProductDistribution"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into product
+		(deleted,version,bills,content,inventory,money,picture,title,product_cate,rate_a,rate_b,rate_c,createDate)
+		values (
+		#{deleted,jdbcType=INTEGER},
+		#{version,jdbcType=INTEGER},
+		#{bills,jdbcType=DOUBLE},
+		#{content,jdbcType=VARCHAR},
+		#{inventory,jdbcType=INTEGER},
+		#{money,jdbcType=DOUBLE},
+		#{picture,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{productCateId,jdbcType=INTEGER},
+		#{rateA,jdbcType=INTEGER},
+		#{rateB,jdbcType=INTEGER},
+		#{rateC,jdbcType=INTEGER},
+		now()
+		)
+	</insert>
+	<update id="update" parameterType="com.abbot.schimneylife.pojo.fenxiao.ProductDistribution">
+		update product set
+		bills=#{bills,jdbcType=DOUBLE},
+		content=#{content,jdbcType=VARCHAR},
+		inventory=#{inventory,jdbcType=INTEGER},
+		money=#{money,jdbcType=DOUBLE},
+		picture=#{picture,jdbcType=VARCHAR},
+		title=#{title,jdbcType=VARCHAR},
+		product_cate=#{productCateId,jdbcType=INTEGER},
+		rate_a=#{rateA,jdbcType=INTEGER},
+		rate_b=#{rateB,jdbcType=INTEGER},
+		rate_c=#{rateC,jdbcType=INTEGER}
+		where  id=#{id,jdbcType=INTEGER}
+		
+	</update>
+	<select id="hasmore" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from product where product_cate=#{proCateId,jdbcType=INTEGER}
+	</select>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from product
+		where deleted = 0
+	</select>
+	<select id="toEdit" resultMap="BaseResultMap">
+		<include refid="select_Column_List" /> where pro.deleted = 0
+		and pro.id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="findByPageAndType" resultMap="BaseResultMap">
+
+		<include refid="select_Column_List" />
+		<trim prefix=" where " prefixOverrides="and|or">
+			pro.deleted = 0
+			<if test="typeId !=null">
+				and pro.product_cate=#{typeId,jdbcType=VARCHAR}
+			</if>
+		</trim>
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<select id="countByType" resultType="Integer">
+		select count(*) from product
+		<trim prefix=" where " prefixOverrides="and|or">
+			deleted = 0
+			<if test="typeId !=null">
+				and product_cate=#{typeId,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	<update id="delete">
+		update product set deleted = 1 where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+</mapper>

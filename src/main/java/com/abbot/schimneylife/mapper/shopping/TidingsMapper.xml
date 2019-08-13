@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ITidingsDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.Tidings" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR"/>
+    <result column="flag" property="flag" jdbcType="INTEGER"/>
+    <result column="author" property="author" jdbcType="VARCHAR"/>
+    <result column="image" property="image" jdbcType="VARCHAR"/>
+    <result column="mall_product_id" property="productId" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, details,flag,author,image,mall_product_id,create_time,update_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.Tidings">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into tidings_info (<include refid="Base_Column_List" />) 
+  	values(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{details,jdbcType=VARCHAR},#{flag,jdbcType=INTEGER},#{author,jdbcType=VARCHAR},#{image,jdbcType=VARCHAR},#{productId,jdbcType=VARCHAR},now(),now())
+  </insert>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.Tidings">
+  	update tidings_info 
+  	<trim prefix="set" suffix=" where id = #{id,jdbcType=VARCHAR} " suffixOverrides=",">
+  		<if test="name !=null">
+  			name = #{name,jdbcType=VARCHAR},
+  		</if>
+  		<if test="details !=null">
+  			details = #{details,jdbcType=VARCHAR},
+  		</if>
+  		<if test="flag !=null">
+  			flag = #{flag,jdbcType=INTEGER},
+  		</if>
+  		<if test="author !=null">
+  			author = #{author,jdbcType=VARCHAR}
+  		</if>
+  		<if test="image !=null">
+  			image = #{image,jdbcType=VARCHAR}
+  		</if>
+  	</trim>
+  </update>
+
+  <select id="findByPage" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tidings_info 
+  	<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  		where name like #{pattern,jdbcType=VARCHAR} or details like #{pattern,jdbcType=VARCHAR}
+  	</if>
+  	order by update_time ${order} limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER} 
+  </select>
+  <select id="countTotal" resultType="Integer">
+  	select count(*) from tidings_info 
+  	<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  		where name like #{pattern,jdbcType=VARCHAR} or details like #{pattern,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  <select id="findById" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tidings_info where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="delete">
+  	delete from tidings_info where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <select id="findAllShow" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tidings_info where flag = 1
+  </select>
+  <select id="countAllShow" resultType="Integer">
+  	select count(*) from tidings_info where flag = 1
+  </select>
+  <select id="findAfter" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from tidings_info where update_time > #{time,jdbcType=VARCHAR} and flag = 1
+  </select>
+  <select id="countAfter" resultType="Integer">
+  	select count(*) from tidings_info where update_time > #{time,jdbcType=VARCHAR} and flag = 1
+  </select>
+</mapper>

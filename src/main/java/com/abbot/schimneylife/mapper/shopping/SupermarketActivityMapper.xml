@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ISupermarketActivityDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.SupermarketActivity" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, details, create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketActivity">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into supermarket_activity_list (id, title, details,supermarket_info_id, create_time) 
+  	values(#{id,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{details,jdbcType=VARCHAR},#{marketId,jdbcType=VARCHAR},now())
+  </insert>
+  <select id="findActivityByMarketId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from supermarket_activity_list 
+  	where supermarket_info_id = #{supermarketId,jdbcType=INTEGER}
+  </select>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketActivity">
+  	update supermarket_activity_list 
+  	<trim prefix="set " suffix=" where id=#{id,jdbcType=VARCHAR} " suffixOverrides=",">
+  		<if test="title !=null">
+  			title = #{title,jdbcType=VARCHAR},
+  		</if>
+  		<if test="details !=null">
+  			details = #{details,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
+  </update>
+  <delete id="delete">
+  	delete from supermarket_activity_list where id=#{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ILogisticsInfoDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.LogisticsInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="waybill" property="waybill" jdbcType="VARCHAR"/>
+    <result column="logistics_no" property="logisticsNo" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company, customer_order_id,waybill,logistics_no,create_time
+  </sql>
+  <insert id="insert">
+  	insert into logistics_info (<include refid="Base_Column_List" />) 
+  	values(replace(uuid(),'-',''),#{company,jdbcType=VARCHAR},#{customerOrderId,jdbcType=VARCHAR},#{waybill,jdbcType=INTEGER},#{logisticsNo,jdbcType=VARCHAR},now())
+  </insert>
+  <update id="update">
+  	update logistics_info 
+  	<trim prefix="set" suffixOverrides="," suffix=" where id=#{id}">
+  		<if test="company !=null">
+  			company = #{company,jdbcType=VARCHAR},
+  		</if>
+  		<if test="waybill !=null">
+  			waybill = #{waybill,jdbcType=VARCHAR},
+  		</if>
+  		<if test="logisticsNo !=null">
+  			logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
+  </update>
+  <select id="fetchByOrderId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from logistics_info where customer_order_id=#{orderId,jdbcType=VARCHAR}
+  </select>
+</mapper>

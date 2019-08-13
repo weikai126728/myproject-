@@ -1,0 +1,269 @@
+
+body{
+	background-color: #F4F4F4;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.266rem;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+
+.fahuo_tishi{
+	width: 100%;
+	height: 3.259rem;
+	background-color: #F19A12;
+	color: #FFFFFF;
+	margin-bottom: 0.296rem;
+}
+.fahuo_tishi img{
+	width: 0.992rem;
+	height: 0.874rem;
+	margin-left: 1.348rem;
+	margin-top: 1.2rem;
+	margin-right: 0.488rem;
+}
+.fahuo_tishi span{
+	font-size: 0.711rem;
+	line-height: 3.259rem;
+}
+
+
+.dz{
+	width: 100%;
+	background-color: #FFFFFF;
+	padding-top: 0.755rem;
+	/*padding-left: 0.592rem;
+	padding-right: 0.592rem;*/
+	padding-bottom: 0.726rem;
+	margin-bottom: 0.326rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.dz .dz_top{
+	font-size: 0.681rem;
+	color: #333333;
+	margin-bottom: 0.666rem;
+	padding-left: 0.592rem;
+}
+.dz .dz_top a{
+	width: 0.459rem;
+	height: 0.651rem;
+	display: inline-block;
+}
+.dz .dz_top a img{
+	width: 100%;
+	margin-bottom: 0.1rem;
+	vertical-align: middle;
+}
+.dz.dz_top span{
+	vertical-align: middle;
+}
+.dz .dz_top span em{
+	margin-left: 0.444rem;
+}
+.dz .dz_top .em{
+	width: 1.229rem;
+	height: 0.696rem;
+	display: inline-block;
+	border: 1px solid #EC3D0E;
+	color: #EC3D0E;
+	text-align: center;
+	line-height: 0.696rem;
+	border-radius: 0.1rem;
+	font-size: 0.414rem;
+	vertical-align: middle;
+	margin-bottom: 0.1rem;
+	margin-left: 0.474rem;
+}
+
+.dz .dz_bottom{
+	width: 100%;
+}
+.dz .dz_bottom span{
+	font-size: 0.562rem;
+	color: #8E8E8E;
+	width: 12.9rem;
+margin-left: 1.348rem;
+    margin-right: 1.348rem;
+    width: 13rem;
+	display: inline-block;
+}
+
+.liuyan{
+	width: 100%;
+	background-color: #FFFFFF;
+	margin-bottom: 0.296rem;
+}
+.liuyan .liuyan_top{
+	width: 100%;
+	height: 2.088rem;
+	line-height: 2.088rem;
+}
+.liuyan .liuyan_top img{
+	width: 0.651rem;
+	height: 0.592rem;
+	margin-top: 0.829rem;
+	margin-left: 0.592rem;
+}
+.liuyan .liuyan_top span{
+	font-size: 0.622rem;
+	color: #333333;
+	margin-left: 0.148rem;
+}
+.liuyan .liuyan_bottom span{
+	font-size: 0.562rem;
+	color: #8E8E8E;
+	margin-left: 1.348rem;
+	margin-right: 1.348rem;
+	display: inline-block;
+	width: 13rem;
+}
+.liuyan .liuyan_bottom{
+	padding-bottom: 0.592rem;
+}
+
+.dingdan_box_bottom{
+	background-color: #FFFFFF;
+	padding-left: 0.592rem;
+	padding-right: 0.592rem;
+	padding-bottom: 0.444rem;
+	padding-top: 0.444rem;
+	border-bottom: 1px solid #EBEBEB;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.dingdan_box_bottom img{
+	width: 4rem;
+	height: 4rem;
+}
+.dingdan_box_bottom ul{
+	width: 9.63rem;
+}
+.dingdan_box_bottom .fl .li_title{
+	font-size: 0.592rem;
+	color: #333333;
+	margin-bottom: 0.415rem;
+	width: 10.5rem;
+}
+.dingdan_box_bottom .fl .li_title2{
+	font-size: 0.503rem;
+	color: #989898;
+	margin-bottom: 0.5rem;
+}
+.dingdan_box_bottom .fl .li_jiage{
+	width: 100%;
+}
+.dingdan_box_bottom .fl .li_jiage .fl{
+	font-size: 0.711rem;
+	color: #EE3900;
+	line-height: 1rem;
+}
+.dingdan_box_bottom .fl .li_jiage .fl em{
+	font-size: 0.444rem;
+}
+.dingdan_box_bottom .fl .li_jiage .fr{
+	font-size: 0.55rem;
+	color: #989898;
+	line-height: 1rem;
+}
+
+.dd_xiangqing{
+	width: 100%;
+	background-color: #FFFFFF;
+	margin-bottom: 0.295rem;
+}
+.dd_xiangqing li{
+	margin-left: 0.592rem;
+	margin-right: 0.592rem;
+	font-size: 0.533rem;
+	color: #8E8E8E;
+	border-bottom: 1px solid #EBEBEB;
+	height: 1.777rem;
+	line-height: 1.777rem;
+}
+
+.fukuan{
+	width: 100%;
+	height: 1.777rem;
+	line-height: 1.777rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.326rem;
+}
+.fukuan span{
+	font-size: 0.592rem;
+	margin-right: 0.592rem;
+}
+.fukuan span em{
+	color: #F10507;
+}
+
+.anniu{
+	width: 100%;
+	height: 2.725rem;
+	border-top: 1px solid #EBEBEB;
+	background-color: #FFFFFF;
+	position: fixed;
+	bottom: 0;
+	z-index: 999;
+}
+.anniu a{
+	display: inline-block;
+	padding: 0 0.503rem;
+	height: 1.185rem;
+	line-height: 1.185rem;
+	text-align: center;
+	border: 1px solid #EBEBEB;
+	border-radius: 0.2rem;
+	margin-left: 0.296rem;
+	margin-top: 0.74rem;
+	font-size: 0.533rem;
+	color: #4B4B4B;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.anniu .queren{
+	color: #EE3900;
+	border-color: #EE3900;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.abbot.schimneylife.dao.shopping.ICustomerShippingAddressDao">
+	<resultMap id="BaseResultMap"
+		type="com.abbot.schimneylife.pojo.shopping.CustomerShippingAddress">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="shipping_address" property="address" jdbcType="VARCHAR" />
+		<result column="shipping_place" property="place" jdbcType="VARCHAR" />
+		<result column="contact_phone" property="contactPhone"
+			jdbcType="VARCHAR" />
+		<result column="contact_user" property="contactUser" jdbcType="VARCHAR" />
+		<result column="shipping_status" property="status" jdbcType="INTEGER" />
+		<result column="user_customer_id" property="customerId"
+			jdbcType="INTEGER" />
+		<result column="contact_user_idCard" property="contactUserIdCard"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, shipping_place,shipping_address, contact_phone,
+		contact_user,
+		shipping_status,user_customer_id,contact_user_idCard,create_time,
+		update_time
+	</sql>
+	<insert id="insert"
+		parameterType="com.abbot.schimneylife.pojo.shopping.CustomerShippingAddress"
+		keyProperty="id" useGeneratedKeys="true">
+
+		insert into
+		customer_shipping_address (shipping_place,
+		shipping_address,
+		contact_phone, contact_user,
+		shipping_status,create_time,
+		update_time,user_customer_id,contact_user_idCard) values
+		(#{place,jdbcType=INTEGER},#{address,jdbcType=INTEGER}
+		,#{contactPhone,jdbcType=VARCHAR},#{contactUser,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},now(),now(),#{customerId,jdbcType=INTEGER},
+		#{contactUserIdCard,jdbcType=VARCHAR})
+	</insert>
+	<select id="queryCustomerShippingAddress" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from customer_shipping_address where user_customer_id =
+		#{customerId,jdbcType=INTEGER} order by shipping_status
+		desc,create_time desc
+	</select>
+	<update id="updateAddressMessage">
+		update customer_shipping_address set shipping_status
+		= 0 where id !=
+		#{id,jdbcType=VARCHAR} and user_customer_id =
+		#{customerId,jdbcType=INTEGER}
+	</update>
+	<update id="setAddressMessage">
+		update customer_shipping_address set shipping_status
+		= 1 where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateAddress"
+		parameterType="com.abbot.schimneylife.pojo.shopping.CustomerShippingAddress">
+		update customer_shipping_address set
+		shipping_address=#{address,jdbcType=VARCHAR},shipping_place=#{place,jdbcType=VARCHAR},
+		contact_phone=#{contactPhone,jdbcType=VARCHAR},contact_user=#{contactUser,jdbcType=VARCHAR},
+		contact_user_idCard=#{contactUserIdCard,jdbcType=VARCHAR},
+		update_time=now() where id=#{id,jdbcType=INTEGER}
+
+	</update>
+	<select id="fetchCommonUse" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from customer_shipping_address where user_customer_id =
+		#{customerId,jdbcType=INTEGER} and shipping_status=1
+	</select>
+	<select id="fetchCommonId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from customer_shipping_address where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectId" resultType="java.lang.Integer">
+		SELECT id FROM customer_shipping_address WHERE user_customer_id=#{customerId,jdbcType=INTEGER} ORDER BY user_customer_id DESC LIMIT 1
+	</select>
+	<select id="selectStatu" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from customer_shipping_address where user_customer_id = #{id,jdbcType=INTEGER} and shipping_status=1
+	</select>
+	<delete id="deleteAddress">
+		delete from customer_shipping_address where id=
+		#{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

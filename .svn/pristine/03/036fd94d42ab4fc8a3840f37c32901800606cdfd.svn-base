@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.user.IRoleDao">
+	<resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.user.Role">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="role_name" property="name" jdbcType="VARCHAR" />
+		<result column="role_describe" property="describe" jdbcType="VARCHAR" />
+		<result column="role_level" property="level" jdbcType="INTEGER" />
+		<result column="num" property="number" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,role_name,role_describe,role_level,create_time
+	</sql>
+	
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.user.Role"
+		keyProperty="id" useGeneratedKeys="true">
+
+		insert into user_role_info (role_name,role_describe,role_level,create_time)
+		values (
+		#{name,jdbcType=VARCHAR},
+		#{describe,jdbcType=VARCHAR},
+		#{level,jdbcType=INTEGER},
+		now())
+
+	</insert>
+	<update id="update" parameterType="com.abbot.schimneylife.pojo.user.Role">
+		update user_role_info 
+		<trim prefix="set" suffixOverrides="," suffix="where id = #{id}">
+			<if test="name!=null">
+				role_name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="describe !=null">
+				role_describe = #{describe,jdbcType=VARCHAR},
+			</if>
+			<if test="level !=null">
+				role_level = #{level,jdbcType=INTEGER},
+			</if>
+		</trim>	
+	</update>
+	<select id="groupByRoleLessThan" resultMap="BaseResultMap">
+		select role.id,(SELECT count(*) from user_to_role where role_id = role.id) as num,role.role_name,role.role_level from user_role_info as role where role.role_level &lt;= #{level,jdbcType=INTEGER} 
+	</select>
+	<select id="groupByNoMarketAndMember" resultMap="BaseResultMap">
+		select role.id,(SELECT count(*) from user_to_role where role_id = role.id) as num,role.role_name,role.role_level from user_role_info as role where role.role_level not in(2,3) 
+	</select>
+	<select id="findByLevelLessThan" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include> from user_role_info where role_level &lt;= #{level,jdbcType=INTEGER}
+	</select>
+	<select id="findByNoMarketAndMember" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include> from user_role_info where role_level not in(2,3)
+	</select>
+	<select id="findByLevelGreaterThan" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include> from user_role_info where role_level &gt;= #{level,jdbcType=INTEGER}
+	</select>
+	<select id="findAll" resultMap="BaseResultMap">
+		select role.id,role.role_describe,(SELECT count(*) from user_to_role where role_id = role.id) as num,role.role_name,role.role_level from user_role_info as role order by role_level asc
+	</select>
+	<delete id="delete">
+		delete from user_role_info where id = #{roleId,jdbcType=INTEGER}
+	</delete>
+</mapper>

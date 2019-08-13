@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IShoppingCartDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.ShoppingCart" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <association property="mallCart" javaType="com.abbot.schimneylife.pojo.shopping.MallCart" >
+	    <id column="mc_id" property="id" jdbcType="VARCHAR" />
+	    <result column="total_count" property="totalCount" jdbcType="INTEGER"/>
+	    <association property="product" javaType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+	    	<id column="mp_id" property="id" jdbcType="VARCHAR" />
+		    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+		    <result column="details" property="details" jdbcType="VARCHAR" />
+		    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+		    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+		    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+		    <result column="pro_status" property="status" jdbcType="INTEGER"/>
+		    <result column="producing_area" property="productArea" jdbcType="VARCHAR"/>
+		    <association property="parameter" javaType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">   
+		        <id column="mpp_id" property="id" jdbcType="VARCHAR"/>
+		        <result column="quality_day" property="qualityDay" jdbcType="INTEGER"/>
+		        <result column="quality_month" property="qualityMonth" jdbcType="INTEGER"/>
+		        <result column="quality_year" property="qualityYear" jdbcType="INTEGER"/>
+		        <result column="original_price" property="original" jdbcType="DECIMAL"/>
+		        <result column="current_price" property="cur_price" jdbcType="DECIMAL"/>
+		        <result column="first_param" property="firstParam" jdbcType="VARCHAR"/>
+		     	<result column="second_param" property="secondParam" jdbcType="VARCHAR"/>
+		     	<result column="param_json" property="json" jdbcType="VARCHAR"/>
+		    </association>
+	    </association>
+	  </association>
+  </resultMap>
+  <resultMap id="orderList" type="com.abbot.schimneylife.pojo.shopping.ShoppingCart" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+   	<collection property="mallList" column="id" select="com.abbot.schimneylife.mapper.shopping.MallCartMapper.fetchListByShoppingCart"></collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_customer_id, create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.ShoppingCart">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into shopping_cart (id, user_customer_id, create_time) values(#{id,jdbcType=VARCHAR},#{customerId,jdbcType=INTEGER},now())
+  </insert>
+  <select id="getIdByUserId" resultMap="BaseResultMap">
+  	select shopping_cart.id,shopping_cart.create_time,mc.id as mc_id,total_count,mp.id as mp_id,pro_status,product_name,details,img_small,img_middle,img_large
+  	,producing_area,mpp.id as mpp_id,quality_day,quality_month,quality_year,original_price,current_price,param_json, first_param, second_param
+  	from shopping_cart left join user_customer ON user_customer_id=user_customer.id 
+  	left join mall_cart_list as mc on shopping_cart.id = mc.shopping_cart_id 
+  	left join mall_product as mp on mc.mall_product_id = mp.id 
+  	left join mall_product_parameter as mpp on mpp.id = mc.mall_product_param_id 
+  	where user_info_id=#{userInfoID,jdbcType=INTEGER} and mp.pro_status = #{status,jdbcType=INTEGER} order by shopping_cart.create_time desc
+  </select>
+  <delete id="delete" parameterType="java.util.Map">
+  	delete from shopping_cart where id in 
+  	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach>
+  </delete>
+  <delete id="deleteById">
+  	delete from shopping_cart where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <select id="findAll" resultMap="orderList">
+  	select <include refid="Base_Column_List"></include> from shopping_cart
+  </select>
+</mapper>

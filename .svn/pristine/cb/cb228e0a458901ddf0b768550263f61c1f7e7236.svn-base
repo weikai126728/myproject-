@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IYingLiOrderDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.YingLiOrder" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR"/>
+    <result column="number" property="number" jdbcType="VARCHAR"/>
+    <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="money" property="money" jdbcType="INTEGER"/>
+    <result column="order_status" property="status" jdbcType="INTEGER"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <association property="user" column="user_info_id" javaType="com.abbot.schimneylife.pojo.user.User"
+     select="com.abbot.schimneylife.dao.user.IUserDao.findById"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, details,number,type,order_status,phone,user_info_id,money,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.YingLiOrder">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into yingli_order (<include refid="Base_Column_List" />) 
+  	values(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{details,jdbcType=VARCHAR},#{number,jdbcType=VARCHAR},#{type,jdbcType=INTEGER}
+  	,1,#{phone,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{money,jdbcType=INTEGER},now())
+  </insert>
+  <select id="findByPage" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from yingli_order 
+  	<trim prefix=" where " suffix=" limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}" prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{startTime,jdbcType=VARCHAR}) &lt;=0 
+  		</if>
+  		<if test="endTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{endTime,jdbcType=VARCHAR}) >=0 
+  		</if>
+  		<if test="like !=null">
+  			<bind name="pattern" value="'%' +like+ '%'"/>
+  			and (name like #{pattern} or phone like #{pattern})
+  		</if>
+  	</trim>
+  </select>
+  <select id="countTotal" resultType="Integer">
+  	select count(*) from yingli_order 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{startTime,jdbcType=VARCHAR}) &lt;=0 
+  		</if>
+  		<if test="endTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{endTime,jdbcType=VARCHAR}) >=0 
+  		</if>
+  		<if test="like !=null">
+  			<bind name="pattern" value="'%' +like+ '%'"/>
+  			and (name like #{pattern} or phone like #{pattern})
+  		</if>
+  	</trim>
+  </select>
+  <update id="updateStatus">
+  	update yingli_order set order_status = #{status,jdbcType=INTEGER} where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

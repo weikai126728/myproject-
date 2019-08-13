@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.IAmountOrderDao">
+	<resultMap type="com.abbot.schimneylife.pojo.weixin.AmountOrder" id="baseMap">
+		<association property="alliance" javaType="com.abbot.schimneylife.pojo.weixin.Alliance">
+			<id column="alid" property="alid" jdbcType="INTEGER"/>
+			<result column="type_id" property="type_id" jdbcType="INTEGER"/>
+			<result column="model_id" property="model_id" jdbcType="INTEGER"/>
+		</association>
+	</resultMap>
+	<select id="findByPage" resultType="com.abbot.schimneylife.pojo.weixin.AmountOrder">
+	select amopenid,product_id,payment,payAmount,count,amtime_end from fzamountorder where amid in (select distinct a.amid  FROM fzamountorder a INNER JOIN fzalliance  fa ON a.product_id = fa.product_id  INNER JOIN user_to_alliance uta on  uta.alliance_alid = fa.alid
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and (a.product_id like #{pattern,jdbcType=VARCHAR} 
+				or fa.storename like #{pattern,jdbcType=VARCHAR})
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+			
+			<if test="salesmanId !=null">
+				and uta.user_info_id=#{salesmanId,jdbcType=INTEGER}
+			</if>
+		</trim>
+		)
+		order by 
+		<choose>
+			<when test="column !=null">
+				${column} 
+			</when>
+			<otherwise>
+				amid 
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort !=null">
+				${sort} 
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}		
+		</if>
+	</select>
+	<select id="findByproduct_id" resultType="com.abbot.schimneylife.pojo.weixin.AmountOrder">
+	select amid,amopenid,product_id,payment,payAmount,count,amtime_end from fzamountorder
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="product_id !=null">
+				and product_id=#{product_id,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+		</trim>
+			 									
+		order by amid  desc
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}		
+		</if>
+	</select>
+	<select id="countTotal" resultType="Integer">
+		select  count(distinct a.amid) FROM fzamountorder a INNER JOIN fzalliance  fa ON a.product_id = fa.product_id  INNER JOIN user_to_alliance uta on  uta.alliance_alid = fa.alid
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and (a.product_id like #{pattern,jdbcType=VARCHAR} 
+				or fa.storename like #{pattern,jdbcType=VARCHAR})
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+			<if test="salesmanId !=null">
+				and uta.user_info_id=#{salesmanId,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="countTotalByProduct_id" resultType="Integer">
+		select  count(distinct amid) FROM fzamountorder
+		<trim prefix=" where " prefixOverrides="and|or">
+		<if test="product_id !=null">
+				and product_id=#{product_id,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+			
+		</trim>
+	</select>
+	<select id="totalAmount" resultType="Integer">
+		select SUM(payAmount) from (select distinct a.amid,payAmount FROM fzamountorder a ,fzalliance  fa,user_to_alliance uta
+		<trim prefix=" where " prefixOverrides="and|or">
+		and a.product_id = fa.product_id and uta.alliance_alid = fa.alid 
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and (a.product_id like #{pattern,jdbcType=VARCHAR} 
+				or fa.storename like #{pattern,jdbcType=VARCHAR})
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+			<if test="salesmanId !=null">
+				and uta.user_info_id=#{salesmanId,jdbcType=INTEGER}
+			</if>
+		</trim>) as data
+	</select>
+	
+	<select id="totalAmountByProduct_id" resultType="Integer">
+		select SUM(payAmount) from (select distinct amid,payAmount FROM fzamountorder 
+		<trim prefix=" where " prefixOverrides="and|or">
+		<if test="product_id !=null">
+				and product_id=#{product_id,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+		</trim>) as data
+	</select>
+	<select id="countAmountByAllianceIds" resultType="Integer" parameterType="java.util.HashMap">
+		select sum(payment) from fzamountorder where product_id in 
+		(select product_id from fzalliance where alid in 
+		<foreach collection="ids" item="id" open="("  separator="," close=")" >
+			#{id,jdbcType=INTEGER}
+		</foreach>
+		)
+		<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+	</select>
+	<select id="noCommissionSum" resultType="Integer">
+		select sum(payment) from fzamountorder fa left join fz_comsettle_to_amount fcta on fa.amid = fcta.amountorder_id where fcta.amountorder_id is null 
+		<if test="product_id !=null">
+			and amopenid in (select amopenid from fzuserpaystore where product_id = #{product_id})
+		</if>
+		<if test="startTime !=null">
+			and date_format(amtime_end,'%Y-%m-%d') >= date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')
+		</if>
+		<if test="endTime !=null">
+			and date_format(amtime_end,'%Y-%m-%d') &lt;= date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')
+		</if>
+	</select>
+	<select id="noCommissionList" resultType="com.abbot.schimneylife.pojo.weixin.AmountOrder">
+		select fa.*,fz.storename,fz.alid,fz.type_id,fz.model_id from fzamountorder fa 
+		left join fz_comsettle_to_amount fcta on fa.amid = fcta.amountorder_id 
+		left join fzalliance fz on fz.product_id = fa.product_id
+		where fcta.amountorder_id is null 
+		<if test="product_id !=null">
+			and amopenid in (select amopenid from fzuserpaystore where product_id = #{product_id})
+		</if>
+		<if test="startTime !=null">
+			and date_format(amtime_end,'%Y-%m-%d') >= date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')
+		</if>
+		<if test="endTime !=null">
+			and date_format(amtime_end,'%Y-%m-%d') &lt;= date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')
+		</if>
+	</select>
+	
+	<select id="sumAmount" resultType="Integer">
+		select SUM(payAmount) from (select distinct amid,payAmount,product_id FROM fzamountorder 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+		</trim>) as data where product_id=#{product_id}
+	</select>
+	<select id="countAmount" resultType="Integer">
+		select count(payAmount) from (select distinct amid,payAmount,product_id FROM fzamountorder 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(amtime_end,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+		</trim>) as data where product_id=#{product_id}
+	</select>
+	<select id="findServiceFee" resultType="com.abbot.schimneylife.pojo.weixin.TsServiceFee">
+	    select * from ts_sefee where product_id=#{product_id}
+	</select>
+	
+	<insert id="insertServicefee">
+	    insert into ts_sefee(product_id,sefee,createtime) values(#{product_id},0,now())
+	</insert>
+	<insert id="updateSfee" parameterType="com.abbot.schimneylife.pojo.weixin.TsServiceFee">
+	    update ts_sefee set sefee=#{sefee} where product_id=#{product_id}
+	</insert>
+</mapper>

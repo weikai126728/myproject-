@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.IOrderPaymentDao">
+	<resultMap type="com.abbot.schimneylife.pojo.weixin.OrderPayment" id="basemap">
+		<id column="pyid" property="id" jdbcType="INTEGER"/>
+		<result column="alopenid" property="openId" jdbcType="VARCHAR"/>
+		<result column="merchantpayment" property="money" jdbcType="INTEGER"/>
+		<result column="payment_time" property="payTime" jdbcType="DATE"/>
+		<result column="partner_trade_no" property="tradeNo" jdbcType="VARCHAR"/>
+		<result column="payment_no" property="paymentNo" jdbcType="VARCHAR"/>
+		<association property="user" column="alopenid" javaType="com.abbot.schimneylife.pojo.user.User" 
+		select="com.abbot.schimneylife.dao.user.IUserDao.fetchByOpenId"></association>
+		<association property="alliance" column="alopenid" javaType="com.abbot.schimneylife.pojo.weixin.Alliance" 
+		select="com.abbot.schimneylife.dao.weixin.IAllianceDao.fetchByOpenId"></association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		pyid,alopenid,merchantpayment,payment_time,partner_trade_no,payment_no
+	</sql>
+	<select id="findByPage" resultMap="basemap">
+		select <include refid="Base_Column_List"></include> from fzordermerpayment
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="userId !=null">
+				and alopenid in(select alopenid from fzalliance where alid in(select alliance_alid from user_to_alliance where user_info_id=#{userId,jdbcType=INTEGER})) 
+			</if>
+			<if test="openId !=null">
+				and alopenid = #{openId,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null">
+			and TIMESTAMPDIFF(DAY,date_format(payment_time,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+			and TIMESTAMPDIFF(DAY,date_format(payment_time,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+			<if test="search !=null">
+			<bind name="pattern" value="'%'+ search +'%'"/>
+				and alopenid in(select alopenid from fzalliance where storename like #{pattern} or product_id like #{pattern})
+			</if>
+		</trim>
+		order by 
+		<choose>
+			<when test="column !=null">
+				${column}
+			</when>
+			<otherwise>
+				payment_time
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort !=null">
+				 ${sort} 
+			</when>
+			<otherwise> desc </otherwise>
+		</choose>
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}		
+		</if>
+	</select>
+	<select id="countTotal" resultType="Integer">
+		select count(*) from fzordermerpayment 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="userId !=null">
+				and alopenid in(select alopenid from fzalliance where alid in(select alliance_alid from user_to_alliance where user_info_id=#{userId,jdbcType=INTEGER})) 
+			</if>
+			<if test="openId !=null">
+				and alopenid = #{openId,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null">
+				and TIMESTAMPDIFF(DAY,date_format(payment_time,'%Y-%m-%d'),date_format(#{startTime,jdbcType=VARCHAR},'%Y-%m-%d')) &lt;=0
+			</if>
+			<if test="endTime !=null">
+			and TIMESTAMPDIFF(DAY,date_format(payment_time,'%Y-%m-%d'),date_format(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d')) &gt;=0
+			</if>
+			<if test="search !=null">
+			<bind name="pattern" value="'%'+ search +'%'"/>
+				and alopenid in(select alopenid from fzalliance where storename like #{pattern} or product_id like #{pattern})
+			</if>
+		</trim>
+	</select>
+	<select id="countTrade" resultType="Integer">
+		select sum(merchantpayment) from fzordermerpayment 
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="userId !=null">
+				and alopenid in(select alopenid from fzalliance where alid in(select alliance_alid from user_to_alliance where user_info_id=#{userId,jdbcType=INTEGER})) 
+			</if>
+			<if test="openId !=null">
+				and alopenid = #{openId,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null">
+				and date_format(payment_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+			</if>
+			<if test="endTime !=null">
+				and date_format(payment_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=VARCHAR}
+			</if>
+			<if test="search !=null">
+			<bind name="pattern" value="'%'+ search +'%'"/>
+				and alopenid in(select alopenid from fzalliance where storename like #{pattern} or product_id like #{pattern})
+			</if>
+		</trim>
+	</select>
+</mapper>

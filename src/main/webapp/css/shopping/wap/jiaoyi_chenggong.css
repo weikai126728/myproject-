@@ -1,0 +1,133 @@
+body {
+	background-color: #FFFFFF;
+}
+
+.top {
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+}
+
+.top .fl {
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+
+.top .fl img {
+	width: 100%;
+}
+
+.top span {
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+.wancheng_tishi {
+	width: 100%;
+	height: 6.34rem;
+	background-color: #FEA50B;
+	margin-bottom: 0.296rem;
+}
+
+.wancheng_tishi img {
+	width: 2.859rem;
+	height: 2.77rem;
+	margin-top: 1.762rem;
+	margin-left: 1.422rem;
+}
+
+.wancheng_tishi ul {
+	margin-top: 1.68rem;
+	margin-right: 0.9rem;
+}
+
+.wancheng_tishi ul li {
+	font-size: 0.562rem;
+	color: #FFFFFF;
+	line-height: 0.859rem;
+}
+
+.wancheng_tishi ul li a {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+.wancheng_tishi ul .lili a {
+	margin-right: 0.888rem;
+}
+
+.tuijian {
+	width: 100%;
+	background-color: #FFFFFF;
+}
+
+.tuijian .tuijian_top {
+	width: 100%;
+	font-size: 0.592rem;
+	color: #333333;
+	height: 2.074rem;
+	line-height: 2.074rem;
+	text-align: center;
+	border-bottom: 1px solid #E3E3E3;
+}
+
+.tuijian .tuijian_top span {
+	display: inline-block;
+}
+
+.tuijian .tuijian_bottom .tuijian_box {
+	width: 7.9rem;
+	border: 1px solid #E3E3E3;
+	padding-top: 1.125rem;
+	padding-bottom: 1.54rem;
+	border-top: none;
+	border-left: none;
+	border-bottom: none;
+}
+
+.tuijian .tuijian_bottom .tuijian_box img {
+	width: 6.237rem;
+	height: 6.237rem;
+	margin: 0.918rem;
+}
+
+.tuijian .tuijian_bottom .tuijian_box ul {
+	margin-left: 0.592rem;
+}
+
+.tuijian .tuijian_bottom .tuijian_box ul li {
+	margin-top: 0.296rem;
+}
+
+.one a {
+	font-size: 0.7rem;
+	color: #000000;
+	width: 7rem;
+	display: inline-block;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.two {
+	font-size: 0.6rem;
+	color: #989898;
+	    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    width: 7.2rem;
+}
+
+.three {
+	font-size: 0.55rem;
+	color: #F20505;
+}
+

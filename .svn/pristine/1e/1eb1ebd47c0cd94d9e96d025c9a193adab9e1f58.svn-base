@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ICustomerFootmarkDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.CustomerFootmark" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+    <result column="supermarket_info_id" property="supermarketId" jdbcType="INTEGER"/>
+    <result column="mall_product_id" property="productId" jdbcType="VARCHAR"/>
+    <result column="surplus_id" property="surplusId" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <association property="product" javaType="com.abbot.schimneylife.pojo.shopping.MallProduct" >
+	    <id column="pro_id" property="id" jdbcType="VARCHAR" />
+	    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+	    <result column="details" property="details" jdbcType="VARCHAR" />
+	    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+	    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+	    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+	    <result column="producing_area" property="productArea" jdbcType="VARCHAR"/>
+	    <association property="parameter" javaType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">   
+	        <id column="par_id" property="id" jdbcType="VARCHAR"/>
+	        <result column="original_price" property="original" jdbcType="DECIMAL"/>
+	        <result column="current_price" property="cur_price" jdbcType="DECIMAL"/>
+	    </association>
+	  </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, customer_id, supermarket_info_id, mall_product_id, surplus_id, create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.CustomerFootmark">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into customer_footmark (<include refid="Base_Column_List"/>) values (#{id,jdbcType=VARCHAR},#{type,jdbcType=INTEGER}
+  	,#{customerId,jdbcType=INTEGER},#{supermarketId,jdbcType=INTEGER},#{productId,jdbcType=VARCHAR},#{surplusId,jdbcType=VARCHAR}
+  	,now())
+  </insert>
+  <delete id="deleteBeforeDays">
+  	delete from customer_footmark where customer_id=#{customerId,jdbcType=INTEGER} and datediff(now(),create_time)>#{days,jdbcType=INTEGER}
+  </delete>
+  <select id="findByPage" resultMap="BaseResultMap">
+  	select cf.id, cf.type,cf.create_time,pro.id as pro_id,product_name,details,img_small,img_middle,img_large,producing_area
+  	,par.id as par_id,original_price,current_price
+  	from customer_footmark as cf 
+  	left join mall_product as pro on cf.mall_product_id = pro.id 
+  	left join mall_product_parameter as par on par.mall_product_id = cf.mall_product_id 
+  	where cf.customer_id=#{customerId,jdbcType=INTEGER} and pro.pro_status = 1 order by cf.create_time desc 
+  	limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="findByDate" resultMap="BaseResultMap">
+  	select cf.id, cf.type,cf.create_time,pro.id as pro_id,product_name,details,img_small,img_middle,img_large,producing_area
+  	,par.id as par_id,original_price,current_price
+  	from customer_footmark as cf 
+  	left join mall_product as pro on cf.mall_product_id = pro.id 
+  	left join mall_product_parameter as par on par.mall_product_id = cf.mall_product_id 
+  	where cf.customer_id=#{customerId,jdbcType=INTEGER} and pro.pro_status = 1 and 
+  	to_days(cf.create_time)-to_days(#{date,jdbcType=VARCHAR})=0 order by cf.create_time desc
+  </select>
+  <select id="countByDate" resultType="java.lang.Integer">
+  	select count(*) 
+  	from customer_footmark as cf 
+  	left join mall_product as pro on cf.mall_product_id = pro.id 
+  	left join mall_product_parameter as par on par.mall_product_id = cf.mall_product_id 
+  	where cf.customer_id=#{customerId,jdbcType=INTEGER} and pro.pro_status = 1 and 
+  	to_days(cf.create_time)-to_days(#{date,jdbcType=VARCHAR})=0
+  </select>
+  <delete id="deleteByIds" parameterType="java.util.Map">
+  	delete from customer_footmark where customer_id=#{customerId,jdbcType=INTEGER} and id in
+  	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach>
+  </delete>
+  <select id="fetchNumToday" resultType="java.lang.Integer">
+  	select count(*) from customer_footmark where customer_id=#{customerId,jdbcType=INTEGER} and mall_product_id=#{productId,jdbcType=VARCHAR} and datediff(now(),create_time)=0
+  </select>
+  <select id="countTotal" resultType="java.lang.Integer">
+  	select count(*) from customer_footmark as cf left join mall_product as pro on cf.mall_product_id = pro.id  
+  	where cf.customer_id=#{customerId,jdbcType=INTEGER} and pro.pro_status = 1
+  </select>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ICustomerEvaluateDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.CustomerEvaluate" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="evaluate_describe" property="describe" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR"/>
+    <result column="pro_start" property="proStart" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <association property="customer" javaType="com.abbot.schimneylife.pojo.user.UserCustomer" >
+	    <id column="cus_id" property="id" jdbcType="VARCHAR" />
+	    <result column="customer_nickname" property="nickName" jdbcType="VARCHAR" />
+	    <result column="customer_ico" property="ico" jdbcType="VARCHAR" />
+	  </association>
+  </resultMap>
+  <resultMap type="com.abbot.schimneylife.pojo.shopping.CustomerEvaluate" id="simpleMap">
+  	<id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="evaluate_describe" property="describe" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR"/>
+    <result column="pro_start" property="proStart" jdbcType="INTEGER"/>
+    <result column="pid" property="pid" jdbcType="VARCHAR"/>
+    <result column="evaluate_level" property="level" jdbcType="INTEGER"/>
+    <result column="evaluate_status" property="status" jdbcType="INTEGER"/>
+    <result column="evaluate_reply" property="reply" jdbcType="VARCHAR"/>
+    <result column="reply_author" property="replyAuthor" jdbcType="VARCHAR"/>
+    <result column="reply_time" property="replyTime" jdbcType="DATE"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <association property="customer" column="customer_id" javaType="com.abbot.schimneylife.pojo.user.UserCustomer" 
+    select="com.abbot.schimneylife.dao.user.IUserCustomerDao.fetchById"></association>
+    <association property="product" column="product_id" javaType="com.abbot.schimneylife.pojo.shopping.MallProduct" 
+    select="com.abbot.schimneylife.dao.shopping.IMallProductDao.fetchById"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_id, product_id, evaluate_type, evaluate_describe, img, pro_start,pid,evaluate_level,evaluate_status,evaluate_reply,reply_author,reply_time, create_time, update_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.CustomerEvaluate">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into customer_evaluate (<include refid="Base_Column_List"></include>) values(#{id,jdbcType=VARCHAR},#{customerId,jdbcType=INTEGER},#{proId,jdbcType=VARCHAR}
+  	,#{type,jdbcType=INTEGER},#{describe,jdbcType=VARCHAR},#{img,jdbcType=VARCHAR},#{proStart,jdbcType=INTEGER},#{pid,jdbcType=VARCHAR}
+  	,#{level,jdbcType=INTEGER},#{status,jdbcType=INTEGER},null,null,null,now(),now())
+  </insert>
+  <select id="findByProduct" resultMap="BaseResultMap">
+  	select eva.id,eva.evaluate_describe,eva.img,eva.pro_start,eva.create_time,eva.update_time,cus.id as cus_id,cus.customer_nickname
+  	,cus.customer_ico from customer_evaluate as eva left join user_customer as cus on eva.customer_id = cus.id 
+  	where eva.product_id = #{proId,jdbcType=VARCHAR} and evaluate_type=1 and evaluate_status &lt;&gt; 0 order by eva.create_time desc limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countByProduct" resultType="Integer">
+  	select count(*) from customer_evaluate where product_id = #{proId,jdbcType=VARCHAR} and evaluate_type=1 and evaluate_status &lt;&gt; 0
+  </select>
+  <select id="getPraise" resultType="String">
+  SELECT FORMAT((SELECT count(*) from customer_evaluate WHERE product_id = #{proId,jdbcType=VARCHAR} and pro_start>3 and evaluate_type=1 and evaluate_status &lt;&gt; 0)/(SELECT  count(*) from customer_evaluate WHERE product_id = #{proId,jdbcType=VARCHAR}  and evaluate_type=1 and evaluate_status &lt;&gt; 0)*100,2)
+  </select>
+  <select id="findGoodByProduct" resultMap="BaseResultMap">
+  	select eva.id,eva.evaluate_describe,eva.img,eva.pro_start,eva.create_time,eva.update_time,cus.id as cus_id,cus.customer_nickname
+  	,cus.customer_ico from customer_evaluate as eva left join user_customer as cus on eva.customer_id = cus.id 
+  	where eva.product_id = #{proId,jdbcType=VARCHAR} and evaluate_type=1 and evaluate_status &lt;&gt; 0 and eva.pro_start>3 order by eva.create_time desc limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countGoodByProduct" resultType="Integer">
+  	select count(*) from customer_evaluate where product_id = #{proId,jdbcType=VARCHAR} and evaluate_type=1 and evaluate_status &lt;&gt; 0 and pro_start>3
+  </select>
+  <select id="findBadByProduct" resultMap="BaseResultMap">
+  	select eva.id,eva.evaluate_describe,eva.img,eva.pro_start,eva.create_time,eva.update_time,cus.id as cus_id,cus.customer_nickname
+  	,cus.customer_ico from customer_evaluate as eva left join user_customer as cus on eva.customer_id = cus.id 
+  	where eva.product_id = #{proId,jdbcType=VARCHAR} and evaluate_type=1 and evaluate_status &lt;&gt; 0 and eva.pro_start<![CDATA[ < ]]>3 order by eva.create_time desc limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countBadByProduct" resultType="Integer">
+  	select count(*) from customer_evaluate where product_id = #{proId,jdbcType=VARCHAR} and evaluate_type=1 and evaluate_status &lt;&gt; 0 and pro_start<![CDATA[ < ]]>3
+  </select>
+  <select id="findByPage" resultMap="simpleMap">
+  	select <include refid="Base_Column_List"></include> from customer_evaluate 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<choose>
+  			<when test="status !=null">
+  				and evaluate_status = #{status,jdbcType=INTEGER}
+  			</when>
+  			<otherwise>
+  				and evaluate_status > 0
+  			</otherwise>
+  		</choose>
+  		<if test="type !=null">
+  			and evaluate_type = #{type,jdbcType=INTEGER}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and evaluate_describe like ${pattern}
+  		</if>
+  		<if test="createTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  		order by create_time ${sort} limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countTotal" resultType="Integer">
+  	select count(*) from customer_evaluate 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<choose>
+  			<when test="status !=null">
+  				and evaluate_status = #{status,jdbcType=INTEGER}
+  			</when>
+  			<otherwise>
+  				and evaluate_status > 0
+  			</otherwise>
+  		</choose>
+  		<if test="type !=null">
+  			and evaluate_type = #{type,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and evaluate_describe like ${pattern}
+  		</if>
+  		<if test="createTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  </select>
+  <update id="updateReply">
+  	update customer_evaluate set evaluate_reply = #{reply,jdbcType=VARCHAR},reply_time = now(),reply_author=#{author,jdbcType=VARCHAR} where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateStatus">
+  	update customer_evaluate set evaluate_status = #{status,jdbcType=INTEGER} where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <delete id="delete" parameterType="Integer">
+  	delete from customer_evaluate where id = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

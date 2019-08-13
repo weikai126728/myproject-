@@ -1,0 +1,125 @@
+body {
+	background-color: #FFFFFF;
+}
+
+.top {
+	text-align: center;
+	border-bottom: 0.296rem solid #F0F0F0;
+	width: 100%;
+	height: 1.955rem;
+	background-color: #FFFFFF;
+	position: fixed;
+	top: 0;
+}
+
+.top .fl {
+	width: 0.385rem;
+	height: 0.696rem;
+}
+
+.top .fl img {
+	width: 100%;
+	margin-left: 0.592rem;
+	margin-top: 0.592rem;
+}
+
+.top span {
+	font-size: 0.692rem;
+	line-height: 1.955rem;
+}
+
+.bbb li {
+	border: 1px solid #EBEBEB;
+	border-left: none;
+	border-right: none;
+	margin: 0 0.592rem;
+}
+
+.bbb {
+	width: 100%;
+	background-color: #FFFFFF;
+	margin-top: 2.296rem;
+}
+
+.bbb span {
+	font-size: 0.6rem;
+	line-height: 2.044rem;
+	margin-left: 0.2rem;
+	color: #4B4B4B;
+}
+
+.bbb li input {
+	font-size: 0.6rem;
+	margin-left: 0.5rem;
+	width: 55%;
+    line-height: 1rem;
+    color: #6A6A6A;
+    -webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+    vertical-align: middle;
+}
+
+.text_ta {
+	border-bottom: none;
+	position: relative;
+	height: 5rem;
+}
+
+.text_ta label {
+	float: right;
+	margin-top:;
+}
+
+.text_ta textarea {
+	width: 69%;
+	height: 4rem;
+	font-size: 0.6rem;
+	margin-left: 0.76rem;
+	margin-top: 0.575rem;
+	float: left;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.sub {
+	width: 14.814rem;
+	margin-left: 0.592rem;
+	margin-top: 1.185rem;
+	margin-bottom: 0.518rem;
+	padding-bottom: 2rem;
+}
+
+.sub span {
+	width: 100%;
+	height: 2.044rem;
+	border-radius: 0.3rem;
+	line-height: 2.044rem;
+	background-color: #f84f18;
+	color: #FFFFFF;
+	font-size: 0.6rem;
+	display: inline-block;
+	text-align: center;
+	margin-top: 1.3rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bbb li em {
+	font-size: 0.6rem;
+	color: #9F9F9F;
+	display:block;
+	margin-left: 0.25rem;
+	margin-top: 0.5rem;
+} 
+
+.clear {
+	visibility: hidden;
+	width: 4%;
+	float: right;
+	vertical-align: middle;
+	margin-right: 0.5rem;
+	margin-top: 0.5rem;
+}

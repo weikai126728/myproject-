@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ICustomerOrderDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.CustomerOrder" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="shipping_address" property="shippingAddress" jdbcType="VARCHAR"/>
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+    <result column="contact_user" property="contactUser" jdbcType="VARCHAR"/>
+    <result column="order_number" property="number" jdbcType="VARCHAR"/>
+    <result column="total_amount" property="amount" jdbcType="DECIMAL"/>
+    <result column="success_total_amount" property="successAmount" jdbcType="DECIMAL"/>
+    <result column="update_total_amount" property="updateTotalAmount" jdbcType="DECIMAL"/>
+    <result column="total_count" property="count" jdbcType="INTEGER"/>
+    <result column="order_status" property="status" jdbcType="INTEGER"/>
+    <result column="flag" property="flag" jdbcType="INTEGER"/>
+    <result column="message" property="message" jdbcType="VARCHAR"/>
+    <result column="order_source" property="source" jdbcType="INTEGER"/>
+    <result column="payment_method" property="payment" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="last_time" property="lastTime" jdbcType="DATE"/>
+  </resultMap>
+  <resultMap id="simpleMap" type="com.abbot.schimneylife.pojo.shopping.CustomerOrder">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="shipping_address" property="shippingAddress" jdbcType="VARCHAR"/>
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+    <result column="contact_user" property="contactUser" jdbcType="VARCHAR"/>
+    <result column="order_number" property="number" jdbcType="VARCHAR"/>
+    <result column="total_amount" property="amount" jdbcType="DECIMAL"/>
+    <result column="success_total_amount" property="successAmount" jdbcType="DECIMAL"/>
+    <result column="update_total_amount" property="updateTotalAmount" jdbcType="DECIMAL"/>
+    <result column="total_count" property="count" jdbcType="INTEGER"/>
+    <result column="order_status" property="status" jdbcType="INTEGER"/>
+    <result column="flag" property="flag" jdbcType="INTEGER"/>
+    <result column="message" property="message" jdbcType="VARCHAR"/>
+    <result column="order_source" property="source" jdbcType="INTEGER"/>
+    <result column="payment_method" property="payment" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="last_time" property="lastTime" jdbcType="DATE"/>
+    <association property="logistics" column="id" javaType="com.abbot.schimneylife.pojo.shopping.LogisticsInfo" select="com.abbot.schimneylife.dao.shopping.ILogisticsInfoDao.fetchByOrderId"></association>
+    <collection property="mallOrder" column="id" ofType="com.abbot.schimneylife.pojo.shopping.MallOrder" select="com.abbot.schimneylife.dao.shopping.IMallOrderDao.findMallOrderList"/>
+  </resultMap>
+  <resultMap id="redMap" type="com.abbot.schimneylife.pojo.shopping.CustomerOrder">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="shipping_address" property="shippingAddress" jdbcType="VARCHAR"/>
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+    <result column="contact_user" property="contactUser" jdbcType="VARCHAR"/>
+    <result column="order_number" property="number" jdbcType="VARCHAR"/>
+    <result column="total_amount" property="amount" jdbcType="DECIMAL"/>
+    <result column="success_total_amount" property="successAmount" jdbcType="DECIMAL"/>
+    <result column="update_total_amount" property="updateTotalAmount" jdbcType="DECIMAL"/>
+    <result column="total_count" property="count" jdbcType="INTEGER"/>
+    <result column="order_status" property="status" jdbcType="INTEGER"/>
+    <result column="flag" property="flag" jdbcType="INTEGER"/>
+    <result column="message" property="message" jdbcType="VARCHAR"/>
+    <result column="order_source" property="source" jdbcType="INTEGER"/>
+    <result column="payment_method" property="payment" jdbcType="INTEGER"/>
+    <result column="cashback_status" property="cashbackStatus" jdbcType="INTEGER"/>
+    <result column="cashback_time" property="cashbackTime" jdbcType="DATE"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="last_time" property="lastTime" jdbcType="DATE"/>
+    <collection property="mallOrder" column="id" ofType="com.abbot.schimneylife.pojo.shopping.MallOrder" select="com.abbot.schimneylife.dao.shopping.IMallOrderDao.findMallOrderList"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_customer_id, order_number, shipping_address, contact_phone, contact_user,total_amount,total_count,order_status,flag,success_total_amount,update_total_amount,order_source,payment_method
+    ,create_time,last_time,cashback_status,cashback_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.CustomerOrder">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into customer_order (<include refid="Base_Column_List"/>) values (#{id,jdbcType=VARCHAR},#{customerId,jdbcType=INTEGER}
+  	,#{number,jdbcType=VARCHAR},#{shippingAddress,jdbcType=VARCHAR},#{contactPhone,jdbcType=VARCHAR},#{contactUser,jdbcType=VARCHAR},#{amount,jdbcType=DECIMAL}
+  	,#{count,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{flag,jdbcType=INTEGER},#{successAmount,jdbcType=DECIMAL},#{updateTotalAmount,jdbcType=DECIMAL},#{source,jdbcType=INTEGER},#{payment,jdbcType=INTEGER},now(),now(),null,null)
+  </insert>
+  <select id="findByStatus" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from customer_order where user_customer_id=#{customerId,jdbcType=INTEGER} and flag = 1
+  	<if test="status!=null">
+  		<choose>
+  			<when test="status ==12">
+  				and (order_status = 1 or order_status = 2)
+  			</when>
+  			<otherwise>
+  				and order_status = #{status,jdbcType=INTEGER}
+  			</otherwise>
+  		</choose>
+  	</if>
+  	<if test="status ==null">
+  		and order_status > -2 
+  	</if>
+  	 order by create_time desc limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countByStatus" resultType="java.lang.Integer">
+  	select count(*) from customer_order where user_customer_id=#{customerId,jdbcType=INTEGER} and flag = 1
+  	<if test="status!=null">
+  		<choose>
+  			<when test="status ==12">
+  				and (order_status = 1 or order_status = 2)
+  			</when>
+  			<otherwise>
+  				and order_status = #{status,jdbcType=INTEGER}
+  			</otherwise>
+  		</choose>
+  	</if>
+  	<if test="status ==null">
+  		and order_status > -2 
+  	</if>
+  </select>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.CustomerOrder">
+  	update customer_order 
+  	<trim prefix=" set " suffixOverrides="," suffix=" where id = #{id}">
+  		<if test="amount !=null">total_amount=#{amount,jdbcType=DECIMAL},</if>
+  		<if test="count !=null">total_count=#{count,jdbcType=INTEGER},</if>
+  		<if test="payment !=null">payment_method=#{payment,jdbcType=INTEGER},</if>
+  		<if test="cashbackStatus !=null">
+  			cashback_status = #{cashbackStatus,jdbcType=INTEGER},
+  			cashback_time = now(),
+  		</if>
+  	</trim>
+  </update>
+  <update id="updateStatus">
+  	update customer_order set order_status = #{status,jdbcType=INTEGER}
+  	<if test="status ==4">
+  	,last_time = now() 
+  	</if>
+  	 where id = #{orderId,jdbcType=VARCHAR} and user_customer_id=#{customerId,jdbcType=INTEGER}
+  </update>
+  <select id="findById" resultMap="simpleMap">
+  	select <include refid="Base_Column_List" /> , last_time from customer_order where user_customer_id=#{customerId,jdbcType=INTEGER} and id=#{orderId,jdbcType=VARCHAR}
+  </select>
+  <select id="fetchById" resultMap="simpleMap">
+  	select <include refid="Base_Column_List" /> from customer_order where id=#{id,jdbcType=VARCHAR}
+  </select>
+  <update id="updateFlag">
+  	update customer_order set flag = #{flag,jdbcType=INTEGER} where id = #{orderId,jdbcType=VARCHAR} and user_customer_id=#{customerId,jdbcType=INTEGER}
+  </update>
+  <select id="countTotal" resultType="Integer">
+  	select count(*) from customer_order
+  </select>
+  <select id="countMoney" resultType="BigDecimal">
+  	select sum(total_amount) from customer_order where order_status in(1,2,3,4,5)
+  </select>
+  <select id="countByStatusAndMonth" resultType="Integer">
+  	select count(*) from customer_order where month(create_time)=#{month,jdbcType=INTEGER} 
+  	<if test="status!=null">
+  		<choose>
+  			<when test="status ==12">
+  				and (order_status = 1 or order_status = 2)
+  			</when>
+  			<otherwise>
+  				and order_status = #{status,jdbcType=INTEGER}
+  			</otherwise>
+  		</choose>
+  	</if>
+  </select>
+  <select id="fetchByOrderID" resultMap="BaseResultMap">
+  	select customer_order.id, user_customer_id, customer_order.order_number, customer_order.shipping_address, customer_order.contact_phone, customer_order.contact_user
+  	,customer_order.total_amount,customer_order.total_count,customer_order.order_status,customer_order.flag,customer_order.success_total_amount,customer_order.order_source,customer_order.create_time,customer_order.last_time 
+  	 from customer_order left join alibaba_order on customer_order.id = alibaba_order.customer_order_id 
+  	 where alibaba_order.orderID = #{orderID,jdbcType=VARCHAR}
+  </select>
+  <select id="findByPage" resultMap="simpleMap">
+  	select <include refid="Base_Column_List"></include> from customer_order 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and order_number like #{pattern}
+  		</if>
+  		<if test="status !=null">
+  			<choose>
+  			<when test="status ==12">
+  				and (order_status = 1 or order_status = 2)
+  			</when>
+  			<otherwise>
+  				and order_status = #{status,jdbcType=INTEGER}
+  			</otherwise>
+  		</choose>
+  		</if>
+  		<if test="createTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  	 order by 
+  	<choose>
+  		<when test="order !=null">
+  			${order}
+  		</when>
+  		<otherwise>
+  			create_time
+  		</otherwise>
+  	</choose>
+  	<choose>
+  		<when test="sort !=null">
+  			${sort}
+  		</when>
+  		<otherwise>
+  			desc
+  		</otherwise>
+  	</choose>
+  	<if test="firstResult!=null and pageSize!=null">
+  	  limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  	</if>
+  </select>
+  <select id="countTotalByLike" resultType="Integer">
+  	select count(*) from customer_order <trim prefix=" where " prefixOverrides="and|or">
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and order_number like #{pattern}
+  		</if>
+  		<if test="status !=null">
+  			<choose>
+  			<when test="status ==12">
+  				and (order_status = 1 or order_status = 2)
+  			</when>
+  			<otherwise>
+  				and order_status = #{status,jdbcType=INTEGER}
+  			</otherwise>
+  		</choose>
+  		</if>
+  		<if test="createTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  </select>
+  <select id="findSettlementByPage" resultMap="simpleMap">
+  	select <include refid="Base_Column_List"></include> from customer_order 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  			and order_status > 0
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and order_number like #{pattern}
+  		</if>
+  		<if test="createTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  	 order by 
+  	<choose>
+  		<when test="order !=null">
+  			${order}
+  		</when>
+  		<otherwise>
+  			create_time
+  		</otherwise>
+  	</choose>
+  	<choose>
+  		<when test="sort !=null">
+  			${sort}
+  		</when>
+  		<otherwise>
+  			desc
+  		</otherwise>
+  	</choose>
+  	<if test="firstResult!=null and pageSize!=null">
+  	  limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  	</if>
+  </select>
+  <select id="countSettlementByLike" resultType="Integer">
+  	select count(*) from customer_order <trim prefix=" where " prefixOverrides="and|or">
+  			and order_status >0
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and order_number like #{pattern}
+  		</if>
+  		<if test="createTime !=null">
+  			and TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),#{createTime,jdbcType=VARCHAR})=0
+  		</if>
+  	</trim>
+  </select>
+  <update id="closeOverdueNoPayOrder">
+  	update customer_order set order_status = -1 where TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),now()) >=5 and order_status = 0
+  </update>
+  <update id="modifyOrderPrice">
+  	update customer_order set update_total_amount = #{amount,jdbcType=DECIMAL} where id=#{id,jdbcType=VARCHAR}
+  </update>
+  <update id="closeOverduiNoGotOrder">
+  	update customer_order set order_status = 3 where TIMESTAMPDIFF(DAY,date_format(create_time,'%Y-%m-%d'),now()) >=10 and order_status = 3
+  </update>
+  <select id="findByPageAndProduct" parameterType="java.util.HashMap" resultMap="redMap">
+  	select customer_order.id, customer_order.user_customer_id, customer_order.order_number, customer_order.shipping_address, customer_order.contact_phone, customer_order.contact_user
+  	,customer_order.total_amount,customer_order.cashback_status,customer_order.cashback_time,customer_order.total_count,customer_order.order_status,customer_order.flag,customer_order.success_total_amount
+  	,customer_order.update_total_amount,customer_order.order_source,customer_order.payment_method,customer_order.create_time,customer_order.last_time from customer_order 
+  	left join mall_order_list on customer_order.id = mall_order_list.customer_order_id 
+  	left join user_customer on customer_order.user_customer_id = user_customer.id 
+  	left join user_info on user_customer.user_info_id = user_info.id 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="create_time !=null">
+  			and customer_order.create_time  &lt;=  #{create_time,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and ( user_info.user_nickname like #{pattern} or user_info.user_phone like #{pattern})
+  		</if>
+  		<if test="productIds !=null">
+  			and mall_order_list.mall_product_id in
+  			<foreach collection="productIds" item="item" open="(" close=")" separator=",">
+  				#{item}
+  			</foreach>
+  		</if>
+  		<if test="userIds !=null">
+  			and user_info.id in 
+  			<foreach collection="userIds" item="item" open="(" close=")" separator=",">
+  				#{item}	
+  			</foreach>
+  		</if>
+  		<if test="success">
+  			and customer_order.order_status >=4 
+  			and timestampdiff(day,date_format(customer_order.last_time,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d')) >=3
+  		</if>
+  	</trim>
+  	order by 
+  	<choose>
+  		<when test="column !=null">
+  			${column} 
+  		</when>
+  		<otherwise>
+  			customer_order.create_time 
+  		</otherwise>
+  	</choose>
+  	<choose>
+  		<when test="sort !=null">
+  			${sort}
+  		</when>
+  		<otherwise>
+  			desc
+  		</otherwise>
+  	</choose>
+  	<if test="firstResult !=null and pageSize !=null">
+  		limit #{firstResult},#{pageSize}
+  	</if>
+  </select>
+  
+  <select id="findByPageAndProductByTime" parameterType="java.util.HashMap" resultMap="redMap">
+  	select customer_order.id, customer_order.user_customer_id, customer_order.order_number, customer_order.shipping_address, customer_order.contact_phone, customer_order.contact_user
+  	,customer_order.total_amount,customer_order.cashback_status,customer_order.cashback_time,customer_order.total_count,customer_order.order_status,customer_order.flag,customer_order.success_total_amount
+  	,customer_order.update_total_amount,customer_order.order_source,customer_order.payment_method,customer_order.create_time,customer_order.last_time from customer_order 
+  	left join mall_order_list on customer_order.id = mall_order_list.customer_order_id 
+  	left join user_customer on customer_order.user_customer_id = user_customer.id 
+  	left join user_info on user_customer.user_info_id = user_info.id 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="create_time !=null">
+  			and customer_order.create_time  &lt;=  #{create_time,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and ( user_info.user_nickname like #{pattern} or user_info.user_phone like #{pattern})
+  		</if>
+  		<if test="productIds !=null">
+  			and mall_order_list.mall_product_id in
+  			<foreach collection="productIds" item="item" open="(" close=")" separator=",">
+  				#{item}
+  			</foreach>
+  		</if>
+  		<if test="userIds !=null">
+  			and user_info.id in 
+  			<foreach collection="userIds" item="item" open="(" close=")" separator=",">
+  				#{item}	
+  			</foreach>
+  		</if>
+  		<if test="success">
+  			and cashback_status=0
+  			and customer_order.order_status >=4 
+  			and timestampdiff(day,date_format(customer_order.last_time,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d')) >=3
+  		</if>
+  	</trim>
+  	order by 
+  	<choose>
+  		<when test="column !=null">
+  			${column} 
+  		</when>
+  		<otherwise>
+  			customer_order.create_time 
+  		</otherwise>
+  	</choose>
+  	<choose>
+  		<when test="sort !=null">
+  			${sort}
+  		</when>
+  		<otherwise>
+  			desc
+  		</otherwise>
+  	</choose>
+  	<if test="firstResult !=null and pageSize !=null">
+  		limit #{firstResult},#{pageSize}
+  	</if>
+  </select>
+  
+  
+  <select id="countTotalByProduct" parameterType="java.util.HashMap" resultType="Integer">
+  	select count(*) from customer_order 
+  	left join mall_order_list on customer_order.id = mall_order_list.customer_order_id 
+  	left join user_customer on customer_order.user_customer_id = user_customer.id 
+  	left join user_info on user_customer.user_info_id = user_info.id 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and ( user_info.user_nickname like #{pattern} or user_info.user_phone like #{pattern})
+  		</if>
+  		<if test="productIds !=null">
+  			and mall_order_list.mall_product_id in
+  			<foreach collection="productIds" item="item" open="(" close=")" separator=",">
+  				#{item}
+  			</foreach>
+  		</if>
+  		<if test="userIds !=null">
+  			and user_info.id in 
+  			<foreach collection="userIds" item="item" open="(" close=")" separator=",">
+  				#{item}	
+  			</foreach>
+  		</if>
+  		<if test="success">
+  			and customer_order.order_status >=4 
+  			and timestampdiff(day,date_format(customer_order.last_time,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d')) >=3
+  		</if>
+  	</trim>
+  </select>
+  <select id="sumTotalByProduct" parameterType="java.util.HashMap" resultType="Double">
+  	select sum(total_amount) from customer_order 
+  	left join mall_order_list on customer_order.id = mall_order_list.customer_order_id 
+  	left join user_customer on customer_order.user_customer_id = user_customer.id 
+  	left join user_info on user_customer.user_info_id = user_info.id 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and ( user_info.user_nickname like #{pattern} or user_info.user_phone like #{pattern})
+  		</if>
+  		<if test="productIds !=null">
+  			and mall_order_list.mall_product_id in
+  			<foreach collection="productIds" item="item" open="(" close=")" separator=",">
+  				#{item}
+  			</foreach>
+  		</if>
+  		<if test="userIds !=null">
+  			and user_info.id in 
+  			<foreach collection="userIds" item="item" open="(" close=")" separator=",">
+  				#{item}	
+  			</foreach>
+  		</if>
+  		<if test="success">
+  			and customer_order.order_status >=4 
+  			and timestampdiff(day,date_format(customer_order.last_time,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d')) >=3
+  		</if>
+  	</trim>
+  </select>
+  
+  <select id="sumTotalByWanghonProduct" parameterType="java.util.HashMap" resultType="Double">
+  	select sum(total_amount) from customer_order 
+  	left join mall_order_list on customer_order.id = mall_order_list.customer_order_id 
+  	left join user_customer on customer_order.user_customer_id = user_customer.id 
+  	left join user_info on user_customer.user_info_id = user_info.id 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="startTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime !=null">
+  			and date_format(customer_order.create_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  		<bind name="pattern" value="'%'+ like +'%'"/>
+  			and ( user_info.user_nickname like #{pattern} or user_info.user_phone like #{pattern})
+  		</if>
+  		<if test="productIds !=null">
+  			and mall_order_list.mall_product_id in
+  			<foreach collection="productIds" item="item" open="(" close=")" separator=",">
+  				#{item}
+  			</foreach>
+  		</if>
+  		<if test="userIds !=null">
+  			and user_info.id in 
+  			<foreach collection="userIds" item="item" open="(" close=")" separator=",">
+  				#{item}	
+  			</foreach>
+  		</if>
+  		<if test="success">
+  			and cashback_status=0
+  			and customer_order.order_status >=4 
+  			and timestampdiff(day,date_format(customer_order.last_time,'%Y-%m-%d'),date_format(now(),'%Y-%m-%d')) >=3
+  		</if>
+  	</trim>
+  </select>
+</mapper>

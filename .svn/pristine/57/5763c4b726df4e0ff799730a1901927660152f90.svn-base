@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.IBonusDao">
+	<resultMap type="com.abbot.schimneylife.pojo.weixin.Bonus" id="baseMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="fu_openid" property="openid" jdbcType="VARCHAR"/>
+		<result column="alopenid" property="alopenid" jdbcType="VARCHAR"/>
+		<result column="product_id" property="product_id" jdbcType="VARCHAR"/>
+		<result column="amtime_end" property="amtime_end" jdbcType="VARCHAR"/>
+		<result column="transaction_id" property="transactionId" jdbcType="VARCHAR"/>
+		<result column="bonus" property="bonus" jdbcType="INTEGER"/>
+		<result column="storename" property="storename" jdbcType="VARCHAR"/>
+		<result column="state" property="state" jdbcType="INTEGER"/>
+		<result column="project" property="project" jdbcType="VARCHAR"/>
+		<result column="total_fee" property="total_fee" jdbcType="INTEGER"/>
+		<result column="commission" property="commission" jdbcType="INTEGER"/>
+	</resultMap>
+	<sql id="sql">
+		id,fu_openid,alopenid,product_id,amtime_end,transaction_id,bonus,storename,state,project,total_fee,commission
+	</sql>
+</mapper>

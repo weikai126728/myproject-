@@ -1,0 +1,359 @@
+body {
+	background-color: #F4F4F4;
+}
+
+.top {
+	width: 100%;
+	height: 6.651rem;
+	background: url(../../../image/shopping/wap/wd_top_bj.png) no-repeat
+		center center;
+	position: relative;
+}
+
+.up {
+	margin-top: 0.903rem;
+	margin-left: 1.481rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.up a {
+	color: #FFFFFF;
+}
+
+.up img {
+	width: 3.229rem;
+	height: 3.229rem;
+	vertical-align: middle;
+	border-radius: 50%;
+}
+
+.up span {
+	font-size: 0.6rem;
+	color: #FFFFFF;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bj {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 1.096rem;
+	height: 1.096rem;
+	top: 0.592rem;
+	right: 0.592rem;
+}
+
+.bj img {
+	width: 100%;
+}
+
+.top_nav {
+	width: 14.8rem;
+	height: 3.4rem;
+	background-color: #FFFFFF;
+	box-shadow: 0px 6px 6px #E5E5E5;
+	border-radius: 0.3rem;
+	position: absolute;
+	text-align: center;
+	bottom: -1.748rem;
+	left: 0.592rem;
+}
+
+.top_nav li {
+	float: left;
+	padding: 0.8rem 0;
+	width: 25%;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.top_nav li img {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
+.shoucang .aaa {
+	width: 1rem;
+	height: 1rem;
+	display: inline-block;
+}
+
+.zuji .aaa {
+	width: 0.948rem;
+	height: 1rem;
+	display: inline-block;
+}
+
+.dizhi .aaa {
+	width: 0.859rem;
+	height: 1rem;
+	display: inline-block;
+}
+
+.zhanghao .aaa {
+	width: 0.844rem;
+	height: 0.962rem;
+	display: inline-block;
+}
+
+.top_nav .a {
+	font-size: 0.6rem;
+	display: block;
+}
+
+.shoucang .a {
+	color: #E58C00;
+}
+
+.zuji .a {
+	color: #2470B7;
+}
+
+.dizhi .a {
+	color: #D21565;
+}
+
+.zhanghao .a {
+	color: #20AFAA;
+}
+
+.my_Order {
+	width: 100%;
+	height: 1.762rem;
+	line-height: 1.762rem;
+	margin-top: 2.237rem;
+	color: #4B4B4B;
+	border: 1px solid #EBEBEB;
+	background-color: #FFFFFF;
+	border-right: none;
+	border-left: none;
+}
+
+.my_Order span {
+	font-size: 0.6rem;
+	margin-left: 0.592rem;
+}
+
+.my_Order em.fr {
+	font-size: 0.6rem;
+	margin-right: 0.592rem;
+	color: #BFBFBF;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.order_nav {
+	width: 100%;
+	text-align: center;
+	height: 2.785rem;
+	border-bottom: 1px solid #EBEBEB;
+	background-color: #FFFFFF;
+	margin-bottom: 0.3rem;
+}
+
+.order_nav li {
+	float: left;
+	width: 19.5%;
+	height: 1.629rem;
+	text-align: center;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.order_nav li .a {
+	font-size: 0.6rem;
+	color: #7E7E7E;
+	display: block;
+}
+
+.order_nav li img {
+	width: 1.037rem;
+	height: 0.77rem;
+	display: block;
+	margin-top: 0.577rem;
+	margin-bottom: 0.325rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.my_nav {
+	margin-bottom: 0.592rem;
+}
+
+.my_nav li {
+	width: 100%;
+	height: 1.8rem;
+	color: #4B4B4B;
+	font-size: 0.6rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.266rem;
+	border-bottom: 1px solid #EBEBEB;
+	border-top: 1px solid #EBEBEB;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.my_nav li span {
+	vertical-align: middle;
+	line-height: 1.8rem;
+}
+
+.my_nav li em {
+	vertical-align: middle;
+	margin-left: 0.5rem;
+	color: #2470B7;
+}
+
+.my_nav li .fl {
+	margin-left: 0.592rem;
+}
+
+.my_nav li .fr {
+	width: 0.266rem;
+	height: 0.474rem;
+	display: inline-block;
+	margin-right: 0.592rem;
+	margin-top: 0.62rem;
+}
+
+.my_nav li .fr img {
+	width: 100%;
+	height: 100%;
+}
+
+.gywm .fl {
+	width: 0.711rem;
+	height: 0.622rem;
+	margin-top: 0.533rem;
+	margin-right: 0.355rem;
+}
+
+.jmdl .fl {
+	width: 0.726rem;
+	height: 0.637rem;
+	margin-top: 0.533rem;
+	margin-right: 0.325rem;
+}
+
+.yjfk .fl {
+	width: 0.666rem;
+	height: 0.651rem;
+	margin-top: 0.474rem;
+	margin-right: 0.355rem;
+}
+
+.gfkf .fl {
+	width: 0.607rem;
+	height: 0.651rem;
+	margin-top: 0.488rem;
+	margin-right: 0.4rem;
+}
+
+.kfdh .fl {
+	width: 0.666rem;
+	height: 0.607rem;
+	margin-top: 0.503rem;
+	margin-right: 0.385rem;
+}
+
+.out {
+	width: 100%;
+	background-color: #FFFFFF;
+	border: 1px solid #EBEBEB;
+	border-left: none;
+	border-right: none;
+	margin-bottom: 2rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.out input {
+	width: 100%;
+	padding: 0.5rem 0;
+	color: #4B4B4B;
+	font-size: 0.6rem;
+}
+
+.bottom {
+	width: 100%;
+	height: 2.192rem;
+	background-color: #FFFFFF;
+	border-top: 1px solid #EBEBEB;
+	text-align: center;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
+
+.bottom .sy, .bottom .wd {
+	margin-left: 13%;
+	font-size: 0.533rem;
+	width: 1.2rem;
+	margin-top: 0.355rem;
+	text-align: center;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bottom .sy a {
+	color: #333333;
+}
+
+.bottom .sy img {
+	width: 0.829rem;
+	height: 0.74rem;
+	margin: 0 auto;
+	margin-bottom: 0.207rem;
+}
+
+.bottom .wd {
+	margin-right: 13%;
+}
+
+.bottom .wd img {
+	width: 0.711rem;
+	height: 0.77rem;
+	margin: 0 auto;
+	margin-bottom: 0.207rem;
+}
+
+.bottom .sy, .bottom .wd {
+	font-size: 0.5rem;
+}
+
+.bottom .wd {
+	width: 7.5%;
+}
+
+.bottom .wd span {
+	color: #f84f18;
+}
+
+.bottom .gw {
+	width: 2.577rem;
+	height: 2.577rem;
+	margin-left: 21%;
+	margin-top: -4%;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bottom .gw img {
+	width: 2.577rem;
+	height: 2.577rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}

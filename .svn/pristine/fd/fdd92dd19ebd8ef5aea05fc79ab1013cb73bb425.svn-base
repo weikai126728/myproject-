@@ -1,0 +1,77 @@
+
+body{
+	background-color: #FFFFFF;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	border-bottom: 0.266rem solid #F4F4F4;
+	position: fixed;
+	top: 0;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+
+.dlhz_bottom{
+	margin-left: 0.592rem;
+	margin-right: 0.592rem;
+	margin-top: 2.295rem;
+}
+.dlhz_bottom .li1 h2{
+	font-size: 0.681rem;
+	color: #000;
+	font-weight: normal;
+	margin-top: 1.407rem;
+	margin-bottom: 1rem;
+}
+.dlhz_bottom .li2 img{
+	width: 14.814rem;
+}
+.dlhz_bottom li em{
+	width: 0.237rem;
+	height: 0.418rem;
+	display: inline-block;
+	background: url(../../../image/shopping/wap/daili_left.png) no-repeat center center;
+	background-size: cover;
+	vertical-align: middle;
+	margin-right: 0.296rem;
+}
+.dlhz_bottom .li3,.dlhz_bottom .li4,.dlhz_bottom .li5{
+	font-size: 0.563rem;
+	color: #404040;
+	line-height: 1.256rem;
+	margin-bottom: 0.592rem;
+}
+.dlhz_bottom li span{
+	vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+

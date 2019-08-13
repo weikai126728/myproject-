@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.IJoinModelDao">
+	<sql id="sql">
+		id,name,details
+	</sql>
+	<select id="findAll" resultType="com.abbot.schimneylife.pojo.weixin.JoinModel">
+		select <include refid="sql"></include> from join_model order by create_time asc
+	</select>
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.weixin.JoinModel">
+		insert into join_model (name,details,create_time) values(#{name},#{details},now())
+	</insert>
+	<update id="update">
+		update join_model 
+		<trim prefix=" set " prefixOverrides="," suffix=" where id = #{id}">
+			<if test="name !=null">
+				name = #{name}
+			</if>
+			<if test="details !=null">
+				,details = #{details}
+			</if>
+		</trim>
+	</update>
+	<delete id="delete">
+		delete from join_model where id = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,322 @@
+body {
+	background-color: #F0F0F0;
+}
+
+.top {
+	width: 100%;
+	height: 1.955rem;
+	background-color: #FFFFFF;
+}
+
+.top .logo {
+	width: 4.288rem;
+	margin-top: 0.492rem;
+	margin-left: 0.592rem;
+}
+
+.top form {
+	position: relative;
+	height: 1.392rem;
+}
+
+.top form .sousuo {
+	margin-top: 0.28rem;
+	margin-left: 0.385rem;
+	width: 9rem;
+	height: 1.392rem;
+	font-size: 0.6rem;
+	background-color: #F0F0F0;
+	border-radius: 0.733rem;
+	text-indent: 1.614rem;
+}
+
+.top form .span {
+	width: 6.5%;
+	display: inline-block;
+	left: 1rem;
+	top: 0.68rem;
+	position: absolute;
+}
+
+.top .xiaoxi {
+	width: 0.755rem;
+	height: 0.755rem;
+	margin-top: 0.592rem;
+	margin-right: 0.592rem;
+	display: inline-block;
+}
+
+.top .xiaoxi img {
+	width: 100%;
+}
+
+.banner {
+	width: 100%;
+}
+
+.banner img {
+	width: 100%;
+}
+
+.nav {
+	width: 100%;
+}
+
+.tab {
+	width: 100%;
+}
+
+.tab-title {
+	width: 100%;
+	height: 2rem;
+	font-size: 0;
+	background-color: #FFFFFF;
+	z-index:3;
+}
+
+.tab-title .item {
+	display: inline-block;
+	width: 50%;
+	line-height: 2rem;
+	text-align: center;
+	color: #333;
+	font-size: 0.65rem;
+	color: #f84f18;
+	float: left;
+	position: relative;
+}
+
+.tab-title .item .tou {
+	width: 10%;
+	vertical-align: middle;
+	margin-right: 0.5rem;
+}
+
+.border_b1,
+.border_b2 {
+	position: absolute;
+	bottom: -0.15rem;
+	left: 0;
+	width: 8rem;
+	height: 0.251rem;
+	display: none;
+}
+
+.tab-title .item-cur .border_b1,
+.tab-title .item-cur .border_b2 {
+	display: block;
+}
+
+.tab-cont {
+	position: relative;
+	width: 100%;
+	height: 10rem;
+	margin-top: 0.4rem;
+}
+
+.tab-cont__wrap {
+	position: absolute;
+	width: 100%;
+}
+
+.tab-cont .item {
+	width: 100%;
+	text-align: center;
+}
+
+.xian{
+	width: 100%;
+	height: 0.3rem;
+	display:block;
+	background:url(../../../image/shopping/wap/border_bottom1.gif) no-repeat center center;
+	position:relative;
+	right: 0%;
+	background-size: cover;
+}
+.xian2{
+	width: 100%;
+	height: 0.3rem;
+	display:block;
+	background:url(../../../image/shopping/wap/border_bottom2.png) no-repeat center center;
+	position:relative;
+	left: -100%;
+	background-size: cover;
+}
+
+#div1.#div2 {
+	margin: auto;
+	position: relative;
+}
+
+.box {
+	width: 100%;
+	height: 4.74rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.296rem;
+    padding-bottom: 0.4rem;
+}
+
+
+.box .cp {
+	width: 0.444rem;
+	height: 0.533rem;
+	margin-right: 0.237rem;
+	vertical-align: middle;
+	margin-bottom: 0.2rem;
+}
+
+.box ul {
+	width: 66%;
+	font-size: 0.57rem;
+	text-align: left;
+	margin-top: 0.903rem;
+	margin-left: 0.8rem;
+}
+
+.box ul li a {
+	color: #000000;
+	font-size: 0.6rem;
+}
+
+.li {
+	color: #989898;
+	font-size: 0.55rem;
+	width: 90%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	display: block;
+}
+.tab-title .item .tou {
+    width: 10%;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+    margin-bottom: 0.15rem;
+}
+
+.li00 {
+	font-size: 0.55rem;
+}
+
+.bottom {
+	width: 100%;
+	height: 2.192rem;
+	background-color: #FFFFFF;
+	border-top: 1px solid #E3E3E3;
+	text-align: center;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index:2;
+}
+
+.bottom .sy,
+.bottom .wd {
+	margin-left: 13%;
+	font-size: 0.533rem;
+	width: 1.2rem;
+	margin-top: 0.355rem;
+	text-align: center;
+}
+
+.bottom .sy span {
+	color: #f84f18;
+}
+
+.bottom .sy img {
+	width: 0.829rem;
+	height: 0.74rem;
+	margin: 0 auto;
+	margin-bottom: 0.207rem;
+}
+
+.bottom .wd {
+	margin-right: 13%;
+}
+
+.bottom .wd img {
+	width: 0.711rem;
+	height: 0.77rem;
+	margin: 0 auto;
+	margin-bottom: 0.207rem;
+}
+
+.bottom .sy,
+.bottom .wd {
+	font-size: 0.5rem;
+}
+
+.bottom .wd {
+	width: 7.5%;
+}
+
+.bottom .wd a {
+	color: #333333;
+}
+
+.bottom .gw {
+	width: 2.577rem;
+	height: 2.577rem;
+	margin-left: 21%;
+	margin-top: -4%;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bottom .gw img {
+	width: 2.577rem;
+	height: 2.577rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+
+.qimo8 {
+	overflow: hidden;
+	width: 13.97rem;
+	margin-left: 0.3rem;
+}
+.qimo8 .qimo {
+	width: 8000%;
+	height: 1.481rem;
+}
+.qimo8 .qimo ul {
+	overflow: hidden;
+	float: left;
+}
+.qimo8 .qimo ul li {
+	float: left;
+	line-height: 1.481rem;
+}
+.qimo8 .qimo ul li span {
+	margin-left: 0.45rem;
+	color: #EC7308;
+	font-size: 0.592rem;
+}
+.qimo8 .qimo div {
+	float: left;
+}
+
+
+.guige{
+	color: #989898;
+    font-size: 0.55rem;
+    margin-top: 0.23rem;
+    margin-left: 0.23rem;
+    display: inline-block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,103 @@
+
+body{
+	background-color: #F4F4F4;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.266rem;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+.top input{
+	font-size: 0.533rem;
+	color: #267CCB;
+	line-height: 1.95rem;
+	margin-right: 0.592rem;
+}
+
+
+
+.biaodan_bianji{
+	width: 100%;
+	background-color: #FFFFFF;
+}
+.biaodan_bianji li{
+	padding: 0.7rem;
+	padding-top: 0.55rem;
+	border-bottom: 1px solid #E3E3E3;
+}
+.biaodan_bianji li span{
+	font-size: 0.6rem;
+	color: #4B4B4B;
+	margin-right: 0.7rem;
+}
+.biaodan_bianji li input{
+	font-size: 0.6rem;
+}
+.biaodan_bianji li em{
+	font-size: 0.6rem;
+	color: #9F9F9F;
+}
+.biaodan_bianji li .fr{
+	width: 2%;
+}
+.biaodan_bianji li .fr img{
+	width: 100%;
+	margin-top: 0.5rem;
+}
+
+.shezhi_moren{
+	width: 100%;
+	text-align: center;
+	margin-top: 1rem;
+}
+.shezhi_moren em{
+	width: 0.685rem;
+    height: 0.685rem;
+    display: inline-block;
+    background: url(../../../image/shopping/wap/moren.png) no-repeat center center;
+    background-size: cover;
+    vertical-align: middle;
+    margin-right: 0.3rem;
+}
+.shezhi_moren span{
+	font-size: 0.7rem;
+	vertical-align: middle;
+	color: #333333;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

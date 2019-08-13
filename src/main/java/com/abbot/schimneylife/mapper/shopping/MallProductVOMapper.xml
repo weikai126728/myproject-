@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallProductVODao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.vo.MallProductVO" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="detials" property="details" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="original" property="original" jdbcType="DECIMAL" />
+    <result column="current" property="current" jdbcType="DECIMAL"/>
+    <result column="area" property="area" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+  </resultMap>
+  <select id="findProductVOByPage" resultMap="BaseResultMap">
+  	select p.id,m.product_name as name,m.product_number as number,m.details,p.original_price as original,p.current_price as current,m.producing_area as area,p.param_status as status,p.create_time from mall_product_parameter as p left join mall_product as m on p.mall_product_id = m.id
+  	 <trim prefix="where" prefixOverrides="and|or" >
+  	 	<if test="typeId!=null">and m.product_type_id = #{typeId,jdbcType=VARCHAR}</if>
+  	 	<if test="name!=null">
+  	 		<bind name="pattern" value="'%' + name + '%'"/>
+  	 		and m.keywords like #{pattern,jdbcType=VARCHAR}
+  	 	</if>
+  	 </trim>
+  	 order by ${sort} ${order} limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countTotalVO" resultType="Integer">
+  	select count(*) from mall_product_parameter as p left join mall_product as m on p.mall_product_id = m.id 
+  	<trim prefix="where" prefixOverrides="and|or" >
+  	 	<if test="typeId!=null">and m.product_type_id = #{typeId,jdbcType=VARCHAR}</if>
+  	 	<if test="name!=null">
+  	 		<bind name="pattern" value="'%' + name + '%'"/>
+  	 		and m.keywords like #{pattern,jdbcType=VARCHAR}
+  	 	</if>
+  	 </trim>
+  </select>
+  <select id="findAllVO" resultMap="BaseResultMap">
+  	select p.id,m.product_name as name,m.details,m.product_number as number,p.original_price as original,p.current_price as current,m.producing_area as area,p.param_status as status,p.create_time from mall_product_parameter as p left join mall_product as m on p.mall_product_id = m.id
+  	<if test="typeId!=null"> where m.product_type_id = #{typeId,jdbcType=VARCHAR}</if> order by m.product_number asc
+  </select>
+  <select id="fetchProStatusByParamId" resultType="Integer">
+  	select m.pro_status from mall_product as m left join mall_product_parameter as p on m.id = p.mall_product_id where p.id=#{paramId,jdbcType=VARCHAR}
+  </select>
+</mapper>

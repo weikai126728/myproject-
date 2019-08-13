@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ISupermarketAddressDao">
+	<resultMap id="BaseResultMap"
+		type="com.abbot.schimneylife.pojo.shopping.SupermarketAddress">
+		<id property="id" column="id" jdbcType="VARCHAR" />
+			<result column="province" property="province" jdbcType="VARCHAR" />
+			<result column="address_detail" property="detail" jdbcType="VARCHAR" />
+			<result column="supermarket_info_id" property="supermarketInfoId" jdbcType="INTEGER" />
+			<result column="bus_route" property="busRoute" jdbcType="VARCHAR" />
+			<result column="longitude" property="longitude" jdbcType="DECIMAL" />
+			<result column="latitude" property="latitude" jdbcType="DECIMAL" />
+			<result column="dis" property="dis" jdbcType="DECIMAL" />
+			<result column="geo_code" property="geoCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, province, address_detail, supermarket_info_id, bus_route, longitude, latitude,
+		dis,geo_code
+	</sql>
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketAddress">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+	  		select replace(uuid(),'-','') from dual
+	  	</selectKey>
+		insert into supermarket_address (
+		id, province, address_detail, supermarket_info_id, bus_route, longitude, latitude,geo_code
+		)
+		values(#{id,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{detail,jdbcType=VARCHAR}
+		,#{supermarketInfoId,jdbcType=INTEGER},#{busRoute,jdbcType=VARCHAR},#{longitude,jdbcType=DECIMAL}
+		,#{latitude,jdbcType=DECIMAL},#{geoCode,jdbcType=VARCHAR})
+	</insert>
+	<update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketAddress">
+		update supermarket_address 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=VARCHAR}" suffixOverrides=",">
+			<if test="province !=null">
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="detail !=null">
+				address_detail = #{detail,jdbcType=VARCHAR},
+			</if>
+			<if test="busRoute !=null">
+				bus_route = #{busRoute,jdbcType=VARCHAR},
+			</if>
+			<if test="longitude !=null">
+				longitude = #{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude !=null">
+				latitude = #{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="geoCode !=null">
+				geo_code = #{geoCode,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</update>
+</mapper>

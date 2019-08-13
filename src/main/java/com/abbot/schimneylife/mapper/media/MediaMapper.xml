@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.media.IMediaDao">
+	<resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.media.Media">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="media_id" property="media_id" jdbcType="VARCHAR" />
+		<result column="created_at" property="created_at" jdbcType="TIMESTAMP" />
+		<result column="image_url" property="image_url" jdbcType="VARCHAR" />
+		<result column="image_media_id" property="image_media_id" jdbcType="VARCHAR" />
+		<result column="author" property="author" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, type, media_id,created_at,image_url,image_media_id,author,content
+	</sql>
+
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.media.Media"
+		keyProperty="id" useGeneratedKeys="true">
+
+		insert into media (type, media_id,created_at,image_url,image_media_id,author,content)
+		values
+		(#{type,jdbcType=VARCHAR},#{media_id,jdbcType=VARCHAR},
+		now(),#{image_url,jdbcType=VARCHAR},#{image_media_id,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR})
+
+	</insert>
+	<delete id="delete">
+		delete from media where id=#{id,jdbcType=INTEGER}
+	</delete>
+	<select id="countTotal" resultType="java.lang.Integer">
+		select count(*) from media 
+		<trim prefix=" where " prefixOverrides="and|or">
+	 	<if test="startTime !=null">
+	 		created_at > #{startTime,jdbcType=VARCHAR}
+	 	</if>
+	 	<if test="endTime !=null">
+	 		created_at &lt; #{endTime,jdbcType=VARCHAR}
+	 	</if>
+	 </trim>
+	</select>
+	<select id="findByPage" resultMap="BaseResultMap">
+	 select <include refid="Base_Column_List" /> from media
+	 <trim prefix=" where " prefixOverrides="and|or">
+	 	<if test="startTime !=null">
+	 		created_at > #{startTime,jdbcType=VARCHAR}
+	 	</if>
+	 	<if test="endTime !=null">
+	 		created_at &lt; #{endTime,jdbcType=VARCHAR}
+	 	</if>
+	 </trim>
+		order by created_at desc
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<select id="fetchById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from media where id = #{id,jdbcType=INTEGER}
+	</select>
+</mapper>  

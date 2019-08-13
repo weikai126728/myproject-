@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.user.IUserOperationLogDao">
+	<resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.user.UserOperationLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="msg" property="msg" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="target_id" property="targetId" jdbcType="INTEGER" />
+		<result column="target_name" property="targetName" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<association property="user" javaType="com.abbot.schimneylife.pojo.user.User"
+		 column="user_info_id" select="com.abbot.schimneylife.dao.user.IUserDao.findById">
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,user_info_id,msg,type,target_id,target_name,create_time
+	</sql>
+	<insert id="insert">
+		insert into log_user_operation (<include refid="Base_Column_List"></include>)
+		values (
+		replace(uuid(),'-',''),
+		#{userId,jdbcType=INTEGER},
+		#{msg,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{targetId,jdbcType=VARCHAR},
+		#{targetName,jdbcType=VARCHAR}
+		,now())
+	</insert>
+</mapper>

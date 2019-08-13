@@ -1,0 +1,54 @@
+
+body{
+	background-color: #F0F0F0;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+
+.banner{
+	width: 100%;
+	height: 6.962rem;
+}
+.banner img{
+	width: 100%;
+	height: 100%;
+}
+
+
+.jianjie_neirong{
+	width: 100%;
+	background-color: #FFFFFF;
+	font-size: 0.6rem;
+	padding-top: 0.888rem;
+}
+.jianjie_neirong p{
+	margin-left: 0.592rem;
+	margin-right: 0.592rem;
+	text-indent: 2em;
+	display: inline-block;
+	line-height: 1.051rem;
+	color: #606060;
+	margin-bottom: 0.592rem;
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IAlibabaOrderDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.AlibabaOrder" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="customer_order_id" property="customerOrderId" jdbcType="VARCHAR" />
+    <result column="result_code" property="resultCode" jdbcType="INTEGER"/>
+    <result column="errorCode" property="errorCode" jdbcType="VARCHAR"/>
+    <result column="error_message" property="errorMessage" jdbcType="VARCHAR"/>
+    <result column="totalSuccessAmount" property="totalSuccessAmount" jdbcType="INTEGER"/>
+    <result column="orderID" property="orderID" jdbcType="VARCHAR"/>
+    <result column="failedlist" property="failed" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_order_id, result_code, errorCode, error_message, totalSuccessAmount, orderID, failedlist,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.AlibabaOrder">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into alibaba_order (<include refid="Base_Column_List"/>) values (#{id,jdbcType=VARCHAR},#{customerOrderId,jdbcType=VARCHAR}
+  	,#{resultCode,jdbcType=INTEGER},#{errorCode,jdbcType=VARCHAR},#{errorMessage,jdbcType=VARCHAR},#{totalSuccessAmount,jdbcType=INTEGER}
+  	,#{orderID,jdbcType=VARCHAR},#{failed,jdbcType=INTEGER},now())
+  </insert>
+  <select id="fetchByCustomerOrderId" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from alibaba_order where customer_order_id = #{customerOrderId,jdbcType=VARCHAR}
+  </select>
+</mapper>

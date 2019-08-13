@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ICustomerHouseDao">
+	<resultMap id="BaseResultMap"
+		type="com.abbot.schimneylife.pojo.shopping.CustomerHouse">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="supermarket_info_id" property="supermarketId"
+			jdbcType="INTEGER" />
+		<result column="mall_product_id" property="productId" jdbcType="VARCHAR" />
+		<result column="surplus_id" property="surplusId" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<association property="product"
+			javaType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+			<id column="mp_id" property="id" jdbcType="VARCHAR" />
+			<result column="product_name" property="productName" jdbcType="VARCHAR" />
+			<result column="details" property="details" jdbcType="VARCHAR" />
+			<result column="img_small" property="imgSmall" jdbcType="VARCHAR" />
+			<result column="img_middle" property="imgMiddle" jdbcType="VARCHAR" />
+			<result column="img_large" property="imgLarge" jdbcType="VARCHAR" />
+			<association property="parameter"
+				javaType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">
+				<id property="id" column="mpp_id" jdbcType="VARCHAR" />
+				<result column="original_price" property="original"/>
+				<result column="current_price" property="cur_price"
+					jdbcType="DECIMAL" />
+			</association>
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, type, customer_id, supermarket_info_id,
+		mall_product_id, surplus_id,
+		create_time
+	</sql>
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.CustomerHouse">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into customer_house (
+		<include refid="Base_Column_List" />
+		) values (#{id,jdbcType=VARCHAR},#{type,jdbcType=INTEGER}
+		,#{customerId,jdbcType=INTEGER},#{supermarketId,jdbcType=INTEGER},#{productId,jdbcType=VARCHAR},#{surplusId,jdbcType=VARCHAR}
+		,now())
+	</insert>
+
+	<select id="checkFavourites" resultMap="BaseResultMap">
+		<!-- select <include refid="Base_Column_List" /> from customer_house where 
+			customer_id = #{customerId,jdbcType=VARCHAR} -->
+		select
+		mp.product_name,
+		mp.details,
+		mpp.current_price,
+		mp.img_small
+		from
+		customer_house as mol,
+		mall_product as mp,
+		mall_product_parameter as mpp
+		where
+		mol.customer_id = 2
+		AND
+		mol.mall_product_id=mp.id
+		and
+		mpp.mall_product_id=mp.id;
+	</select>
+	<delete id="deleteFavourites">
+		delete from customer_house where customer_id =
+		#{customerId,jdbcType=INTEGER} and id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByProductId">
+		delete from customer_house where customer_id =
+		#{customerId,jdbcType=INTEGER} and mall_product_id = #{proId,jdbcType=VARCHAR}
+	</delete>
+	<select id="isMyFavourites" resultType="java.lang.Integer">
+		select count(*) from customer_house WHERE customer_id = #{customerId,jdbcType=INTEGER} AND mall_product_id = #{productId,jdbcType=VARCHAR}
+	</select>
+	<select id="findByPage" resultMap="BaseResultMap">
+		select mol.id,mol.create_time,mp.id as mp_id,
+		mp.product_name,
+		mp.details,mpp.id as mpp_id,mpp.original_price,
+		mpp.current_price,
+		mp.img_small,mp.img_middle,mp.img_large,min(mpp.current_price) 
+		from
+		customer_house as mol left join
+		mall_product as mp on mol.mall_product_id = mp.id
+		left join mall_product_parameter as mpp on mpp.mall_product_id = mp.id
+		where mol.customer_id = #{customerId,jdbcType=INTEGER} and mp.pro_status=1 group by mol.id order by mol.create_time desc limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<select id="countTotal" resultType="java.lang.Integer">
+		select count(*) from
+		customer_house as mol left join
+		mall_product as mp on mol.mall_product_id = mp.id where mol.customer_id=#{customerId,jdbcType=INTEGER} and mp.pro_status=1
+	</select>
+</mapper>

@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ISupermarketInfoDao">
+	<resultMap id="BaseResultMap"
+		type="com.abbot.schimneylife.pojo.shopping.SupermarketInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="contact_user" property="contactUser" jdbcType="VARCHAR" />
+		<result column="details" property="details" jdbcType="VARCHAR" />
+		<result column="introduction" property="introduction" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="mclass" property="mclass" jdbcType="INTEGER" />
+		<result column="openid" property="openid" jdbcType="VARCHAR" />
+		<result column="img_small" property="imgSmall" jdbcType="VARCHAR" />
+		<result column="img_middle" property="imgMiddle" jdbcType="VARCHAR" />
+		<result column="img_large" property="imgLarge" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="recommendation" property="recommendation" jdbcType="INTEGER" />
+		<result column="information" property="information" jdbcType="VARCHAR" />
+		<result column="weChatqrcode" property="weChatqrcode" jdbcType="VARCHAR" />
+		<result column="banner" property="banner" jdbcType="VARCHAR" />
+		<result column="productTime" property="productTime" jdbcType="VARCHAR" />
+		<result column="products" property="products" jdbcType="VARCHAR" />
+		<result column="distribution" property="distribution" jdbcType="VARCHAR" />
+		<result column="addre" property="addre" jdbcType="VARCHAR" />
+		<result column="super_html" property="html" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<association property="address"
+			javaType="com.abbot.schimneylife.pojo.shopping.SupermarketAddress">
+			<id property="id" column="a_id" jdbcType="VARCHAR" />
+			<result column="province" property="province" jdbcType="VARCHAR" />
+			<result column="address_detail" property="detail" jdbcType="VARCHAR" />
+			<result column="supermarket_info_id" property="supermarketInfoId" jdbcType="INTEGER" />
+			<result column="bus_route" property="busRoute" jdbcType="VARCHAR" />
+			<result column="longitude" property="longitude" jdbcType="DECIMAL" />
+			<result column="latitude" property="latitude" jdbcType="DECIMAL" />
+			<result column="dis" property="dis" jdbcType="DECIMAL" />
+		</association>
+	</resultMap>
+	
+		 <resultMap id="productResultMap" type="com.abbot.schimneylife.pojo.shopping.MarketProductInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="imgname" property="imgname" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="marketid" property="marketid" jdbcType="INTEGER" />
+    <result column="productDetails" property="productDetails" jdbcType="VARCHAR" />
+    <result column="img_small" property="img_small" jdbcType="VARCHAR"/>
+    <result column="banners" property="banners" jdbcType="VARCHAR"/>
+    <result column="url" property="url" jdbcType="VARCHAR"/>
+    <result column="videofile" property="videofile" jdbcType="VARCHAR"/>
+    <result column="urlname" property="urlname" jdbcType="VARCHAR"/>
+    <result column="pbutton" property="pbutton" jdbcType="VARCHAR"/>
+    <result column="videoImg" property="videoImg" jdbcType="VARCHAR"/>
+    <result column="mp3" property="mp3" jdbcType="VARCHAR"/>
+    <result column="gapImg" property="gapImg" jdbcType="VARCHAR"/>
+    <result column="productIntegral" property="productIntegral" jdbcType="INTEGER"/>
+     <result column="productRadio" property="productRadio" jdbcType="INTEGER"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="comm" property="comm" jdbcType="INTEGER"/>
+     <result column="posters" property="posters" jdbcType="VARCHAR"/>
+     <result column="dis" property="dis" jdbcType="INTEGER"/>
+     <result column="countdown" property="countdown" jdbcType="DATE"/>
+    <association property="sproductParameter" javaType="com.abbot.schimneylife.pojo.shopping.SproductParameter">   
+        <id property="productId" column="productid" jdbcType="INTEGER"/>
+        <result column="original" property="original" jdbcType="DECIMAL"/>
+        <result column="cur_price" property="cur_price" jdbcType="DECIMAL"/>
+        <result column="repertory" property="repertory" jdbcType="INTEGER"/>
+    </association>
+  </resultMap>
+	
+	<sql id="Base_Column_List">
+		id, name, phone, contact_user, details, tel,introduction, img_small,recommendation,
+		img_middle,
+		img_large,
+		status,banner,super_html, create_time, update_time
+	</sql>
+	<insert id="insert"
+		parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketInfo"  useGeneratedKeys="true" keyProperty="id">
+		insert into supermarket_info (
+		name, phone, contact_user, details, tel,introduction,recommendation, img_small,
+		img_middle,img_large,video,openid,mclass,status,banner,super_html, create_time, update_time,information,weChatqrcode,products,productTime,distribution,addre)
+		values(#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR}
+		,#{contactUser,jdbcType=VARCHAR},#{details,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{introduction,jdbcType=VARCHAR},#{recommendation,jdbcType=INTEGER},#{imgSmall,jdbcType=VARCHAR},#{imgMiddle,jdbcType=VARCHAR}
+		,#{imgLarge,jdbcType=VARCHAR},#{video,jdbcType=VARCHAR},#{openid,jdbcType=VARCHAR},#{mclass,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{banner,jdbcType=VARCHAR},#{html,jdbcType=VARCHAR},now(),now()
+		,#{information,jdbcType=VARCHAR},#{weChatqrcode,jdbcType=VARCHAR},#{products,jdbcType=VARCHAR},#{productTime,jdbcType=VARCHAR},#{distribution,jdbcType=VARCHAR},#{addre,jdbcType=VARCHAR})
+	</insert>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from
+		supermarket_info
+	</select>
+	<select id="fetchById" resultMap="BaseResultMap">
+		SELECT info.id, info.name,info.productTime,info.products,info.distribution,
+		info.phone, info.contact_user, info.details,info.information,
+		info.introduction,info.recommendation,info.mclass,info.openid,info.addre,
+		info.tel, info.img_small, info.img_middle,info.weChatqrcode,
+		info.img_large,info.status,info.super_html,info.banner,
+		info.create_time,info.update_time,
+		ad.id AS a_id, province,
+		address_detail,bus_route, longitude, latitude from
+		supermarket_info AS
+		info left join supermarket_address as ad
+		on info.id =
+		ad.supermarket_info_id where
+		info.id=#{gid,jdbcType=INTEGER}
+	</select>
+	<select id="findByName" resultMap="BaseResultMap">
+		SELECT info.id, info.name,info.productTime,info.products,info.distribution,
+		info.phone, info.contact_user, info.details,info.information,info.addre,
+		info.introduction,info.recommendation,info.mclass,info.openid,
+		info.tel, info.img_small, info.img_middle,
+		info.img_large,info.status,info.weChatqrcode,
+		info.create_time,info.update_time,
+		ad.id AS a_id, province,
+		address_detail,bus_route, longitude, latitude from
+		supermarket_info AS
+		info left join supermarket_address as ad
+		on info.id =
+		ad.supermarket_info_id where name like 
+		 concat('%',#{name,jdbcType=VARCHAR},'%')
+	</select>
+	<select id="selectMarket" resultMap="BaseResultMap">
+		SELECT info.id, info.name,info.productTime,info.products,info.addre,
+		info.phone, info.contact_user, info.details,info.distribution,
+		info.introduction,info.recommendation,info.information,
+		info.tel, info.img_small, info.img_middle,info.weChatqrcode,
+		info.img_large,info.status,info.mclass,info.openid,
+		info.create_time,info.update_time,
+		ad.id AS a_id, province,
+		address_detail,bus_route, longitude, latitude from
+		supermarket_info AS
+		info left join supermarket_address as ad
+		on info.id =
+		ad.supermarket_info_id
+	</select>
+	<select id="fetchBygId" resultMap="BaseResultMap">
+	 SELECT info.id, info.name,info.productTime,info.products,info.distribution,
+		info.phone, info.contact_user, info.details,info.information,info.addre,
+		info.introduction,info.recommendation,info.mclass,info.openid,
+		info.tel, info.img_small, info.img_middle,info.weChatqrcode,
+		info.img_large,info.status,info.super_html,info.banner,
+		info.create_time,info.update_time,
+		ad.id AS a_id, province,
+		address_detail,bus_route, longitude, latitude from
+		supermarket_info AS
+		info left join supermarket_address as ad
+		on info.id =
+		ad.supermarket_info_id where
+		info.id = (select marketid from sproductparameter where id=#{id})
+	</select>
+	<update id="disable">
+		update supermarket_info set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enable">
+		update supermarket_info set status=1 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<!-- 商品开关 -->
+	<update id="disablePro">
+		update suerpmarketproductinfo set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enablePro">
+		update suerpmarketproductinfo set status=1 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 商品推广开关 -->
+	<update id="disablePromote">
+		update suerpmarketproductinfo set promote=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enablePromote">
+		update suerpmarketproductinfo set promote=1 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	
+		<!--积分 商品开关 -->
+	<update id="disableProi">
+		update m_integralproductinfo set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enableProi">
+		update m_integralproductinfo set status=1 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 活动开关 -->
+	<update id="disableShare">
+		update m_productinfo set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enableShare">
+		update m_productinfo set status=1 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteMarket">
+		DELETE supermarket_info,supermarket_address FROM
+		supermarket_info LEFT JOIN
+		supermarket_address ON
+		supermarket_info.id=supermarket_address.supermarket_info_id WHERE
+		supermarket_info.id=#{id,jdbcType=INTEGER}
+	</delete>
+	<update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketInfo">
+		update supermarket_info 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=VARCHAR}" suffixOverrides=",">
+			<if test="name !=null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="phone !=null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="details !=null">
+				details = #{details,jdbcType=VARCHAR},
+			</if>
+			<if test="introduction !=null">
+				introduction = #{introduction,jdbcType=VARCHAR},
+			</if>
+			<if test="contactUser !=null">
+				contact_user = #{contactUser,jdbcType=VARCHAR},
+			</if>
+			<if test="tel !=null">
+				tel = #{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="mclass !=null">
+				mclass = #{mclass,jdbcType=INTEGER},
+			</if>
+			<if test="imgSmall !=null">
+				img_small = #{imgSmall,jdbcType=VARCHAR},
+			</if>
+			<if test="imgMiddle !=null">
+				img_middle=#{imgMiddle,jdbcType=VARCHAR},
+			</if>
+			<if test="video !=null">
+				video=#{video,jdbcType=VARCHAR},
+			</if>
+			<if test="imgLarge !=null">
+				img_large=#{imgLarge,jdbcType=VARCHAR},
+			</if>
+			<if test="banner !=null">
+				banner=#{banner,jdbcType=VARCHAR},
+			</if>
+			<if test="information !=null">
+				information=#{information,jdbcType=VARCHAR},
+			</if>
+			<if test="html !=null">
+				super_html=#{html,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendation !=null">
+				recommendation = #{recommendation,jdbcType=INTEGER}
+			</if>
+			<if test="openid !=null">
+				openid = #{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="weChatqrcode !=null">
+				weChatqrcode = #{weChatqrcode,jdbcType=VARCHAR},
+			</if>
+			<if test="products !=null">
+				products = #{products,jdbcType=VARCHAR},
+			</if>
+			<if test="productTime !=null">
+				productTime = #{productTime,jdbcType=VARCHAR},
+			</if>
+			<if test="distribution !=null">
+				distribution = #{distribution,jdbcType=VARCHAR},
+			</if>
+			<if test="addre !=null">
+				addre = #{addre,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</update>
+	
+	
+	<insert id="addProducti" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+	 insert into m_integralproductinfo(imgname,img_small,marketid,productName,createTime,status,productIntegral,cur_price) 
+	 values(#{imgname},#{img_small},#{marketid},#{productName},now(),0,#{productIntegral},#{cur_price})   
+	</insert>
+	
+	
+	<insert id="addmarketPro" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+	 insert into suerpmarketproductinfo(imgname,img_small,marketid,productName,productDetails,createTime,banners,status,productIntegral,comm,posters,dis,videoImg,videofile,gapImg,url,urlname,countdown,pbutton,mp3) 
+	 values(#{imgname},#{img_small},#{marketid},#{productName},#{productDetails},now(),#{banners},0,#{productIntegral},#{comm},#{posters},#{dis},#{videoImg},#{videofile},#{gapImg},#{url},#{urlname},#{countdown},#{pbutton},#{mp3})   
+	</insert>
+	<insert id="addmarketShare" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+	 insert into m_productinfo(imgname,img_small,marketid,productName,productDetails,createTime,banners,status,url,productRadio,videofile,urlname,pbutton,videoImg,gapImg,mp3) 
+	 values(#{imgname},#{img_small},#{marketid},#{productName},#{productDetails},now(),#{banners},0,#{url},#{productRadio},#{videofile},#{urlname},#{pbutton},#{videoImg},#{gapImg},#{mp3})   
+	</insert>
+	<insert id="insertParameter" parameterType="com.abbot.schimneylife.pojo.shopping.SproductParameter">
+	 insert into sproductparameter(productid,original,cur_price,repertory,createTime) values(#{productid},#{original},#{cur_price},#{repertory},now())   
+	</insert>
+	<select id="findListShare" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from m_productinfo s,supermarket_info i where s.marketid=i.id 
+	</select>
+	<select id="findListPro" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from suerpmarketproductinfo s,supermarket_info i where s.marketid=i.id 
+	</select>
+	<select id="findListProi" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from m_integralproductinfo s,supermarket_info i where s.marketid=i.id 
+	</select>
+	
+	
+	<delete id="deleteMarketPro">
+		DELETE  FROM suerpmarketproductinfo WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteMarketProi">
+		DELETE  FROM m_integralproductinfo WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteMarketShare">
+		DELETE  FROM m_productinfo WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<select id="fetchProById" resultMap="productResultMap">
+	  select s.*,sp.* from suerpmarketproductinfo s,sproductparameter sp where  sp.productid=s.id and s.id=#{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="fetchProiById" resultMap="productResultMap">
+	  select * from m_integralproductinfo where id=#{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="fetchShareById" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from m_productinfo s,supermarket_info i where s.marketid=i.id and s.id=#{id,jdbcType=INTEGER}
+	</select>
+	<update id="updatePro" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+		update suerpmarketproductinfo 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="imgname !=null">
+				imgname = #{imgname,jdbcType=VARCHAR},
+			</if>
+			<if test="img_small !=null">
+				img_small = #{img_small,jdbcType=VARCHAR},
+			</if>
+			<if test="marketid !=null">
+				marketid = #{marketid,jdbcType=INTEGER},
+			</if>
+			<if test="productName !=null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productDetails !=null">
+				productDetails = #{productDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="banners !=null">
+				banners = #{banners,jdbcType=VARCHAR},
+			</if>
+			<if test="productIntegral !=null">
+				productIntegral = #{productIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="comm !=null">
+				comm = #{comm,jdbcType=INTEGER},
+			</if>
+			<if test="countdown !=null">
+				countdown = #{countdown,jdbcType=VARCHAR},
+			</if>
+			<if test="posters !=null">
+				posters = #{posters,jdbcType=VARCHAR},
+			</if>
+			<if test="dis !=null">
+				dis = #{dis,jdbcType=INTEGER},
+			</if>
+			<if test="url !=null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="urlname !=null">
+				urlname = #{urlname,jdbcType=VARCHAR},
+			</if>
+			<if test="videoImg !=null">
+				videoImg = #{videoImg,jdbcType=VARCHAR},
+			</if>
+			<if test="gapImg !=null">
+				gapImg = #{gapImg,jdbcType=VARCHAR},
+			</if>
+			<if test="videofile !=null">
+				videofile = #{videofile,jdbcType=VARCHAR},
+			</if>
+			<if test="pbutton !=null">
+				pbutton = #{pbutton,jdbcType=VARCHAR},
+			</if>
+			<if test="mp3 !=null">
+				mp3 = #{mp3,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</update>
+	
+	<update id="updateProi" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+		update m_integralproductinfo 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="imgname !=null">
+				imgname = #{imgname,jdbcType=VARCHAR},
+			</if>
+			<if test="img_small !=null">
+				img_small = #{img_small,jdbcType=VARCHAR},
+			</if>
+			<if test="marketid !=null">
+				marketid = #{marketid,jdbcType=INTEGER},
+			</if>
+			<if test="productName !=null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productIntegral !=null">
+				productIntegral = #{productIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="cur_price !=null">
+				cur_price = #{cur_price,jdbcType=DECIMAL},
+			</if>
+			
+		</trim>
+	</update>
+	
+	
+	<update id="updateShare" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+		update m_productinfo 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="imgname !=null">
+				imgname = #{imgname,jdbcType=VARCHAR},
+			</if>
+			<if test="img_small !=null">
+				img_small = #{img_small,jdbcType=VARCHAR},
+			</if>
+			<if test="marketid !=null">
+				marketid = #{marketid,jdbcType=INTEGER},
+			</if>
+			<if test="productName !=null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productDetails !=null">
+				productDetails = #{productDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="banners !=null">
+				banners = #{banners,jdbcType=VARCHAR},
+			</if>
+			<if test="url !=null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="productRadio !=null">
+				productRadio = #{productRadio,jdbcType=INTEGER},
+			</if>
+			<if test="videofile !=null">
+				videofile = #{videofile,jdbcType=VARCHAR},
+			</if>
+			<if test="urlname !=null">
+				urlname = #{urlname,jdbcType=VARCHAR},
+			</if>
+			<if test="pbutton !=null">
+				pbutton = #{pbutton,jdbcType=VARCHAR},
+			</if>
+			<if test="videoImg !=null">
+				videoImg = #{videoImg,jdbcType=VARCHAR},
+			</if>
+			<if test="gapImg !=null">
+				gapImg = #{gapImg,jdbcType=VARCHAR},
+			</if>
+			<if test="mp3 !=null">
+				mp3 = #{mp3,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</update>
+	
+		<update id="updateParameter" parameterType="com.abbot.schimneylife.pojo.shopping.SproductParameter">
+		update sproductparameter 
+		<trim prefix=" set " suffix=" where productid = #{productid,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="original !=null">
+				original = #{original},
+			</if>
+			<if test="cur_price !=null">
+				cur_price = #{cur_price},
+			</if>
+			<if test="repertory !=null">
+				repertory = #{repertory},
+			</if>
+		</trim>
+	</update>
+	<select id="findBalance" resultType="com.abbot.schimneylife.pojo.shopping.Recharge">
+	  select * from m_weixin_recharge where mopenid=#{openid}
+	</select>
+	<insert id="addRecharge" parameterType="com.abbot.schimneylife.pojo.shopping.Recharge">
+      	insert into m_weixin_recharge(mopenid,balance,recharge,consume,create_time)values(#{mopenid},#{balance},#{recharge},#{consume},now());
+  </insert>
+  
+  <update id="updateRecharge" parameterType="com.abbot.schimneylife.pojo.shopping.Recharge">
+      update m_weixin_recharge set balance=#{balance},recharge=#{recharge},consume=#{consume},update_time=now() where  mopenid=#{mopenid}
+  </update>
+  
+  <select id="findListOrder" resultType="com.abbot.schimneylife.pojo.shopping.Customer">
+	  select  * from  m_marketorder  where statustag=1 order by amtime_end desc 
+	</select>
+	 <select id="findListAppointment" resultType="com.abbot.schimneylife.pojo.shopping.Appointment">
+	  select  * from  m_appointment  order by createTime desc 
+	</select>
+	 <select id="findProductByid" resultMap="productResultMap">
+	  select  * from  m_productinfo   where id=#{id}
+	</select>
+	
+	 <!--动态首页信息管理  -->
+	<insert id="addProductVipcn" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo" >
+	 insert into m_vipcninfo(img_small,marketid,productName,url,createTime) values(#{img_small},#{marketid},#{productName},#{url},now())   
+	</insert>
+	<select id="findListVipcn" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from m_vipcninfo s,supermarket_info i where s.marketid=i.id 
+	</select>
+		<update id="disableVipcn">
+		update m_vipcninfo set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enableVipcn">
+		update m_vipcninfo set status=1 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteMarketVipcn">
+		DELETE  FROM m_vipcninfo WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="fetchVipcnById" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from m_vipcninfo s,supermarket_info i where s.marketid=i.id and s.id=#{id,jdbcType=INTEGER}
+	</select>
+	
+	<update id="updateVipcn" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+		update m_vipcninfo 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="img_small !=null">
+				img_small = #{img_small,jdbcType=VARCHAR},
+			</if>
+			<if test="productName !=null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="url !=null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</update>
+	
+	<select id="findListAttract" resultType="com.abbot.schimneylife.pojo.shopping.Appointment">
+	  select * from m_attract  order by createTime desc
+	</select>
+	<delete id="deleteAttract">
+		DELETE  FROM m_attract WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<!--便民信息  -->
+	<select id="secondProiList" resultType="com.abbot.schimneylife.pojo.shopping.SmarketProductInfo">
+	    select info.*,mcs.sname as smname from m_marketproductinfo info,m_convenience_smclass mcs where info.mclass=mcs.id order by updateTime desc
+	</select>
+	<update id="secondStop">
+		update m_marketproductinfo set status=0 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<update id="secondStart">
+		update m_marketproductinfo set status=1 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteSecond">
+		DELETE  FROM m_marketproductinfo WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<select id="SecondProByid" resultType="com.abbot.schimneylife.pojo.shopping.SmarketProductInfo">
+	  select  * from m_marketproductinfo  where id=#{id,jdbcType=INTEGER}
+	</select>
+	
+	<update id="updateSecond" parameterType="com.abbot.schimneylife.pojo.shopping.SmarketProductInfo">
+		update m_marketproductinfo 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="phone !=null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="productName !=null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="imgname !=null">
+				imgname = #{imgname,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</update>
+	<!-- 福利管理 -->
+		<select id="storeProiList" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from ms_storeproduct s,supermarket_info i where s.marketid=i.id 
+	</select>
+	<update id="storeStop">
+		update ms_storeproduct set status=0 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<update id="storeStart">
+		update ms_storeproduct set status=1 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteStore">
+		DELETE  FROM ms_storeproduct WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<select id="storeProByid" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	  select s.*,i.name as name from ms_storeproduct s,supermarket_info i where s.marketid=i.id  and s.id=#{id,jdbcType=INTEGER}
+	</select>
+	<select id="findStoreClass" resultType="com.abbot.schimneylife.pojo.shopping.StoreClass">
+	  select * from ms_storeclass 
+	</select>
+	
+	<update id="updateStore" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+		update ms_storeproduct 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=INTEGER}" suffixOverrides=",">
+			<if test="img_small !=null">
+				img_small = #{img_small,jdbcType=VARCHAR},
+			</if>
+			<if test="productName !=null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="imgname !=null">
+				imgname = #{imgname,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</update>
+	<insert id="addStoreProduct" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	   insert into  ms_storeproduct (imgname,img_small,productName,mclass,price,marketid,countdown,createTime,updateTime,status)
+	   values(#{imgname},#{img_small},#{productName},#{mclass},#{price},#{marketid},#{countdown},now(),now(),0)
+	</insert>
+</mapper>

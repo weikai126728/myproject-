@@ -1,0 +1,159 @@
+.first-param div:first-child label:before{
+	content:'一级参数：'
+}
+.first-param div:not(:first-child) label{
+	height:35px;
+}
+.first-param div:last-child em {
+	position:absolute;
+	width:10px;
+	height:10px;
+	background:url(../images/add.png) no-repeat center;
+	background-size:10px;
+	cursor:pointer;
+	display:inline-block;
+	float:right;
+	right:-12px;
+	top:9px;
+}
+.first-param div:not(:last-child) em{
+	position:absolute;
+	width:10px;
+	height:10px;
+	background:url(../images/delete.png) no-repeat center;
+	background-size:10px;
+	cursor:pointer;
+	display:inline-block;
+	float:right;
+	right:-12px;
+	top:9px;
+}
+
+.spec-add div:last-child em {
+	position:absolute;
+	width:10px;
+	height:10px;
+	background:url(../images/add.png) no-repeat center;
+	background-size:10px;
+	cursor:pointer;
+	display:inline-block;
+	float:right;
+	right:-12px;
+	top:9px;
+}
+
+.spec-add div:first-child label:before{
+	content:'二级参数：'
+}
+.spec-add div:not(:first-child) label{
+	height:35px;
+}
+.spec-add div:not(:last-child) em{
+	position:absolute;
+	width:10px;
+	height:10px;
+	background:url(../images/delete.png) no-repeat center;
+	background-size:10px;
+	cursor:pointer;
+	display:inline-block;
+	float:right;
+	right:-12px;
+	top:9px;
+}
+.group-add{
+	position:relative;
+	width:20px;
+	height:20px;
+	background:url(../images/add.png) no-repeat center;
+	background-size:20px;
+	cursor:pointer;
+}
+.xy-btn-del{
+    background: url(../images/del3.png) no-repeat center center;
+    background-size:40px;
+    cursor:pointer;
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 40px;
+    float: right;
+    top: -17px;
+    right: -16px;
+    z-index:2;
+}
+.xy-btn-enable{
+	background: url(../images/enable.png) no-repeat center center;
+    background-size:40px;
+    cursor:pointer;
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 40px;
+    float: right;
+    top: -17px;
+    right: -16px;
+}
+.xy-btn-disable{
+	background: url(../images/disable.png) no-repeat center center;
+    background-size:46px;
+    cursor:pointer;
+    position: absolute;
+/*     display: block; */
+    width: 50px;
+    height: 50px;
+    float: right;
+    top: 24px;
+    right: 167px;
+/*     transform:rotate(-12deg); */
+    z-index:2;
+}
+.xy-btn-update{
+    background: url(../images/update.png) no-repeat center center;
+    background-size: 20px;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: inline-block;
+    left: -29px;
+    cursor:pointer;
+}
+.xy-btn-update-transform{
+	animation:mymove 1s linear infinite;
+	-webkit-animation:mymove 1s linear infinite; /* Safari 和 Chrome */
+}
+
+@keyframes mymove
+{
+from {
+	transform:rotate(0deg);
+	-ms-transform:rotate(0deg); 	/* IE 9 */
+	-moz-transform:rotate(0deg); 	/* Firefox */
+	-webkit-transform:rotate(0deg); /* Safari 和 Chrome */
+	-o-transform:rotate(0deg); 	/* Opera */	
+	}
+to {
+	transform:rotate(360deg);
+	-ms-transform:rotate(360deg); 	/* IE 9 */
+	-moz-transform:rotate(360deg); 	/* Firefox */
+	-webkit-transform:rotate(360deg); /* Safari 和 Chrome */
+	-o-transform:rotate(360deg); 	/* Opera */
+	}
+}
+
+@-webkit-keyframes mymove /*Safari and Chrome*/
+{
+from {
+	transform:rotate(0deg);
+	-ms-transform:rotate(0deg); 	/* IE 9 */
+	-moz-transform:rotate(0deg); 	/* Firefox */
+	-webkit-transform:rotate(0deg); /* Safari 和 Chrome */
+	-o-transform:rotate(0deg); 	/* Opera */	
+	}
+to {
+	transform:rotate(360deg);
+	-ms-transform:rotate(360deg); 	/* IE 9 */
+	-moz-transform:rotate(360deg); 	/* Firefox */
+	-webkit-transform:rotate(360deg); /* Safari 和 Chrome */
+	-o-transform:rotate(360deg); 	/* Opera */
+	}
+}

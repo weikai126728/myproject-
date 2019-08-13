@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.user.IJoinDao">
+	<resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.user.Join">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="store" property="store" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="user_info_id" property="userId" jdbcType="INTEGER" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="place" property="place" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name,phone,store,type,address,place,create_time
+	</sql>
+
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.user.Join"
+		keyProperty="id" useGeneratedKeys="true">
+
+		insert into user_join (
+		name,phone,store,type,user_info_id,address,place,create_time)
+		values
+		(#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},
+		#{store,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},
+		#{userId,jdbcType=INTEGER},
+		#{address,jdbcType=VARCHAR},#{place,jdbcType=VARCHAR},now())
+
+	</insert>
+	<select id="checkJoin" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from user_join
+	</select>
+	<delete id="deleteById">
+		delete from user_join where id=#{id,jdbcType=INTEGER}
+	</delete>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from user_join
+	</select>
+	<select id="findByPageAndType" resultMap="BaseResultMap">
+	 select <include refid="Base_Column_List" /> from user_join
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+</mapper>  

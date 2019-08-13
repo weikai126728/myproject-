@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.IAllianceCommissionDao">
+	<sql id="sql">
+		fzalliance_commission.id,percent,product_id,pri_status,business_type_id
+	</sql>
+	<insert id="insert" parameterType="com.abbot.schimneylife.pojo.weixin.AllianceCommission">
+		insert into fzalliance_commission(percent,product_id,pri_status,business_type_id,create_time) 
+		values(#{percent},#{product_id},#{pri_status},#{business_type_id},now())
+	</insert>
+	<select id="findByProductId" resultType="com.abbot.schimneylife.pojo.weixin.AllianceCommission">
+		select <include refid="sql"></include>,business_type.name typeName from business_type left join fzalliance_commission
+		 on business_type.id = fzalliance_commission.business_type_id where product_id = #{product_id} order by business_type.id asc
+	</select>
+	<delete id="deleteByProductId">
+		delete from fzalliance_commission where product_id = #{product_id}
+	</delete>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.fenxiao.IUserDistributionDao">
+	<resultMap type="com.abbot.schimneylife.pojo.fenxiao.UserDistribution"
+		id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="deleted" property="deleted" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="balance" property="balance" jdbcType="DOUBLE" />
+		<result column="commission" property="commission" jdbcType="DOUBLE" />
+		<result column="contacts" property="contacts" jdbcType="VARCHAR" />
+		<result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="lastLoginTime" property="lastLoginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="loginCount" property="loginCount" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="oppenId" property="oppenId" jdbcType="VARCHAR" />
+		<result column="no" property="no" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="post" property="post" jdbcType="INTEGER" />
+		<result column="registerIp" property="registerIp" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="statusDate" property="statusDate" jdbcType="DATE" />
+		<result column="superior" property="superior" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,deleted,version,address,balance,commission,contacts,lastLoginIp,lastLoginTime,loginCount,name,
+		oppenId,no,password,phone,post,registerIp,status,statusDate,superior,createDate
+	</sql>
+	<select id="selectUser" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user where deleted=0;
+	</select>
+	<select id="selectUserBy" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM user where name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+		or phone LIKE concat('%',#{phone,jdbcType=VARCHAR},'%') or no LIKE
+		concat('%',#{no,jdbcType=VARCHAR},'%')
+
+	</select>
+	<update id="stop">
+		update user set status = 0 where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<update id="start">
+		update user set status = 1 where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<update id="deleteById">
+		update user set deleted = 1 where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from user
+		where deleted = 0
+	</select>
+	<select id="findByPageAndType" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from user
+		where deleted = 0
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+</mapper>

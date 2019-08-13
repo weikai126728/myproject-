@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.fenxiao.IProductCateDistributionDao">
+	<resultMap
+		type="com.abbot.schimneylife.pojo.fenxiao.ProductCateDistribution" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="deleted" property="deleted" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="fatherId" property="fatherId" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,deleted,version,fatherId,name,createDate
+	</sql>
+	<select id="selectProCate" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from product_cate where deleted = 0
+	</select>
+	<select id="fetchById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from product_cate where id = #{id,jdbcType=INTEGER} and deleted = 0
+	</select>
+	<insert id="addPro" parameterType="com.abbot.schimneylife.pojo.fenxiao.ProductCateDistribution" 
+			keyProperty="id" useGeneratedKeys="true">
+		insert into product_cate (deleted,version,fatherId,name,createDate) values (#{deleted,jdbcType=INTEGER},#{version,jdbcType=INTEGER},#{fatherId,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},now())
+	</insert>
+	<update id="delete">
+		update product_cate set deleted=1 where id=#{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatePro">
+		update product_cate set name=#{name,jdbcType=VARCHAR} where id=#{id,jdbcType=INTEGER}
+	</update>
+</mapper>

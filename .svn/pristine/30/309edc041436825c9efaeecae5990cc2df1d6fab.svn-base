@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallCartDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallCart" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="shopping_cart_id" property="shoppingCartId" jdbcType="VARCHAR" />
+    <result column="mall_product_id" property="mProductId" jdbcType="VARCHAR"/>
+    <result column="mall_product_param_id" property="parameterId" jdbcType="VARCHAR"/>
+    <result column="total_count" property="totalCount" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  <resultMap id="ProResultMap" type="com.abbot.schimneylife.pojo.shopping.MallCart" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="shopping_cart_id" property="shoppingCartId" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <association property="product" javaType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+    	<id column="mp_id" property="id" jdbcType="VARCHAR" />
+	    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+	    <result column="details" property="details" jdbcType="VARCHAR" />
+	    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+	    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+	    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+	    <result column="producing_area" property="productArea" jdbcType="VARCHAR"/>
+	     <result column="product_source" property="source" jdbcType="INTEGER"/>
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+	    <result column="sale" property="noname" jdbcType="INTEGER"/>
+	    <result column="product_source" property="source" jdbcType="INTEGER"/>
+	    <association property="parameter" javaType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">   
+	        <id property="id" column="mpp_id" jdbcType="VARCHAR"/>
+	        <result column="quality_day" property="qualityDay" jdbcType="INTEGER"/>
+	        <result column="quality_month" property="qualityMonth" jdbcType="INTEGER"/>
+	        <result column="quality_year" property="qualityYear" jdbcType="INTEGER"/>
+	        <result column="mpp_original_price" property="original" jdbcType="DECIMAL"/>
+	        <result column="mpp_current_price" property="cur_price" jdbcType="DECIMAL"/>
+	        <result column="first_param" property="firstParam" jdbcType="DECIMAL"/>
+	    </association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shopping_cart_id,mall_product_id, total_count,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallCart">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into mall_cart_list (id,shopping_cart_id,mall_product_param_id,mall_product_id,total_count,create_time) 
+  	values(#{id,jdbcType=VARCHAR},#{shoppingCartId,jdbcType=VARCHAR},#{parameterId,jdbcType=VARCHAR},#{mProductId,jdbcType=VARCHAR},#{totalCount,jdbcType=INTEGER},now())
+  </insert>
+  <update id="setMallProNum">
+  	update mall_cart_list set total_count=#{num,jdbcType=INTEGER} where shopping_cart_id in 
+  	(select id from shopping_cart where user_customer_id=#{customerId,jdbcType=INTEGER})
+  	 and id = #{mallCartId,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteMallPro">
+  	delete from mall_cart_list where shopping_cart_id in 
+  	(select id from shopping_cart where user_customer_id=#{customerId,jdbcType=INTEGER}) and mall_product_param_id = #{paramID,jdbcType=VARCHAR}
+  </delete>
+  <select id="fetchListByShoppingCart" resultMap="ProResultMap">
+  	select mcl.id, mcl.total_count, mcl.create_time,mp.id as mp_id,product_name,mp.details,img_small,img_middle,img_large,producing_area,mpp.id as mpp_id, 
+  	quality_day, quality_month, quality_year,mpp.original_price as mpp_original_price,mpp.current_price as mpp_current_price 
+  	from mall_cart_list as mcl 
+  	left join mall_product as mp on mcl.mall_product_id = mp.id 
+  	left join mall_product_parameter as mpp on mpp.id = mcl.mall_product_param_id 
+  	where mcl.shopping_cart_id = #{shoppingCartId,jdbcType=VARCHAR}
+  </select>
+  <select id="findByIds" resultMap="ProResultMap" parameterType="java.util.Map">
+  	select mcl.id, mcl.total_count, mcl.create_time,mp.id as mp_id,product_name,mp.details,img_small,img_middle,img_large,producing_area,mp.product_source,mpp.id as mpp_id
+  	,quality_day, quality_month, quality_year,mpp.original_price as mpp_original_price,mpp.first_param,mpp.current_price as mpp_current_price 
+  	from mall_cart_list as mcl 
+  	left join mall_product as mp on mcl.mall_product_id = mp.id 
+  	left join mall_product_parameter as mpp on mpp.id = mcl.mall_product_param_id 
+  	where mcl.id in 
+  	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach>
+  </select>
+  <select id="fetchFistSameType" resultMap="BaseResultMap">
+  	select mcl.id, mcl.shopping_cart_id,mcl.mall_product_id,mcl.mall_product_param_id,mcl.total_count,mcl.create_time from mall_cart_list as mcl left join mall_product as mp 
+  	on mcl.mall_product_id = mp.id 
+  	left join shopping_cart as sc on sc.id = mcl.shopping_cart_id
+  	where mp.product_source = #{source,jdbcType=INTEGER} and sc.user_customer_id = #{customerId,jdbcType=INTEGER} limit 0,1
+  </select>
+  <select id="fetchSameCart" resultMap="BaseResultMap">
+  	select mcl.id, mcl.shopping_cart_id,mcl.mall_product_id,mcl.mall_product_param_id,mcl.total_count,mcl.create_time from mall_cart_list as mcl 
+  	left join shopping_cart as sc on sc.id = mcl.shopping_cart_id where sc.user_customer_id = #{customerId,jdbcType=INTEGER} 
+  	and mcl.mall_product_id = #{productId,jdbcType=VARCHAR} and mcl.mall_product_param_id = #{paramId,jdbcType=VARCHAR}
+  </select>
+  <delete id="delete">
+  	delete from mall_cart_list where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <select id="fetchById" resultMap="BaseResultMap">
+  	select mcl.id, mcl.shopping_cart_id,mcl.mall_product_id,mcl.mall_product_param_id,mcl.total_count,mcl.create_time from mall_cart_list as mcl 
+  	where mcl.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="countByShoppingCartId" resultType="Integer">
+  	select count(*) from mall_cart_list where shopping_cart_id = #{id,jdbcType=VARCHAR}
+  </select>
+</mapper>

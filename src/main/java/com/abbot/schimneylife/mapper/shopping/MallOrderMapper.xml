@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallOrderDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallOrder" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="original_price" property="original" jdbcType="DECIMAL" />
+    <result column="customer_order_id" property="customerOrderId" jdbcType="VARCHAR"/>
+    <result column="current_price" property="current" jdbcType="DECIMAL"/>
+    <result column="settlement_price" property="settlement" jdbcType="DECIMAL"/>
+    <result column="total" property="total" jdbcType="INTEGER"/>
+    <result column="mall_order_status" property="status" jdbcType="INTEGER"/>
+    <result column="errorCode" property="errorCode" jdbcType="VARCHAR"/>
+    <result column="errorMessage" property="errorMessage" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="DATE"/>
+    <association property="product" javaType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+    	<id column="mp_id" property="id" jdbcType="VARCHAR" />
+	    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+	    <result column="details" property="details" jdbcType="VARCHAR" />
+	    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+	    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+	    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+	    <result column="producing_area" property="productArea" jdbcType="VARCHAR"/>
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+	    <result column="sale" property="noname" jdbcType="INTEGER"/>
+	    <association property="parameter" javaType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">   
+	        <id property="id" column="mpp_id" jdbcType="VARCHAR"/>
+	        <result column="quality_day" property="qualityDay" jdbcType="INTEGER"/>
+	        <result column="quality_month" property="qualityMonth" jdbcType="INTEGER"/>
+	        <result column="quality_year" property="qualityYear" jdbcType="INTEGER"/>
+	        <result column="mpp_original_price" property="original" jdbcType="DECIMAL"/>
+	        <result column="mpp_current_price" property="cur_price" jdbcType="DECIMAL"/>
+	        <result column="first_param" property="firstParam" jdbcType="VARCHAR"/>
+	        <result column="second_param" property="secondParam" jdbcType="VARCHAR"/>
+	        <result column="param_json" property="json" jdbcType="VARCHAR"/>
+	    </association>
+    </association>
+  </resultMap>
+  <resultMap id="simpleMap" type="com.abbot.schimneylife.pojo.shopping.MallOrder">
+  	<id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="original_price" property="original" jdbcType="DECIMAL" />
+    <result column="current_price" property="current" jdbcType="DECIMAL"/>
+    <result column="settlement_price" property="settlement" jdbcType="DECIMAL"/>
+    <result column="total" property="total" jdbcType="INTEGER"/>
+    <result column="mall_product_id" property="errorCode" jdbcType="VARCHAR"/>
+    <result column="errorCode" property="errorCode" jdbcType="VARCHAR"/>
+    <result column="errorMessage" property="errorMessage" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, original_price, current_price, settlement_price, total,mall_product_id,errorCode,errorMessage,create_time,update_time
+  </sql>
+  <sql id="select_list">
+  	select mol.id,mol.customer_order_id, mol.original_price, mol.current_price, mol.settlement_price, mol.total,mol.errorCode,mol.errorMessage, mol.mall_order_status,mol.create_time,mol.update_time
+  	,mp.id as mp_id,product_name,mp.details,img_small,img_middle,img_large,producing_area,mpp.id as mpp_id
+  	, quality_day, quality_month, quality_year,mpp.first_param,mpp.second_param,mpp.param_json,mpp.original_price as mpp_original_price,mpp.current_price as mpp_current_price
+  	from mall_order_list as mol 
+  	left join mall_product as mp on mol.mall_product_id = mp.id 
+  	left join mall_product_parameter as mpp on mpp.id = mol.mall_product_param_id 
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallOrder">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into mall_order_list (id, mall_product_id, mall_product_param_id, customer_order_id, original_price, current_price, settlement_price, total,errorCode,errorMessage,create_time,update_time) 
+  	values (#{id,jdbcType=VARCHAR},#{productId,jdbcType=VARCHAR},#{paramId,jdbcType=VARCHAR}
+  	,#{customerOrderId,jdbcType=VARCHAR},#{original,jdbcType=DECIMAL},#{current,jdbcType=DECIMAL},#{settlement,jdbcType=DECIMAL},#{total,jdbcType=INTEGER},#{errorCode,jdbcType=VARCHAR},#{errorMessage,jdbcType=VARCHAR}
+  	,now(),now())
+  </insert>
+  <select id="selectMsg" resultMap="BaseResultMap">
+  	<include refid="select_list"/> where mol.customer_order_id=#{id,jdbcType=VARCHAR}
+  </select>
+  <select id="findMallOrderList" resultMap="BaseResultMap">
+  	<include refid="select_list" /> where mol.customer_order_id = #{customerOrderID,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAmount" resultType="java.math.BigDecimal">
+  	select settlement_price from mall_order_list where id=#{id,jdbcType=VARCHAR}
+  </select>
+</mapper>

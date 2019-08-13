@@ -1,0 +1,93 @@
+@charset "utf-8";
+
+
+body,ul,ol,h1,h2,h3,h4,h5,h6,p,input,select,textarea,dl,dd{margin: 0;padding: 0; font-family: "微软雅黑";}
+ul,ol{list-style: none;}
+i,em{ font-style:normal}
+input,select,textarea{background-color: transparent; border: none; outline: none;}
+textarea{resize: none;}/*右下角的小尾巴*/
+img{border: none; vertical-align: top;}
+a{text-decoration: none;}
+input[type=date],input[type=text] {
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+
+.clearfix:after,.clearfix:before{content: "";display: table;}
+.clearfix:after{clear: both;}
+.clearfix{*zoom:1;}
+
+
+
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.dino{
+	display: none;
+}
+.op0{
+	opacity: 0;
+}
+
+
+
+.bottom_logo {
+	width: 100%;
+	padding-bottom: 4rem;
+	text-align: center;
+}
+
+.bottom_logo li {
+	font-size: 0.55rem;
+	color: #7A7A7A;
+	width: 100%;
+	text-align: center;
+		-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.bottom_logo li i{
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.bottom_logo li a{
+	color: #7A7A7A;
+}
+
+.bottom_logo li span {
+	padding: 0 0.37rem;
+}
+
+
+.fhdb{
+	width: 1.688rem;
+	height: 1.688rem;
+	display: inline-block;
+	position: fixed;
+	background: url(../../../image/shopping/wap/fhdb.png) no-repeat center center;
+	background-size: cover;
+	right: 0.4rem;
+	bottom: 3.5rem;
+	z-index: 5;
+	opacity: 0;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+
+.tpl{
+	height: 1.2rem;
+	line-height: 1.2rem;
+	border: 1px solid #dcdcdc;
+	border-radius: 0.7rem;
+	padding-top: 0.2rem;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline-block;
+} 

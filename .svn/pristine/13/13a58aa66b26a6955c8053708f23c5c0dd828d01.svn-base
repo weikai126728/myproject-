@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.fenxiao.IFinancialDistributionDao">
+	<resultMap type="com.abbot.schimneylife.pojo.fenxiao.FinancialDistribution"
+		id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="deleted" property="deleted" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="DATE" />
+		<result column="balance" property="balance" jdbcType="DOUBLE" />
+		<result column="money" property="money" jdbcType="DOUBLE" />
+		<result column="no" property="no" jdbcType="VARCHAR" />
+		<result column="operator" property="operator" jdbcType="VARCHAR" />
+		<result column="payment" property="payment" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="user" property="userId" jdbcType="INTEGER" />
+		<association property="user"
+			javaType="com.abbot.schimneylife.pojo.fenxiao.UserDistribution">
+			<id column="user_id" property="id" jdbcType="INTEGER" />
+			<result column="name" property="name" jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,deleted,version,createDate,balance,money,no,operator,payment,remark,type,user
+	</sql>
+	<sql id="select_List">
+		select
+		f.id,f.deleted,f.version,f.createDate,f.balance,f.money,f.no,f.operator,f.payment,f.remark,f.type,f.user,
+		user.name
+		from financial as f left join user
+		on user.id = f.user
+	</sql>
+	<select id="selectFinancial" resultMap="BaseResultMap">
+		<include refid="select_List" />
+		where f.deleted = 0
+	</select>
+	<select id="selectFinancialBy" resultMap="BaseResultMap">
+		<include refid="select_List"/>
+			where f.no LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+			or f.operator LIKE concat('%',#{name,jdbcType=VARCHAR},'%') or user.name LIKE
+			concat('%',#{name,jdbcType=VARCHAR},'%')
+	</select>
+	<select id="totalCount" resultType="java.lang.Integer">
+		select count(*) from financial
+		where deleted = 0
+	</select>
+	<select id="findByPageAndType" resultMap="BaseResultMap">
+		<include refid="select_List" />
+		where	f.deleted = 0
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+</mapper>

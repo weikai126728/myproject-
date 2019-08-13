@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IRefundDao">
+	<resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.Refund">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="customer_order_id" property="customerOrderId"
+			jdbcType="VARCHAR" />
+		<result column="describes" property="describe" jdbcType="VARCHAR" />
+		<result column="mall_order_id" property="mallOrderId" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="service_type" property="serviceType" jdbcType="INTEGER" />
+		<result column="is_Submit" property="isSubmit" jdbcType="INTEGER" />
+		<result column="is_Agree" property="isAgree" jdbcType="INTEGER" />
+		<result column="agree_time" property="agreeTime" jdbcType="DATE" />
+		<result column="sub_time" property="subTime" jdbcType="DATE" />
+		<result column="image_path" property="imagePpath" jdbcType="VARCHAR" />
+		<result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR" />
+		<result column="refund_num" property="refundNum" jdbcType="VARCHAR" />
+		<result column="service_status" property="serviceStatus"
+			jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<result column="update_time" property="updateTime" jdbcType="DATE" />
+		<association property="cOrder"
+			javaType="com.abbot.schimneylife.pojo.shopping.CustomerOrder">
+			<id column="cId" property="id" jdbcType="VARCHAR" />
+			<result column="shipping_address" property="shippingAddress"
+				jdbcType="VARCHAR" />
+			<result column="contact_phone" property="contactPhone"
+				jdbcType="VARCHAR" />
+			<result column="contact_user" property="contactUser" jdbcType="VARCHAR" />
+			<result column="order_number" property="number" jdbcType="VARCHAR" />
+			<result column="total_amount" property="amount" jdbcType="VARCHAR" />
+			<result column="total_count" property="count" jdbcType="INTEGER" />
+			<result column="order_status" property="status" jdbcType="INTEGER" />
+			<result column="flag" property="flag" jdbcType="INTEGER" />
+			<association property="mOrder"
+				javaType="com.abbot.schimneylife.pojo.shopping.MallOrder">
+				<id column="mId" property="id" jdbcType="VARCHAR" />
+				<result column="settlement_price" property="settlement"
+					jdbcType="DECIMAL" />
+				<result column="total" property="total" jdbcType="INTEGER" />
+				<result column="create_time" property="createTime" jdbcType="DATE" />
+				<association property="product"
+					javaType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+					<id column="mp_id" property="id" jdbcType="VARCHAR" />
+					<result column="product_name" property="productName"
+						jdbcType="VARCHAR" />
+					<result column="details" property="details" jdbcType="VARCHAR" />
+					<result column="img_small" property="imgSmall" jdbcType="VARCHAR" />
+					<result column="img_middle" property="imgMiddle" jdbcType="VARCHAR" />
+					<result column="img_large" property="imgLarge" jdbcType="VARCHAR" />
+				</association>
+			</association>
+		</association>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,customer_order_id,
+		describes,mall_order_id,amount,service_type,is_Submit,sub_time,is_Agree,agree_time,image_path,reason,service_status,create_time,update_time,refuse_reason,refund_num
+	</sql>
+	<sql id="select_List">
+		select
+		sale.id,sale.describes,sale.customer_order_id,sale.mall_order_id,sale.amount,sale.service_type,sale.is_Submit,sale.sub_time,sale.is_Agree,
+		sale.agree_time,sale.reason,sale.image_path,sale.service_status,sale.create_time,sale.update_time,sale.refuse_reason,sale.refund_num,
+		cu.id as cId,cu.shipping_address,cu.contact_phone,cu.contact_user,cu.order_number,cu.total_amount,cu.total_count,cu.order_status,cu.flag,
+		mall.id as mId,mall.settlement_price,mall.total,mall.create_time,
+		pro.id as mp_id,pro.product_name,pro.details,img_small,img_middle,img_large 
+		from 
+		after_sales_service	as sale left join 
+		customer_order as cu ON	sale.customer_order_id=cu.id 
+		left join mall_order_list as mall on sale.mall_order_id=mall.id	
+		left join mall_product as pro on pro.id=mall.mall_product_id
+	</sql>
+	<insert id="add" parameterType="com.abbot.schimneylife.pojo.shopping.Refund">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  		</selectKey>
+		insert into after_sales_service
+		(<include refid="Base_Column_List" />)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{customerOrderId,jdbcType=VARCHAR},
+		#{describe,jdbcType=VARCHAR},
+		#{mallOrderId,jdbcType=VARCHAR},
+		#{amount,jdbcType=VARCHAR},
+		#{serviceType,jdbcType=VARCHAR},
+		#{isSubmit,jdbcType=VARCHAR},
+		#{imagePpath,jdbcType=VARCHAR},
+		#{serviceStatus,jdbcType=INTEGER},
+		now(),now()
+		)
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		<include refid="select_List" />
+		where
+		cu.user_customer_id=#{id,jdbcType=VARCHAR}
+	</select>
+	<select id="findByPageAndType" resultMap="BaseResultMap">
+		<include refid="select_List"/>
+		order by ${order} ${sort}
+		limit
+		#{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<select id="selectAllRefund" resultMap="BaseResultMap">
+		<include refid="select_List"/> order by sale.id desc
+	</select>
+	<select id="getImgName" resultType="String">
+		select image_path from after_sales_service where
+		id=#{id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectMsg" resultMap="BaseResultMap">
+		 <include refid="select_List"/>  where cu.id= #{mId,jdbcType=VARCHAR}
+	</select>
+	<select id="checkMsg" resultType="com.abbot.schimneylife.pojo.shopping.Refund">
+		select <include refid="Base_Column_List"/> from after_sales_service where id=#{id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(*) from after_sales_service
+		as sale left join customer_order as cu ON
+		sale.customer_order_id=cu.id
+		left join mall_order_list as mall on
+		sale.mall_order_id=mall.id
+		left join mall_product as pro on
+		pro.id=mall.mall_product_id
+	</select>
+	<delete id="delete">
+		delete from after_sales_service where
+		id=#{id,jdbcType=VARCHAR}
+	</delete>
+	<update id="agreeRefund">
+		update after_sales_service set  service_status=#{serviceStatus,jdbcType=INTEGER} ,update_time=now()
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	<update id="agreegoods">
+		update after_sales_service set  is_Agree=#{isAgree,jdbcType=INTEGER}, agree_time=now()
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	 <update id="updateSub">
+	 	update after_sales_service set is_Submit=#{sub,jdbcType=INTEGER} 
+	 	where id=#{id,jdbcType=VARCHAR}
+	 </update>
+	 <update id="addReason">
+	 	update after_sales_service set refuse_reason=#{refuseReason,jdbcType=VARCHAR} 
+	 	where id=#{id,jdbcType=VARCHAR}
+	 </update>
+</mapper>

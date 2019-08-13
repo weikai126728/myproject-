@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.ILogisticsDao">
+	<resultMap type="com.abbot.schimneylife.pojo.shopping.Logistics"
+		id="BaseResultMap">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="service_id" property="service_id" jdbcType="VARCHAR" />
+		<result column="img_path" property="img_path" jdbcType="VARCHAR" />
+		<result column="logistics" property="logistics" jdbcType="VARCHAR" />
+		<result column="logistics_company" property="logistics_company"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<result column="update_time" property="updateTime" jdbcType="DATE" />
+		<association property="service"
+			javaType="com.abbot.schimneylife.pojo.shopping.Refund">
+			<id column="Rid" property="id" jdbcType="VARCHAR" />
+			<result column="customer_order_id" property="customerOrderId"
+				jdbcType="VARCHAR" />
+			<result column="describes" property="describe" jdbcType="VARCHAR" />
+			<result column="mall_order_id" property="mallOrderId"
+				jdbcType="VARCHAR" />
+			<result column="amount" property="amount" jdbcType="DECIMAL" />
+			<result column="service_type" property="serviceType" jdbcType="INTEGER" />
+			<result column="image_path" property="imagePpath" jdbcType="VARCHAR" />
+			<result column="service_status" property="serviceStatus"
+				jdbcType="INTEGER" />
+			<result column="create_time" property="createTime" jdbcType="DATE" />
+			<result column="update_time" property="updateTime" jdbcType="DATE" />
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,service_id,img_path,logistics,logistics_company,create_time,update_time
+	</sql>
+	
+	<insert id="add" parameterType="com.abbot.schimneylife.pojo.shopping.Logistics">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  			select replace(uuid(),'-','') from dual
+  		</selectKey>
+		insert into after_sales_logistics (<include refid="Base_Column_List" />)
+		values  (
+		#{id,jdbcType=VARCHAR},
+		#{service_id,jdbcType=VARCHAR},
+		#{img_path,jdbcType=VARCHAR},
+		#{logistics,jdbcType=VARCHAR},
+		#{logistics_company,jdbcType=VARCHAR},
+		now(),now()
+		)
+	</insert>
+	
+	<select id="queryLogById" resultMap="BaseResultMap">
+		select log.id,log.service_id,log.img_path,log.logistics,log.logistics_company,log.create_time,log.update_time from after_sales_logistics as log left join after_sales_service as service
+		 on log.service_id=service.id where service.id=#{id,jdbcType=VARCHAR}
+	</select>
+</mapper>

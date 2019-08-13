@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.FashionableDao">
+	<select id="findByPage"  resultType="com.abbot.schimneylife.pojo.weixin.Receivers">
+		select * FROM ts_Receivers 
+		
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and product_id like #{like,jdbcType=VARCHAR} 
+			</if>
+		</trim>
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}		
+		</if>
+	</select>
+	<select id="countTotal" resultType="Integer">
+		select count(*) FROM  ts_Receivers
+		<trim prefix=" where " prefixOverrides="and|or">
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and (product_id like #{like,jdbcType=VARCHAR} 
+			</if>
+		</trim>
+		
+	</select>
+		<select id="findfashionable" resultType="com.abbot.schimneylife.pojo.weixin.Receivers">
+		select * FROM  ts_Receivers where id=#{id}
+	</select>
+	<update id="updatefindfashionable" parameterType="com.abbot.schimneylife.pojo.weixin.Receivers">
+		update ts_Receivers set product_id = #{product_id},
+		type = #{type},
+		account = #{account},
+		amount = #{amount},
+		description = #{description}
+		name=#{name}
+		where id =#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deletfashionable">
+		delete from  ts_Receivers  where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="addfindfashionable" parameterType="com.abbot.schimneylife.pojo.weixin.Receivers">
+	   insert into ts_Receivers  (product_id,type,account,amount,description,name,createTime) values(#{product_id},#{type},#{account},#{amount},#{description},#{name},now())
+	    
+	</insert>
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.BenefitDao">
+	
+  	 <resultMap id="productResultMap" type="com.abbot.schimneylife.pojo.shopping.MarketProductInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="imgname" property="imgname" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="marketid" property="marketid" jdbcType="INTEGER" />
+    <result column="productDetails" property="productDetails" jdbcType="VARCHAR" />
+    <result column="img_small" property="img_small" jdbcType="VARCHAR"/>
+    <result column="banners" property="banners" jdbcType="VARCHAR"/>
+    <result column="url" property="url" jdbcType="VARCHAR"/>
+    <result column="urlname" property="urlname" jdbcType="VARCHAR"/>
+    <result column="videofile" property="videofile" jdbcType="VARCHAR"/>
+    <result column="pbutton" property="pbutton" jdbcType="VARCHAR"/>
+    <result column="videoImg" property="videoImg" jdbcType="VARCHAR"/>
+    <result column="gapImg" property="gapImg" jdbcType="VARCHAR"/>
+    <result column="productRadio" property="productRadio" jdbcType="INTEGER"/>
+    <result column="productIntegral" property="productIntegral" jdbcType="INTEGER"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="dis" property="dis" jdbcType="INTEGER"/>
+    <result column="comm" property="comm" jdbcType="INTEGER"/>
+    <result column="countdown" property="countdown" jdbcType="DATE" />
+    <result column="posters" property="posters" jdbcType="VARCHAR"/>
+    <result column="mp3" property="mp3" jdbcType="VARCHAR"/>
+    <result column="promote" property="promote" jdbcType="INTEGER"/>
+  </resultMap>
+	<select id="findAllBenefit" resultMap="productResultMap">
+	   select * from  m_benefit order by createTime desc
+	</select>
+	<select id="findByid" resultMap="productResultMap">
+	   select * from  m_benefit where status=1 and marketid=#{marketid}
+	</select>
+	<select id="findCoalition" resultType="com.abbot.schimneylife.pojo.shopping.SupermarketInfo">
+	   select * from  m_coalition  
+	</select>
+	<update id="disable">
+		update m_coalition set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="enable">
+		update m_coalition set status=1 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	 <update id="benefitstop">
+		update m_benefit set status=0 where
+		id =#{id,jdbcType=INTEGER}
+	</update>
+	<update id="benefitstart">
+		update m_benefit set status=1 where
+		id =
+		#{id,jdbcType=INTEGER}
+	</update> 
+
+	<insert id="addProduct" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketInfo">
+	   insert into  m_coalition (imgSmall,name,openid,contactUser,addre,phone,createTime,status,imgLarge)
+	   values(#{imgSmall},#{name},#{openid},#{contactUser},#{addre},#{phone},now(),0,#{imgLarge})
+	</insert>
+	
+	<select id="fetchById" resultType="com.abbot.schimneylife.pojo.shopping.SupermarketInfo">
+	   select * from  m_coalition where id=#{id}  
+	</select>
+	
+	<update id="updateProduct" parameterType="com.abbot.schimneylife.pojo.shopping.SupermarketInfo">
+		update m_coalition 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=VARCHAR}" suffixOverrides=",">
+			<if test="name !=null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="phone !=null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="contactUser !=null">
+				contactUser = #{contactUser,jdbcType=VARCHAR},
+			</if>
+			<if test="imgSmall !=null">
+				imgSmall = #{imgSmall,jdbcType=VARCHAR},
+			</if>
+			<if test="openid !=null">
+				openid = #{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="addre !=null">
+				addre = #{addre,jdbcType=VARCHAR},
+			</if>
+			<if test="mp3 !=null">
+				mp3 = #{mp3,jdbcType=VARCHAR},
+			</if>
+			<if test="imgLarge !=null">
+				imgLarge = #{imgLarge,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	</update>
+	
+	<insert id="addBenefit" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	   insert into  m_benefit (imgname,marketid,hopenid,productDetails,countdown,createTime,status,html)
+	   values(#{imgname},#{marketid},#{hopenid},#{productDetails},#{countdown},now(),0,#{html})
+	</insert>
+	
+	<select id="findBenefitByid" resultType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+	   select * from  m_benefit   where id=#{id}
+	</select>
+	
+	<update id="updateBenefit" parameterType="com.abbot.schimneylife.pojo.shopping.MarketProductInfo">
+		update m_benefit 
+		<trim prefix=" set " suffix=" where id = #{id,jdbcType=VARCHAR}" suffixOverrides=",">
+			<if test="imgname !=null">
+				imgname = #{imgname,jdbcType=VARCHAR},
+			</if>
+			<if test="hopenid !=null">
+				hopenid = #{hopenid,jdbcType=VARCHAR},
+			</if>
+			<if test="productDetails !=null">
+				productDetails = #{productDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="countdown !=null">
+				countdown = #{countdown,jdbcType=VARCHAR},
+			</if>
+			<if test="html !=null">
+				html = #{html,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</update>
+	<delete id="deletebit">
+		DELETE  FROM m_benefit WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deletecon">
+		DELETE  FROM m_coalition WHERE id=#{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

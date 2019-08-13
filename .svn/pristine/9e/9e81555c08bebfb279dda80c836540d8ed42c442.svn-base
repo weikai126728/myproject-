@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallHomeBannerDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallHomeBanner" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="images" property="images" jdbcType="VARCHAR" />
+    <result column="image_path" property="image_path" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, images,type,image_path,create_time
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallHomeBanner">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into mall_home_banner (<include refid="Base_Column_List"></include>) 
+  	values(#{id,jdbcType=VARCHAR},#{images,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{image_path,jdbcType=VARCHAR},now())
+  </insert>
+  <update id="updateImage">
+  	update mall_home_banner set images = #{images,jdbcType=VARCHAR},create_time = now() where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updatePath">
+  	update mall_home_banner set image_path = #{path,jdbcType=VARCHAR},create_time = now() where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="fetchById" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from mall_home_banner where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="findByType" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from mall_home_banner where type = #{type,jdbcType=INTEGER}
+  </select>
+  <delete id="delete">
+  	delete from mall_home_banner where id = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

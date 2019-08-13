@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallProductParameterDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallProductParameter" >
+     <id property="id" column="id" jdbcType="VARCHAR"/>
+     <result column="mall_product_id" property="productId" jdbcType="VARCHAR"/>
+     <result column="quality_day" property="qualityDay" jdbcType="INTEGER"/>
+     <result column="quality_month" property="qualityMonth" jdbcType="INTEGER"/>
+     <result column="quality_year" property="qualityYear" jdbcType="INTEGER"/>
+     <result column="original_price" property="original" jdbcType="DECIMAL"/>
+     <result column="current_price" property="cur_price" jdbcType="DECIMAL"/>
+     <result column="param_json" property="json" jdbcType="VARCHAR"/>
+     <result column="first_param" property="firstParam" jdbcType="VARCHAR"/>
+     <result column="second_param" property="secondParam" jdbcType="VARCHAR"/>
+     <result column="param_status" property="status" jdbcType="INTEGER"/>
+     <result column="repertory" property="repertory" jdbcType="INTEGER"/>
+  </resultMap>
+ <sql id="base_column_list">
+ 	id, mall_product_id, quality_day, quality_month, quality_year, original_price, current_price, param_json,first_param,second_param,param_status,repertory
+ </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into mall_product_parameter (<include refid="base_column_list"/>,create_time) values(#{id,jdbcType=VARCHAR},#{productId,jdbcType=VARCHAR},
+  	#{qualityDay,jdbcType=INTEGER},#{qualityMonth,jdbcType=INTEGER},#{qualityYear,jdbcType=INTEGER},#{original,jdbcType=DECIMAL}
+  	,#{cur_price,jdbcType=DECIMAL},#{json,jdbcType=VARCHAR},#{firstParam,jdbcType=VARCHAR},#{secondParam,jdbcType=VARCHAR},0,#{repertory,jdbcType=INTEGER},now())
+  </insert>
+  <select id="fetchLowerPriceByProId" resultMap="BaseResultMap">
+  	select <include refid="base_column_list"/> from mall_product_parameter as p
+  	where p.mall_product_id=#{proId,jdbcType=VARCHAR} ORDER BY p.current_price ASC LIMIT 0,1
+  </select>
+  <select id="groupByFirstParam" resultType="String">
+  	select first_param from mall_product_parameter where mall_product_id=#{proId,jdbcType=VARCHAR} group by first_param
+  </select>
+  <select id="groupBySecondParam" resultType="String">
+  	select second_param from mall_product_parameter where mall_product_id=#{proId,jdbcType=VARCHAR} group by second_param
+  </select>
+  <select id="findByProductId" resultMap="BaseResultMap">
+  	select <include refid="base_column_list"/> from mall_product_parameter where mall_product_id=#{productId,jdbcType=VARCHAR}
+  </select>
+  <update id="updateStatus">
+  	update mall_product_parameter set param_status = #{status,jdbcType=INTEGER} where id = #{paramId,jdbcType=VARCHAR}
+  </update>
+  <select id="findSameLevel" resultMap="BaseResultMap">
+  	select <include refid="base_column_list" /> from mall_product_parameter where mall_product_id = 
+  	(select mall_product_id from mall_product_parameter where id=#{paramId,jdbcType=VARCHAR})
+  </select>
+  <select id="fetchById" resultMap="BaseResultMap">
+  	select <include refid="base_column_list" /> from mall_product_parameter where id = #{paramId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteById">
+  	delete from mall_product_parameter where id = #{paramId,jdbcType=VARCHAR}
+  </delete>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">
+  	update mall_product_parameter 
+  	<trim prefix="set" suffixOverrides="," suffix=" where id = #{id} ">
+	  <if test="qualityDay!=null">quality_day=#{qualityDay,jdbcType=INTEGER},</if>
+	  <if test="qualityMonth!=null">quality_month=#{qualityMonth,jdbcType=INTEGER},</if>
+	  <if test="qualityYear!=null">quality_year=#{qualityYear,jdbcType=INTEGER},</if>
+	  <if test="original!=null">original_price=#{original,jdbcType=DECIMAL},</if>
+	  <if test="cur_price!=null">current_price=#{cur_price,jdbcType=DECIMAL},</if>
+	  <if test="json!=null">param_json=#{json,jdbcType=VARCHAR},</if>
+	  <if test="firstParam!=null">first_param=#{firstParam,jdbcType=VARCHAR},</if>
+	  <if test="secondParam!=null">second_param=#{secondParam,jdbcType=VARCHAR},</if>
+	  <if test="repertory !=null">repertory=#{repertory,jdbcType=INTEGER},</if>
+	</trim>
+  </update>
+  <select id="findAll" resultMap="BaseResultMap">
+  	select <include refid="base_column_list" /> from mall_product_parameter
+  </select>
+</mapper>

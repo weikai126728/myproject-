@@ -1,0 +1,152 @@
+
+body{
+	background-color: #F4F4F4;
+}
+.top{
+	width: 100%;
+	text-align: center;
+	height: 1.95rem;
+	background-color: #FFFFFF;
+	margin-bottom: 0.266rem;
+}
+.top .fl{
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+.top .fl img{
+	width: 100%;
+}
+.top span{
+	line-height: 1.95rem;
+	font-size: 0.681rem;
+	margin-left: -0.725rem;
+	color: #4B4B4B;
+	/*padding: 0.622rem 0;
+	display: inline-block;*/
+}
+
+
+.wuliu_box_top{
+	background-color: #FFFFFF;
+	padding: 0.592rem 0;
+	margin-bottom: 0.296rem;
+}
+.wuliu_box_top .wuliu_box_img{
+	width: 4rem;
+	height: 4rem;
+	border: 1px solid #E3E3E3;
+	position: relative;
+	margin-left: 0.592rem;
+	margin-bottom: 0.296rem;
+}
+.wuliu_box_top .wuliu_box_img img{
+	width: 100%;
+	height: 100%;
+}
+.wuliu_box_top .wuliu_box_img span{
+	width: 100%;
+	height: 0.77rem;
+	line-height: 0.77rem;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	text-align: center;
+	font-size: 0.503rem;
+	color: #FFFFFF;
+	background-color: rgba(0,0,0,0.5);
+}
+.wuliu_box_top ul{
+	font-size: 0.55rem;
+	color: #8E8E8E;
+	line-height: 1.051rem;
+	margin-left: 0.592rem;
+}
+.wuliu_box_top ul .ph em{
+	color: #EC3D0E;
+}
+
+
+
+
+.track-rcol{
+	border: 1px solid #eee;
+	font-size: 0.592rem;
+	background-color: #FFFFFF;
+	padding-left: 0.592rem;
+	padding-top: 0.74rem;
+}
+.track-list{
+	margin: 0.296rem; 
+	padding-left: 0.074rem; 
+	background-color: #FFFFFF;
+	position: relative;
+	padding-bottom: 1rem;
+}
+.track-list li{
+	position: relative; 
+	padding: 0.74rem 0 0 0.7rem; 
+	line-height: 0.888rem; 
+	border-left: 1px solid #d9d9d9;
+	color: #999;
+}
+.track-list li:first-child{
+	color: #000000; 
+	padding-top: 0; 
+}
+.track-list li .node-icon{
+	position: absolute; 
+	left: -0.19rem; 
+	top: 45%; 
+	width: 0.4rem; 
+	height: 0.4rem; 
+	background: url(../../../image/shopping/wap/yuan.png) no-repeat center center;
+	background-size: cover;
+}
+.track-list li:first-child .node-icon{
+	background-image: url(../../../image/shopping/wap/yuan_on.png);
+	width: 0.7rem;
+	height: 0.7rem;
+	background-size: cover;
+	left: -0.35rem;
+	top: 19%;
+}
+.track-list li .time{
+	margin-right: 0.296rem; 
+	position: relative; 
+	top: 0.059rem; 
+	display: inline-block; 
+	vertical-align: middle;
+}
+.track-list li .txt{
+	position: relative; 
+	top: 0.059rem; 
+	display: inline-block; 
+	vertical-align: middle;
+}
+.track-list li:first-child .time{
+	margin-right: 0.296rem; 
+}
+.track-list li .time{
+	display: block;
+}
+.track-list li a{
+	text-decoration: underline;
+	color: #0283CD;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

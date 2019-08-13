@@ -1,0 +1,464 @@
+package com.abbot.schimneylife.serviceImpl.shopping;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.abbot.schimneylife.dao.shopping.ISupermarketAddressDao;
+import com.abbot.schimneylife.dao.shopping.ISupermarketInfoDao;
+import com.abbot.schimneylife.pojo.shopping.Appointment;
+import com.abbot.schimneylife.pojo.shopping.Customer;
+import com.abbot.schimneylife.pojo.shopping.MarketProductInfo;
+import com.abbot.schimneylife.pojo.shopping.Recharge;
+import com.abbot.schimneylife.pojo.shopping.SproductParameter;
+import com.abbot.schimneylife.pojo.shopping.SupermarketAddress;
+import com.abbot.schimneylife.pojo.shopping.SupermarketInfo;
+import com.abbot.schimneylife.service.shopping.SupermarketInfoService;
+
+@Service
+public class SupermarketInfoServiceImpl implements SupermarketInfoService {
+	private static final Logger logger = Logger.getLogger(SupermarketInfoServiceImpl.class);
+
+	@Resource
+	private ISupermarketInfoDao marketDao;
+	@Resource
+	private ISupermarketAddressDao addressDao;
+	@Override
+	public List<SupermarketInfo> findByPageOrderDis(Integer firstResult, Integer pageSize, BigDecimal lng,
+			BigDecimal lat) {
+		List<SupermarketInfo> superList = Collections.emptyList();
+		try {
+			superList = marketDao.selectByPageAndDis(firstResult, pageSize, lng, lat);
+		} catch (Exception e) {
+			logger.error("分页查询根据距离排序异常！", e);
+		}
+		return superList;
+	}
+
+	@Override
+	public Integer totalCount() {
+		Integer total = 0;
+		try {
+			total = marketDao.totalCount();
+		} catch (Exception e) {
+			logger.error("查询总数量异常！", e);
+		}
+		return total;
+	}
+
+	@Transactional(rollbackFor=Exception.class)
+	@Override
+	public void addSupermarket(SupermarketInfo market) throws Exception {
+		marketDao.insert(market);
+		if(market.getAddress()!=null) {
+			SupermarketAddress address = market.getAddress();
+			address.setSupermarketInfoId(market.getId());
+			addressDao.insert(address);
+		}
+	}
+
+	@Override
+	public SupermarketInfo fetchById(Integer gid) {
+		SupermarketInfo market;
+		try {
+			market = marketDao.fetchById(gid);
+		} catch (Exception e) {
+			market = new SupermarketInfo();
+			logger.error("根据超市id查找超市信息异常！", e);
+		}
+		return market;
+	}
+
+	@Override
+	public List<SupermarketInfo> findByPageBetweenRadius(Integer firstResult, Integer pageSize, String minlng,
+			String maxlng, String minlat, String maxlat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SupermarketInfo> selectMarket() {
+		try {
+			return marketDao.selectMarket();
+		} catch (Exception e) {
+			logger.error("超市列表查询异常", e);
+			return null;
+		}
+	}
+
+	@Override
+	public boolean disable(Integer marketId) {
+		try {
+			marketDao.disable(marketId);
+			return true;
+		} catch (Exception e) {
+			logger.error("超市禁用异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean enable(Integer marketId) {
+		try {
+			marketDao.enable(marketId);
+			return true;
+		} catch (Exception e) {
+			logger.error("超市启用异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteMarket(Integer marketId) {
+		try {
+			marketDao.deleteMarket(marketId);
+			return true;
+		} catch (Exception e) {
+			logger.error("删除异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public List<SupermarketInfo> findByName(String name) {
+		try {
+			return marketDao.findByName(name);
+		} catch (Exception e) {
+			logger.error("删除异常", e);
+		}
+		return null;
+	}
+	
+	@Transactional(rollbackFor=Exception.class)
+	@Override
+	public void update(SupermarketInfo market) throws Exception {
+		marketDao.update(market);
+		if(market.getAddress()!=null) {
+			addressDao.update(market.getAddress());
+		}
+	}
+
+	@Override
+	public void addmarketPro(MarketProductInfo info){
+		try {
+			marketDao.addmarketPro(info);
+		} catch (Exception e) {
+			logger.info("添加门店商品失败",e);
+		}
+		
+	}
+
+	@Override
+	public List<MarketProductInfo> findListPro() {
+		List<MarketProductInfo> list=Collections.emptyList();
+		try {
+			list=marketDao.findListPro();
+		} catch (Exception e) {
+			logger.info("查询门店商品列表",e);
+		}
+		
+		return list;
+	}
+	@Override
+	public boolean deleteMarketPro(Integer marketId) {
+		try {
+			marketDao.deleteMarketPro(marketId);
+			return true;
+		} catch (Exception e) {
+			logger.error("删除异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public MarketProductInfo fetchProById(Integer marketId) {
+		try {
+			return marketDao.fetchProById(marketId);
+		} catch (Exception e) {
+			logger.error("根据商品id查询商品异常", e);
+		}
+		return null;
+	}
+	@Transactional(rollbackFor=Exception.class)
+	@Override
+	public void updatePro(MarketProductInfo info,SproductParameter paramList) {
+		try {
+			marketDao.updatePro(info);
+			paramList.setProductId(info.getId());;
+			marketDao.updateParameter(paramList);
+		} catch (Exception e) {
+			logger.error("修改商品异常", e);
+		}
+		
+	}
+
+	@Override
+	public void addProduct(MarketProductInfo info, List<SproductParameter> SproductParameter) {
+		try {
+		marketDao.addmarketPro(info);
+		for(SproductParameter param:SproductParameter) {
+			param.setProductId(info.getId());
+			marketDao.insertParameter(param);
+		}
+		} catch (Exception e) {
+			logger.error("增加商品",e);
+		}
+	}
+
+	@Override
+	public boolean disablePro(Integer proid) {
+		try {
+			marketDao.disablePro(proid);
+			return true;
+		} catch (Exception e) {
+			logger.error("商品禁用异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean enablePro(Integer proid) {
+		try {
+			marketDao.enablePro(proid);
+			return true;
+		} catch (Exception e) {
+			logger.error("商品启用异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public void addProductShare(MarketProductInfo info) {
+		try {
+			marketDao.addmarketShare(info);
+			} catch (Exception e) {
+				logger.error("增加商品",e);
+			}
+		
+	}
+
+	@Override
+	public List<MarketProductInfo> findListShare() {
+		List<MarketProductInfo> list=Collections.emptyList();
+		try {
+			list=marketDao.findListShare();
+		} catch (Exception e) {
+			logger.info("查询门店商品列表",e);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public boolean disableShare(Integer proid) {
+		try {
+			marketDao.disableShare(proid);
+			return true;
+		} catch (Exception e) {
+			logger.error("活动禁用异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean enableShare(Integer proid) {
+		try {
+			marketDao.enableShare(proid);
+			return true;
+		} catch (Exception e) {
+			logger.error("活动启用异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public MarketProductInfo fetchShareById(Integer marketId) {
+		try {
+			return marketDao.fetchShareById(marketId);
+		} catch (Exception e) {
+			logger.error("根据活动id查询活动异常", e);
+		}
+		return null;
+	}
+
+	@Override
+	public void updateShare(MarketProductInfo info){
+		try {
+			marketDao.updateShare(info);
+		} catch (Exception e) {
+			logger.error("修改活动异常", e);
+		}
+		
+	}
+
+	@Override
+	public boolean deleteMarketShare(Integer marketId) {
+		try {
+			marketDao.deleteMarketShare(marketId);
+			return true;
+		} catch (Exception e) {
+			logger.error("删除活动异常", e);
+		}
+		return false;
+	}
+
+	@Override
+	public Recharge findBalance(String openid) {
+		try {
+			return	marketDao.findBalance(openid);
+		} catch (Exception e) {
+			logger.error("查询广告金异常", e);
+		}
+		return null;
+	}
+
+	@Override
+	public void addRecharge(Recharge re) {
+		try {
+			marketDao.addRecharge(re);
+		} catch (Exception e) {
+			logger.error("添加广告金异常", e);
+		}
+		
+		
+	}
+
+	@Override
+	public void updateRecharge(Recharge re) {
+		try {
+			marketDao.updateRecharge(re);
+		} catch (Exception e) {
+			logger.error("修改广告金异常", e);
+		}
+		
+	}
+
+	@Override
+	public SupermarketInfo fetchBygId(Integer proid) {
+		try {
+			return	marketDao.fetchBygId(proid);
+		} catch (Exception e) {
+			logger.error("根据商品id查询门店信息", e);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Customer> findListOrder() {
+		List<Customer> list =Collections.emptyList();
+		try {
+			list=	marketDao.findListOrder();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public List<Appointment> findListAppointment() {
+		List<Appointment> list =Collections.emptyList();
+		try {
+			list=	marketDao.findListAppointment();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public MarketProductInfo findProductByid(Integer gid) {
+		try {
+			return	marketDao.findProductByid(gid);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void addProductVipcn(MarketProductInfo product) {
+		try {
+			marketDao.addProductVipcn(product);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		
+	}
+
+	@Override
+	public List<MarketProductInfo> findListVipcn() {
+		List<MarketProductInfo> list=Collections.emptyList();
+		try {
+			list=marketDao.findListVipcn();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return list;
+	}
+
+	@Override
+	public boolean deleteMarketVipcn(Integer marketId) {
+		try {
+			marketDao.deleteMarketVipcn(marketId);
+			return true;
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean enableVipcn(Integer proid) {
+		try {
+			marketDao.enableVipcn(proid);
+			return true;
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean disableVipcn(Integer proid) {
+		try {
+			marketDao.disableVipcn(proid);
+			return true;
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return false;
+	}
+
+	@Override
+	public MarketProductInfo fetchVipcnById(Integer marketId) {
+		try {
+			return	marketDao.fetchVipcnById(marketId);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return null;
+	}
+
+	@Override
+	public void updateVipcn(MarketProductInfo info) {
+		try {
+				marketDao.updateVipcn(info);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		
+	}
+
+	
+	
+}

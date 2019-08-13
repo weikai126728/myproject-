@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.shopping.IMallProductDao" >
+  <resultMap id="BaseResultMap" type="com.abbot.schimneylife.pojo.shopping.MallProduct" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="product_type_id" property="productTypeId" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR" />
+    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+    <result column="producing_area" property="productArea" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="sale" property="noname" jdbcType="INTEGER"/>
+    <association property="parameter" javaType="com.abbot.schimneylife.pojo.shopping.MallProductParameter">   
+        <id property="id" column="p_id" jdbcType="VARCHAR"/>
+        <result column="quality_day" property="qualityDay" jdbcType="INTEGER"/>
+        <result column="quality_month" property="qualityMonth" jdbcType="INTEGER"/>
+        <result column="quality_year" property="qualityYear" jdbcType="INTEGER"/>
+        <result column="original_price" property="original" jdbcType="DECIMAL"/>
+        <result column="current_price" property="cur_price" jdbcType="DECIMAL"/>
+        <result column="first_param" property="firstParam" jdbcType="VARCHAR"/>
+     	<result column="second_param" property="secondParam" jdbcType="VARCHAR"/>
+     	<result column="param_json" property="json" jdbcType="VARCHAR"/>
+    </association>
+  </resultMap>
+  <resultMap id="SimpleMap" type="com.abbot.schimneylife.pojo.shopping.MallProduct">
+  	<id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_type_id" property="productTypeId" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR" />
+    <result column="img_small" property="imgSmall" jdbcType="VARCHAR"/>
+    <result column="img_middle" property="imgMiddle" jdbcType="VARCHAR"/>
+    <result column="img_large" property="imgLarge" jdbcType="VARCHAR"/>
+    <result column="producing_area" property="productArea" jdbcType="VARCHAR"/>
+    <result column="province" property="province" jdbcType="VARCHAR"/>
+    <result column="product_number" property="number" jdbcType="VARCHAR"/>
+    <result column="keywords" property="keywords" jdbcType="VARCHAR"/>
+    <result column="degree" property="degree" jdbcType="INTEGER"/>
+    <result column="pro_status" property="status" jdbcType="INTEGER"/>
+    <result column="recommendation" property="recommendation" jdbcType="INTEGER"/>
+    <result column="product_source" property="source" jdbcType="INTEGER"/>
+     <result column="productIntegral" property="productIntegral" jdbcType="INTEGER"/>
+    
+  </resultMap>
+  <sql id="simple_list">
+  	id,product_name,product_type_id,details,img_small,img_middle,img_large,producing_area,province,product_number
+  	,keywords,degree,pro_status,recommendation,product_source,productIntegral
+  </sql>
+  <sql id="Base_Column_List" >
+    mall_product.id, product_type_id, product_name, mall_product.details, img_small, img_middle, img_large, productIntegral,
+    producing_area, mall_product.create_time, p.id as p_id, param_json, first_param, second_param, quality_day,
+     quality_month, quality_year, original_price, current_price from mall_product 
+    left join mall_product_parameter as p on mall_product.id = p.mall_product_id 
+  </sql>
+  <sql id="searchList">
+  mall_product.id,
+	product_type_id,
+	product_name,
+	mall_product.details,
+	img_small,
+	img_middle,
+	img_large,
+	producing_area,
+	mall_product.create_time,
+	p_id,
+	param_json, 
+	first_param, 
+	second_param,
+	quality_day,
+	quality_month,
+	quality_year,
+	productIntegral,
+	original_price,
+	current_price
+	 FROM mall_product 
+LEFT JOIN (SELECT sp.id AS p_id,sp.mall_product_id,
+	param_json, 
+	first_param, 
+	second_param,
+	quality_day,
+	quality_month,
+	quality_year,
+	original_price,
+	current_price,param_status 
+	 FROM mall_product_parameter AS sp GROUP BY mall_product_id ORDER BY mall_product_id,current_price ASC) AS p ON mall_product.id = p.mall_product_id
+  </sql>
+  <insert id="insert" parameterType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+  	<selectKey keyProperty="id" resultType="String" order="BEFORE">
+  		select replace(uuid(),'-','') from dual
+  	</selectKey>
+  	insert into mall_product (id,product_name,details,img_small, img_middle, img_large,producing_area,pro_status,product_number,keywords,province,product_type_id,degree,recommendation,product_source,create_time,productIntegral) 
+  	values(#{id,jdbcType=VARCHAR},#{productName,jdbcType=VARCHAR}
+  	,#{details,jdbcType=VARCHAR},#{imgSmall,jdbcType=VARCHAR},#{imgMiddle,jdbcType=VARCHAR},#{imgLarge,jdbcType=VARCHAR}
+  	,#{productArea,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{number,jdbcType=VARCHAR},#{keywords,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{productTypeId,jdbcType=VARCHAR},#{degree,jdbcType=INTEGER},#{recommendation,jdbcType=INTEGER},#{source,jdbcType=INTEGER},now(),#{productIntegral})
+  </insert>
+  <select id="findByPageAndType" resultMap="SimpleMap">
+  	select id,pro_status,product_name,product_type_id,details,img_small,img_middle,img_large,producing_area,province,productIntegral
+  	,product_number,keywords,degree,recommendation,product_source from mall_product
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="typeId !=null">
+  			product_type_id=#{typeId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  			<bind name="pattern" value="'%'+ like +'%'"/>
+  			and (product_name like #{pattern,jdbcType=VARCHAR} or details like #{pattern,jdbcType=VARCHAR} or product_number like #{pattern,jdbcType=VARCHAR}) 
+  		</if>
+  	</trim> 
+  		order by ${order} ${sort}
+  	limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="countByType" resultType="Integer">
+  	select count(*) from mall_product 
+  	<trim prefix=" where " prefixOverrides="and|or">
+  		<if test="typeId !=null">
+  			product_type_id=#{typeId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="like !=null">
+  			<bind name="pattern" value="'%'+ like +'%'"/>
+  			and (product_name like #{pattern,jdbcType=VARCHAR} or details like #{pattern,jdbcType=VARCHAR} or product_number like #{pattern,jdbcType=VARCHAR}) 
+  		</if>
+  	</trim>
+  </select>
+  <select id="findByPage" resultMap="BaseResultMap">
+  	SELECT
+	mall_product.id,
+	product_type_id,
+	product_name,
+	mall_product.details,
+	img_small,
+	img_middle,
+	img_large,
+	producing_area,
+	mall_product.create_time,
+	p_id,
+	param_json, 
+	first_param, 
+	second_param,
+	quality_day,
+	quality_month,
+	quality_year,
+	original_price,
+	productIntegral,
+	current_price
+	 FROM mall_product 
+LEFT JOIN (SELECT sp.id AS p_id,sp.mall_product_id,
+	param_json, 
+	first_param, 
+	second_param,
+	quality_day,
+	quality_month,
+	quality_year,
+	original_price,
+	current_price
+	 FROM mall_product_parameter AS sp ORDER BY current_price ASC) AS p ON mall_product.id = p.mall_product_id
+  		where pro_status = 1
+ 		<if test="provinces !=null">  	
+     and province in <foreach item="item" index="index" collection="provinces" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach>
+  	</if>
+  	<if test="like!=null"><bind name="pattern" value="'%' + like + '%'" /> 
+  		and keywords like #{pattern,jdbcType=VARCHAR}</if> GROUP BY
+	mall_product_id
+  	<if test="order!=null">order by ${order} 
+  		<choose><when test="up==1">desc</when><otherwise>asc</otherwise></choose>
+  	</if>
+  		limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER} 
+  </select>
+  <select id="totalCount" resultType="java.lang.Integer">
+  	select count(*) from (select mall_product.id from mall_product left join mall_product_parameter as p on mall_product.id = p.mall_product_id 
+  	where pro_status = 1
+  	<if test="provinces !=null">  	
+	   and province in <foreach item="item" index="index" collection="provinces" open="(" separator="," close=")">  
+		  #{item,jdbcType=VARCHAR}  
+		</foreach>
+  	</if> 
+  	<if test="like!=null"><bind name="pattern" value="'%' + like + '%'" />
+  	and keywords like #{pattern,jdbcType=VARCHAR}</if> group by mall_product.id) as data
+  </select>
+  <select id="findByRecom" resultMap="BaseResultMap">
+	  SELECT
+		mall_product.id,
+		product_type_id,
+		product_name,
+		mall_product.details,
+		img_small,
+		img_middle,
+		img_large,
+		producing_area,
+		mall_product.create_time,
+		p_id,
+		param_json, 
+		first_param, 
+		second_param,
+		quality_day,
+		quality_month,
+		quality_year,
+		original_price,
+		productIntegral,
+		current_price
+		 FROM mall_product 
+	LEFT JOIN (SELECT sp.id AS p_id,sp.mall_product_id,
+		param_json, 
+		first_param, 
+		second_param,
+		quality_day,
+		quality_month,
+		quality_year,
+		original_price,
+		current_price
+		 FROM mall_product_parameter AS sp where sp.param_status = 1 ORDER BY current_price ASC) AS p ON mall_product.id = p.mall_product_id
+	  		where  recommendation >0
+	  	GROUP BY mall_product_id order by recommendation desc
+	  		limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="totalCountByRecom" resultType="java.lang.Integer">
+  	select count(*) from (select mall_product.id from mall_product left join mall_product_parameter as p on mall_product.id = p.mall_product_id 
+  	where p.param_status = 1 and recommendation>0 group by mall_product.id) as data
+  </select>
+  <select id="selectBySale" resultMap="BaseResultMap">
+  	select sale,<include refid="searchList" />  LEFT JOIN (SELECT COUNT(*) AS sale,mall_product_id FROM mall_order_list GROUP BY mall_product_id) AS pro_sale 
+  	ON pro_sale.mall_product_id = mall_product.id  where param_status = 1 <if test="provinces !=null">  	
+     and province in <foreach item="item" index="index" collection="provinces" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach>
+  	</if> and pro_status=1 
+  	<if test="like!=null"><bind name="pattern" value="'%' + like + '%'" />
+  	and mall_product.keywords like #{pattern,jdbcType=VARCHAR}</if> ORDER BY sale
+  	<choose>
+  		<when test="order==0">asc</when><otherwise>desc</otherwise>
+  	</choose> limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByCartId" resultMap="BaseResultMap">
+  	select cl.total_count as sale,<include refid="Base_Column_List" /> left join mall_cart_list as cl 
+  	on mall_product.id = cl.mall_product_id and cl.mall_product_param_id = p.id where cl.shopping_cart_id = #{shoppingCartId,jdbcType=VARCHAR}
+  </select>
+  <select id="fetchById" resultMap="SimpleMap">
+  	select <include refid="simple_list" /> from mall_product where id = #{gid,jdbcType=VARCHAR}
+  </select>
+  <select id="fetchByParamId" resultMap="SimpleMap">
+  	select id,product_type_id,product_name,details,img_small,img_middle,img_large,producing_area,province,degree,recommendation,productIntegral
+  	,product_number,keywords from mall_product where id = (select mall_product_id from mall_product_parameter where id = #{paramId,jdbcType=VARCHAR})
+  </select>
+  <select id="findProvince" resultType="java.lang.String">
+  	select province from mall_product left join mall_product_parameter as p on mall_product.id = p.mall_product_id where p.param_status=1 GROUP BY mall_product.province
+  </select>
+  <select id="findByProvince" resultMap="BaseResultMap">
+  	select <include refid="searchList"/> where province in <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach> <if test="like!=null"><bind name="pattern" value="'%' + like + '%'"/>
+		and keywords like #{pattern,jdbcType=VARCHAR} 
+	</if>
+	and pro_status=1 limit #{firstResult,jdbcType=VARCHAR},#{pageSize,jdbcType=VARCHAR}
+  </select>
+  <select id="countByProvince" resultType="Integer">
+  	select count(*) from mall_product where province in <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{item,jdbcType=VARCHAR}  
+	</foreach> <if test="like!=null"><bind name="pattern" value="'%' + like + '%'"/>
+		and keywords like #{pattern,jdbcType=VARCHAR} 
+	</if>
+	and pro_status=1
+  </select>
+  <update id="updateStatusByParamId">
+  	update mall_product set pro_status = #{status,jdbcType=INTEGER} where id = (select mall_product_id from mall_product_parameter where id=#{paramId,jdbcType=VARCHAR})
+  </update>
+  <delete id="deleteById">
+  	delete from mall_product where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <update id="update" parameterType="com.abbot.schimneylife.pojo.shopping.MallProduct">
+  	update mall_product 
+  	<trim prefix="set" suffixOverrides="," suffix=" where id = #{id} ">
+	  <if test="productName != null">product_name=#{productName,jdbcType=VARCHAR},</if>
+	  <if test="details != null">details=#{details,jdbcType=INTEGER},</if>
+	  <if test="productTypeId != null">product_type_id=#{productTypeId,jdbcType=VARCHAR},</if>
+	  <if test="number != null">product_number=#{number,jdbcType=VARCHAR},</if>
+	  <if test="keywords != null">keywords=#{keywords,jdbcType=VARCHAR},</if>
+	  <if test="province != null">province=#{province,jdbcType=VARCHAR},</if>
+	  <if test="productArea != null">producing_area=#{productArea,jdbcType=VARCHAR},</if>
+	  <if test="degree != null">degree=#{degree,jdbcType=INTEGER},</if>
+	  <if test="recommendation != null">recommendation=#{recommendation,jdbcType=INTEGER},</if>
+	  <if test="imgSmall != null">img_small=#{imgSmall,jdbcType=VARCHAR},</if>
+	  <if test="imgMiddle != null">img_middle=#{imgMiddle,jdbcType=VARCHAR},</if>
+	  <if test="imgLarge != null">img_large=#{imgLarge,jdbcType=VARCHAR},</if>
+	  <if test="status != null">pro_status=#{status,jdbcType=INTEGER},</if>
+	  <if test="source != null">product_source=#{source,jdbcType=INTEGER},</if>
+	  <if test="productIntegral != null">productIntegral=#{productIntegral,jdbcType=INTEGER},</if>
+	  
+	</trim>
+  </update>
+  <select id="findByNumber" resultMap="SimpleMap">
+  	select <include refid="simple_list"></include> from mall_product where product_number=#{number,jdbcType=VARCHAR}
+  </select>
+</mapper>

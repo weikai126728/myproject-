@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.abbot.schimneylife.dao.weixin.IAllianceDao">
+	<sql id="Base_Column_List">
+		alid,product_id,alopenid,alname,altel,alproject,alMethod,alShopArea,storename
+		,storeaddress,storecurrtime,url,son_openid
+	</sql>
+	<select id="findByPage" resultType="com.abbot.schimneylife.pojo.weixin.Alliance">
+		select alid,product_id,alopenid,alname,altel,business_type.name alproject,join_model.name alMethod,alShopArea,storename
+		,storeaddress,storecurrtime,url,son_openid from fzalliance inner join business_type on fzalliance.type_id = business_type.id inner join join_model on fzalliance.model_id = join_model.id where alopenid is not null 
+		<trim>
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and  storename like #{pattern}  or product_id like #{pattern}
+			</if>
+		</trim>
+		order by 
+		<choose>
+			<when test="column !=null">
+				${column}
+			</when>
+			<otherwise>
+				storecurrtime
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort !=null">
+				 ${sort} 
+			</when>
+			<otherwise> desc </otherwise>
+		</choose>
+		<if test="firstResult !=null and pageSize !=null">
+			limit #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="countTotal" resultType="Integer">
+		select count(*) from fzalliance where alopenid is not null <trim>
+			<if test="like !=null">
+			<bind name="pattern" value="'%'+ like +'%'"/>
+				and storename like #{pattern}
+			</if>
+		</trim>
+	</select>
+	<select id="fetchByNumber" resultType="com.abbot.schimneylife.pojo.weixin.Alliance">
+		select storename,alname from fzalliance where product_id = #{product_id,jdbcType=VARCHAR} limit 0,1
+	</select>
+	<select id="findIdsByUserId" resultType="Integer">
+		select alliance_alid from user_to_alliance where user_info_id = #{userId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteRelByUserId">
+		delete from user_to_alliance where user_info_id = #{userId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insertRel">
+		insert into user_to_alliance(user_info_id,alliance_alid) values(#{userId,jdbcType=INTEGER},#{alid,jdbcType=INTEGER})
+	</insert>
+	<select id="fetchByOpenId" resultType="com.abbot.schimneylife.pojo.weixin.Alliance">
+		select <include refid="Base_Column_List"></include> from fzalliance where alopenid = #{openId,jdbcType=VARCHAR} limit 0,1
+	</select>
+	<!-- 查找指定角色等级没有分配的加盟商超列表 -->
+	<select id="findAllNotAllocation" resultType="com.abbot.schimneylife.pojo.weixin.Alliance">
+		select <include refid="Base_Column_List"></include> from(select * from fzalliance where alid not in(
+			select alid FROM fzalliance LEFT JOIN user_to_alliance on fzalliance.alid = user_to_alliance.alliance_alid 
+			left join user_to_role on user_to_alliance.user_info_id = user_to_role.user_info_id
+			left join user_role_info on user_to_role.role_id = user_role_info.id
+			where user_role_info.role_level = #{level,jdbcType=INTEGER}
+		) and alopenid is not null
+		union all 
+		SELECT fzalliance.* from fzalliance left join user_to_alliance on fzalliance.alid = user_to_alliance.alliance_alid where user_to_alliance.user_info_id = #{userId,jdbcType=INTEGER}
+		) as alliance ORDER BY storecurrtime asc
+	</select>
+	
+	
+	<select id="countUser" resultType="java.lang.Integer">
+	select count(amopenid) from fzuserpaystore where product_id=#{product_id}
+	</select>
+	
+	<update id="updatefzOff">
+	    update fzalliance_off set tag=1 where product_id=#{product_id}
+	</update>
+	<update id="updatefz">
+	     update fzalliance set type_id=1 ,model_id=1 where product_id=#{product_id}
+	</update>
+</mapper>

@@ -1,0 +1,259 @@
+
+
+/*banner*/
+
+
+
+#solid{
+	width:100%;
+	height:550px;
+	margin-top: 10px;
+	clear:both;
+	position:relative;
+}
+#solid img{
+	height: 550px;
+	width: 100%;
+}
+#solid .solid0,#solid .solid1,#solid .solid2{
+	position:absolute;
+	left:0px;
+	top:0px;
+	width:100%;
+	height:550px;
+	display:none;
+}
+#solid .solid0{
+	background:#78c4db;
+}
+#solid .solid1{
+	background:#c5c9db;
+}
+#solid .solid2{
+	background:#e7dfd1;
+}
+#solid ul{
+	margin:0px;
+	padding:0px;
+	list-style:none;	
+}
+#solid ul li{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:550px;
+	display:none;
+	cursor:pointer;
+}
+#solid #btt{
+	width:905px;
+	height:55px;
+	top:495px;
+	left:50%;
+	position:relative;
+	margin-left:-452px;
+}
+#solid #btt span{
+	position:absolute;
+	top:15px;
+	left:45%;
+	display:block;
+	width:30px;
+	height:8px;
+	margin:0 15px;	
+	text-align:center;
+	background:#3d3d3d;
+	z-index:1000;
+	cursor:pointer;
+	filter:alpha(opacity=70); /*IE婊ら暅锛岄�忔槑搴�50%*/
+	-moz-opacity:0.7; /*Firefox绉佹湁锛岄�忔槑搴�50%*/
+	opacity:0.7;/*鍏朵粬锛岄�忔槑搴�50%*/
+}
+
+
+/*鍝佺墝鐞嗗康*/
+
+.box{
+	text-align: center;
+	margin-top: 30px;
+}
+.box_top span{
+	display: block;
+	font-size: 24px;
+	color: #999;
+}
+.box_top em{
+	font-size: 20px;
+	color: #884352;
+	display: block;
+	margin-bottom: 10px;
+}
+.box_top i{
+	font-size: 14px;
+	color: #999999;
+}
+.box_top{
+	margin-bottom: 20px;
+}
+.box_bottom{
+	text-align: left;
+	padding-bottom: 30px;
+}
+.box_bottom .p1{
+	color: #884352;
+    font-size: 20px;
+    line-height: 32px;
+}
+.box_bottom .p1 span{
+	font-size: 16px;
+    color: #463034;
+    margin-right: 10px;
+}
+.box_bottom .p2{
+	font-size: 18px;
+    color: #73aed7;
+    line-height: 36px;
+}
+.box_bottom p{
+	color: #5b5b5b;
+    font-size: 14px;
+    line-height: 28px;
+}
+
+/*浜у搧浠嬬粛!*/
+.cp{
+	text-align: center;
+	margin-bottom: 20px;
+}
+.cp_bottom{
+	margin-left: 20px;
+}
+.cp_bottom ul li{
+	float: left;
+	height: 150px;
+	margin-right: 2px;
+	margin-bottom: 2px;
+	position: relative;
+}
+.cp_bottom ul .li1,.cp_bottom ul li .s1{
+	width: 270px;
+	transition: 1s;
+}
+.cp_bottom ul .li2,.cp_bottom ul li .s2{
+	width: 210px;
+}
+.cp_bottom ul .li3,.cp_bottom ul li .s3{
+	width: 150px;
+}
+
+.cp_bottom ul li div{
+	height: 150px;
+	position: absolute;
+	left: 0;
+	bottom: 150px;
+	opacity: 0;
+	background-color: #000000;
+}
+
+.cp_bottom ul li a img{
+	height: 150px;
+	border: 1px solid #CCCCCC;
+}
+.cp_bottom ul li a .img1{
+	width: 270px;
+}
+.cp_bottom ul li a .img2{
+	width: 210px;
+}
+.cp_bottom ul li a .img3{
+	width: 150px;
+}
+
+.cp_bottom ul .li1:hover .s1{
+	bottom: 0;
+	opacity: 1;
+}
+
+
+/*鏂伴椈&鍔ㄦ��&鍜ㄨ!*/
+
+.new_box{
+	width: 100%;
+	padding: 20px 0;
+	background-color: #F0F1F3;
+}
+.new_box .new .new_{
+	margin-right: 20px;
+}
+.new_box .new .new_ h2,.new_box .new .zixun h2{
+	font-size: 16px;
+	font-weight: normal;
+    color: #884352;
+    line-height: 28px;
+}
+.new_box .new .new_ ul{
+	border-right: 1px solid #CCCCCC;
+	padding-right: 10px;
+	min-height: 225px;
+}
+.new_box .new .new_ ul li{
+	line-height: 25px;
+}
+.new_box .new .new_ ul li a{
+	font-size: 14px;
+	color: #999999;
+	display: block;
+	white-space:nowrap; 
+	width:300px; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
+}
+
+.new_box .new .zixun .input_one input ,.input_ input{
+	width: 405px;
+    float: left;
+    padding: 5px 10px;
+    border: 1px solid #CCCCCC;
+    margin-right: 5px;
+    color: #999999;
+    margin-bottom: 5px;
+    background-color: #FFFFFF;
+    display: block;
+}
+.input_one,.input_{
+	width: 405px;
+}
+.new_box .new .zixun .input_two input{
+	width: 405px;
+    float: left;
+    padding: 5px 10px;
+    border: 1px solid #CCCCCC;
+    color: #999999;
+    margin-bottom: 5px;
+    background-color: #FFFFFF;
+}
+.new_box .new .zixun .text textarea{
+	width: 405px;
+	height: 105px;
+	border: 1px solid #CCCCCC;
+	padding: 5px 10px;
+	color: #999999;
+	background-color: #FFFFFF;
+	margin-bottom: 5px;
+}
+.new_box .new .zixun .sub{
+	height: 42px;
+    width: 129px;
+    display: block;
+    border: 1px solid #CCCCCC;
+    font-size: 14px;
+    color: #3D3D3D;
+    cursor:pointer;
+}
+.zixun{
+	width: 432px;
+}
+.zixun em{
+	line-height: 35px;
+}

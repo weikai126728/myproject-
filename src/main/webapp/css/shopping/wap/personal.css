@@ -1,0 +1,197 @@
+body {
+	background-color: #F4F4F4;
+}
+
+.top {
+	width: 100%;
+	height: 1.955rem;
+	line-height: 1.955rem;
+	text-align: center;
+	background-color: #FFFFFF;
+	margin-bottom: 0.296rem;
+	position: fixed;
+	top: 0;
+}
+
+.top .fl {
+	width: 0.385rem;
+	height: 0.696rem;
+	margin-top: 0.637rem;
+	margin-left: 0.726rem;
+}
+
+.top .fl img {
+	width: 100%;
+}
+
+.top span {
+	font-size: 0.681rem;
+	color: #4B4B4B;
+	display: inline-block;
+}
+
+.top .fr {
+	font-size: 0.6rem;
+	margin-right: 0.592rem;
+	margin-top: 0.711rem;
+	color: #267CCB;
+}
+
+.tx {
+	width: 100%;
+	height: 6.518rem;
+	background-color: #FFFFFF;
+	text-align: center;
+	border-bottom: 1px solid #E9E9E9;
+	margin-top: 1.955rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.tx label{
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.tx .img {
+	width: 3.822rem;
+	height: 3.822rem;
+	margin-top: 0.74rem;
+	border-radius: 50%;
+	background-size: cover;
+}
+
+.tx .input {
+	height: 1.57rem;
+	line-height: 1.57rem;
+}
+
+.tx .input label {
+	color: #9F9F9F;
+	font-size: 0.6rem;
+}
+
+.bd {
+	background-color: #FFFFFF;
+}
+
+.bd li {
+	width: 100%;
+	height: 2.163rem;
+	line-height: 2.163rem;
+	border-bottom: 1px solid #E9E9E9;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bd li span {
+	font-size: 0.6rem;
+	color: #4B4B4B;
+	margin-left: 0.592rem;
+}
+
+.bd li input {
+	font-size: 0.6rem;
+	height: 2.163rem;
+	line-height: 2.163rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.bd li em {
+	font-size: 0.6rem;
+	color: #9F9F9F;
+}
+
+.bd li .fr {
+	width: 0.326rem;
+	height: 0.577rem;
+	margin-right: 0.592rem;
+	margin-top: 0.8rem;
+}
+
+.bd li .fr img {
+	width: 100%;
+}
+
+.xingbei label {
+	font-size: 0.6rem;
+	color: #9F9F9F;
+	margin-left: 0.281rem;
+	margin-right: 2.385rem;
+	vertical-align: middle;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* iCheck plugin Square skin, red
+----------------------------------- */
+.icheckbox_square-red, .iradio_square-red {
+	display: inline-block;
+	*display: inline;
+	vertical-align: middle;
+	margin: 0;
+	padding: 0;
+	width: 0.685rem;
+	height: 0.685rem;
+	background: url(../../../image/shopping/wap/moren.png) no-repeat center
+		center;
+	border: none;
+	cursor: pointer;
+}
+
+.icheckbox_square-red.hover {
+	background-position: center;
+	background-image: url(../../../image/shopping/wap/moren.png);
+}
+
+.icheckbox_square-red.checked {
+	background-position: center;
+	background-image: url(../../../image/shopping/wap/moren.png);
+}
+
+.iradio_square-red {
+	background-position: center;
+}
+
+.iradio_square-red.hover {
+	background-position: center;
+	background-image: url(../../../image/shopping/wap/c_checkbox_off.png);
+}
+
+.iradio_square-red.checked {
+	background-position: center;
+	background-image: url(../../../image/shopping/wap/moren.png);
+}
+
+.iradio_square-red.disabled {
+	background-position: center;
+	cursor: default;
+}
+
+.iradio_square-red.checked.disabled {
+	background-position: center;
+}
+
+/* HiDPI support */
+@media ( -o-min-device-pixel-ratio : 5/4) , ( -webkit-min-device-pixel-ratio :
+		1.25) , ( min-resolution : 120dpi) {
+	.icheckbox_square-red, .iradio_square-red {
+		background-image: url(../../../image/shopping/wap/c_checkbox_off.png);
+		-webkit-background-size: cover;
+		background-size: cover;
+	}
+}
+
+.month {
+	width: 76%;
+	vertical-align: middle;
+	float: left;
+	font-size: 0.533rem;
+	color: #9F9F9F;
+	background-color: #FFFFFF;
+}

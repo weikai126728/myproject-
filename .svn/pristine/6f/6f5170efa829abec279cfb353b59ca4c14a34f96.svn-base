@@ -1,0 +1,231 @@
+@charset "utf-8";
+
+
+body,ul,ol,h1,h2,h3,h4,h5,h6,p,input,select,textarea,dl,dd{margin: 0;padding: 0; font-family: "微软雅黑";}
+ul,ol{list-style: none;}
+i,em{ font-style:normal}
+input,select,textarea{background-color: transparent; border: none; outline: none;}
+textarea{resize: none;}/*右下角的小尾巴*/
+img{border: none; vertical-align: top;}
+a{text-decoration: none;}
+
+.clearfix:after,.clearfix:before{content: "";display: table;}
+.clearfix:after{clear: both;}
+.clearfix{*zoom:1;}
+
+
+.gWidth{
+	width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.fl{float: left;}
+.fr{float: right;}
+.mt10{ margin-top: 10px;}
+.mt20{ margin-top: 20px;}
+.mb20{ margin-bottom: 20px;}
+.mr20{ margin-right: 20px;}
+.txt2em{ text-indent: 2em;}
+.pa10{ padding: 10px;}
+.pb20{ padding-bottom: 20px;}
+
+
+
+/*top_nav*/
+
+.top{
+	height: 30px;
+	line-height: 30px;
+}
+.top span{
+	float: right;
+	font-size: 12px;
+	color: #666;
+}
+.top span a{
+	height: 22px;
+	padding: 0 10px;
+	display: inline-block;
+	text-align: center;
+	line-height: 22px;
+	margin-right: 5px;
+	border-radius: 5px;
+	color: #FFFFFF;
+}
+.top span a i{
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	background-size: cover;
+	vertical-align: middle;
+	margin-bottom: 2px;
+	margin-right: 5px;
+}
+.top .a1{
+	background-color: gold;
+}
+.top .a1 i{
+	background-image: url(../img/tianmao.png);
+}
+.top .a2{
+	background-color: crimson;
+}
+.top .a2 i{
+	background-image: url(../img/taobao.png);
+}
+.top .a3{
+	/*background-color: greenyellow;*/
+	background-color: gold;
+	position: relative;
+}
+.top .a3 i{
+	background-image: url(../../image/company/weibo.png);
+}
+.top .a3 img{
+	width: 150px;
+	height: 150px;
+	display: none;
+	position: absolute;
+	bottom: -160px;
+	left: -50%;
+	margin-left: 10px;
+	background-color: #FFFFFF;
+	z-index: 999;
+}
+.top .a3:hover .img{
+	display: block;
+}
+
+.nav .fl a img{
+	width: 87px;
+	height: 40px;
+}
+.nav li{
+	float: left;
+	line-height: 40px;
+	font-size: 14px;
+}
+.nav li a{
+	color: #666;
+	padding: 0 5px 10px 5px;
+	margin: 0 10px;
+	border-bottom: 3px solid #FFFFFF;
+}
+.nav li a:hover{
+	border-color: gold;
+}
+.nav .active{
+	border-color: gold;
+}
+
+
+/*bottom!*/
+
+.bottom_one{
+	width: 100%;
+	padding-top: 40px;
+	background-color: #CCCCCC;
+	overflow: hidden;
+}
+.bottom_one_top ul{
+	width:676px; /*一个 li宽 167px*/
+	text-align: center;
+	margin: 0 auto;
+	margin-bottom: 50px;
+}
+.bottom_one_top ul li{
+	float: left;
+	border: 1px solid #999999;
+	margin-right: 2px;
+	padding: 10px 20px;
+	background-color: #FFFFFF;
+	width: 125px;
+	height: 40px;
+}
+.bottom_one_top ul li a{
+	display: block;
+}
+.bottom_one_top ul li .fl{
+	background-position: center center;
+	background-repeat: no-repeat;
+	width: 36px;
+	height: 36px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.bottom_one_top ul .li1 .fl{
+	background-image: url(../../image/company/qq.png);
+}
+.bottom_one_top ul .li2 .fl{
+	background-image: url(../../image/company/chaoshi.png);
+}
+.bottom_one_top ul .li3 .fl{
+	background-image: url(../../image/company/canting.png);
+}
+.bottom_one_top ul .li4 .fl{
+	background-image: url(../../image/company/zhu.png);
+}
+.bottom_one_top ul li .fr{
+	font-size: 14px;
+	line-height: 20px;
+	text-align: left;
+	margin-left: 10px;
+	width: 79px;
+}
+.bottom_one_top ul li .fr a{
+	color: #3D3D3D;
+}
+.bottom_one_top ul li .fr em{
+	color: #999999;
+	font-size: 12px;
+}
+
+
+.bottom_one_bot{
+	text-align: center;
+	padding-bottom: 50px;
+}
+.bottom_one_bot img{
+	width: 130px;
+	height: 130px;
+	border: 1px solid #FFFFFF;
+	margin: 0 5px;
+}
+.bottom_one_bot span{
+	line-height: 130px;
+	font-size: 14px;
+	color: #3D3D3D;
+}
+.bottom_one_bot .span1{
+	margin-right: 10px;
+}
+.bottom_one_bot .span2{
+	margin-left: 10px;
+}
+
+.bottom_two{
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+	line-height: 25px;
+	color: #999999;
+}
+.bottom_two a{
+	border-right: 1px solid #999999;
+	padding:0 10px;
+	color: #3D3D3D;
+}
+.bottom_two span{
+	margin-right: 10px;
+}
+
+.bottom_two .aaa{
+	border: none;
+}
+.bottom_two .aaa:hover{
+	color: red;
+}

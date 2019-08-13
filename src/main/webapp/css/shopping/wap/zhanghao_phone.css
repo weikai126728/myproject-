@@ -1,0 +1,119 @@
+body {
+	background-color: #F0F0F0;
+}
+
+.top {
+	text-align: center;
+	margin-bottom: 0.296rem;
+	background-color: #FFFFFF;
+	width: 100%;
+	height: 1.955rem;
+}
+
+.top .fl {
+	width: 0.385rem;
+	height: 0.692rem;
+}
+
+.top .fl img {
+	width: 100%;
+	margin-left: 0.725rem;
+	margin-top: 0.637rem;
+}
+
+.top span {
+	font-size: 0.711rem;
+	line-height: 1.955rem;
+}
+
+.phone li {
+	background-color: #FFFFFF;
+	border: 1px solid #EBEBEB;
+	border-left: none;
+	border-right: none;
+	margin-bottom: 0.296rem;
+	height: 1.25rem;
+	padding: 0.45rem 0;
+}
+
+.phone {
+	width: 100%;
+}
+
+.phone span {
+	font-size: 0.6rem;
+	height: 1.25rem;
+	line-height: 1.25rem;
+	color: #4B4B4B;
+	margin-left: 0.592rem;
+	display: inline-block;
+	vertical-align: middle;
+	/*	border: 1px solid red;*/
+}
+
+.phone li input {
+	font-size: 0.6rem;
+	margin-left: 0.5rem;
+	height: 1.25rem;
+	line-height: 1.25rem;
+	width: 55%;
+	vertical-align: middle;
+	/*	border: 1px solid red;*/
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.yzm {
+	font-size: 0.6rem;
+	color: #EE3900;
+	padding-top: 0.2rem;
+	padding-bottom: 0.2rem;
+	padding-left: 0.222rem;
+	padding-right: 0.222rem;
+	border: 1px solid #EE3900;
+	border-radius: 0.2rem;
+	margin-right: 0.592rem;
+	vertical-align: middle;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.yzm2 {
+	font-size: 0.6rem;
+	color: #999999;
+	padding-top: 0.2rem;
+	padding-bottom: 0.2rem;
+	padding-left: 0.222rem;
+	padding-right: 0.222rem;
+	border: 1px solid #EBEBEB;
+	border-radius: 0.222rem;
+	display: none;
+	margin-right: 0.592rem;
+	vertical-align: middle;
+}
+
+.sub {
+	width: 14.814rem;
+	margin-top: 1.185rem;
+	margin-bottom: 0.518rem;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.sub span {
+	width: 100%;
+	height: 2.044rem;
+	border-radius: 0.3rem;
+	line-height: 2.044rem;
+	background-color: #EE3900;
+	color: #FFFFFF;
+	font-size: 0.6rem;
+	display: inline-block;
+	text-align: center;
+	-webkit-tap-highlight-color:transparent;
+     			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        		tap-highlight-color: rgba(0, 0, 0, 0);
+}
